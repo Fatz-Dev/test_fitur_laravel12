@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "RjUDGLZFI-oVAiUcq62Y5"
+uri = "file://fitur-pemeilihan-lokasi-otomatis.md"
+type = "text"
+title = "Dokumentasi Fitur Pemilihan Lokasi Otomatis"
