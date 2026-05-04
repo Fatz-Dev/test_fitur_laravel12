@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIPEP Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#00164e",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "on-background": "#0d1c2e",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#89f5e7",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#233144",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#e6eeff",
+                    "outline": "#757682",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-tint": "#4059aa",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#f8f9ff",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#d5e3fc",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#b6c4ff",
+                    "primary": "#00236f",
+                    "on-primary-fixed-variant": "#264191",
+                    "on-tertiary-container": "#aaadaf",
+                    "surface-container-low": "#eff4ff",
+                    "on-secondary-fixed-variant": "#005049",
+                    "tertiary": "#272b2d",
+                    "on-tertiary-fixed": "#191c1e",
+                    "secondary-container": "#86f2e4",
+                    "secondary-fixed-dim": "#6bd8cb",
+                    "surface": "#f8f9ff",
+                    "outline-variant": "#c5c5d3",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#006a61",
+                    "primary-container": "#1e3a8a",
+                    "on-surface": "#0d1c2e",
+                    "on-primary-container": "#90a8ff",
+                    "surface-container-highest": "#d5e3fc",
+                    "primary-fixed": "#dce1ff",
+                    "on-secondary-container": "#006f66",
+                    "on-surface-variant": "#444651",
+                    "surface-dim": "#ccdbf3",
+                    "on-secondary-fixed": "#00201d",
+                    "tertiary-container": "#3d4143",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "tertiary-fixed": "#e0e3e5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "base": "4px",
+                    "lg": "24px",
+                    "container-max": "1280px",
+                    "xl": "32px",
+                    "2xl": "48px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "xs": "4px"
+            },
+            "fontFamily": {
+                    "h1": ["Public Sans"],
+                    "label-sm": ["Public Sans"],
+                    "label-md": ["Public Sans"],
+                    "h3": ["Public Sans"],
+                    "body-sm": ["Public Sans"],
+                    "h2": ["Public Sans"],
+                    "body-md": ["Public Sans"],
+                    "body-lg": ["Public Sans"]
+            },
+            "fontSize": {
+                    "h1": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1", "fontWeight": "600"}],
+                    "h3": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Public Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Sidebar Navigation Shell -->
+<aside class="hidden md:flex flex-col h-full fixed left-0 top-0 z-40 bg-blue-900 h-screen w-64 border-r border-blue-800 font-public-sans text-sm">
+<div class="px-6 py-8">
+<h1 class="text-2xl font-black text-white tracking-tight">SIPEP</h1>
+<p class="text-teal-400 font-medium">Portal Akademik</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-800 text-teal-400 border-l-4 border-teal-400 focus:ring-2 focus:ring-teal-500 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span>Registrasi KPM/PPL</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="distance">distance</span>
+<span>Pilih Sekolah</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Dokumen</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Pengaturan</span>
+</a>
+</nav>
+<div class="p-4 border-t border-blue-800">
+<button class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white w-full hover:bg-blue-800/50 transition-all">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Keluar</span>
+</button>
+</div>
+</aside>
+<!-- Main Canvas Area -->
+<main class="md:ml-64 min-h-screen flex flex-col">
+<!-- TopAppBar Shell -->
+<header class="sticky top-0 z-50 flex items-center justify-between px-6 h-16 w-full bg-white border-b border-slate-200 shadow-sm font-public-sans">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-primary text-body-sm" placeholder="Cari data mahasiswa atau sekolah..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="Student or Admin Avatar" data-alt="A professional headshot of a university administrator in a clean office setting. The lighting is soft and natural, emphasizing a trustworthy and organized professional persona. The overall aesthetic is clean and modern, following a bright light-mode UI style with subtle professional blue tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDh-bF-7dzJjWzrUwBZXpAqZpI_EglV6RlpN5kVo42QqExY_FeSZyZEQIA3gy4Q3pymiXblC4GZsgEqIdSSFSYDYf9uf6IGrKQ0AoKxY0-Ca6VhfY-h0Nk2BUeRv_WlYgnbC5szIzIhG0h-Yj5YYyC69tlHp4Jkwqyz-bK6CYD5Uqqb2DDWxJBE0n5_CAhfOxR3f-7acvAfEj7KdwWkKGRs1-Ff_GhNTSQYfNnGpRt1A7guU7jN4nezkSf6ydKuNd1E1xZoD7z6o_Y"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-lg md:p-xl space-y-lg max-w-[1280px] mx-auto w-full">
+<!-- Welcome Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h2 class="font-h2 text-h2 text-primary">Ringkasan Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Pantau aktivitas akademik dan penempatan sekolah secara real-time.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-md py-2 bg-secondary text-white rounded-lg font-label-md hover:bg-on-secondary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="download">download</span>
+                        Unduh Laporan
+                    </button>
+</div>
+</section>
+<!-- Analytics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
+<div class="bg-primary-container/10 p-3 rounded-lg">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="groups">groups</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Total Mahasiswa</p>
+<h3 class="text-h3 font-h3 text-primary mt-1">1,284</h3>
+<p class="text-[12px] text-green-600 font-medium mt-1">↑ 12% dari bulan lalu</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
+<div class="bg-secondary-container/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="school">school</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Total Sekolah</p>
+<h3 class="text-h3 font-h3 text-primary mt-1">86</h3>
+<p class="text-[12px] text-on-surface-variant font-medium mt-1">Tersebar di 5 wilayah</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
+<div class="bg-blue-50 p-3 rounded-lg">
+<span class="material-symbols-outlined text-blue-600 text-3xl" data-icon="assignment_turned_in">assignment_turned_in</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Penempatan Aktif</p>
+<h3 class="text-h3 font-h3 text-primary mt-1">942</h3>
+<p class="text-[12px] text-blue-600 font-medium mt-1">Berjalan lancar</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
+<div class="bg-error-container/20 p-3 rounded-lg">
+<span class="material-symbols-outlined text-error text-3xl" data-icon="pending_actions">pending_actions</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Menunggu Review</p>
+<h3 class="text-h3 font-h3 text-primary mt-1">45</h3>
+<p class="text-[12px] text-error font-medium mt-1">Perlu tindakan segera</p>
+</div>
+</div>
+</section>
+<!-- Main Data Visuals -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Bar Chart Area (Asymmetric Layout) -->
+<div class="lg:col-span-2 bg-white p-lg rounded-xl border border-slate-200 shadow-sm">
+<div class="flex items-center justify-between mb-xl">
+<div>
+<h3 class="text-h3 font-h3 text-primary">Pendaftaran Per Minggu</h3>
+<p class="text-body-sm text-on-surface-variant">Statistik pendaftaran mahasiswa baru PPL/KPM</p>
+</div>
+<select class="bg-slate-50 border-none rounded-lg text-label-md focus:ring-2 focus:ring-primary">
+<option>7 Hari Terakhir</option>
+<option>30 Hari Terakhir</option>
+</select>
+</div>
+<!-- Simulated Bar Chart -->
+<div class="relative h-[300px] w-full flex items-end justify-between px-4 pb-8 border-b border-slate-100">
+<div class="w-12 bg-primary/20 rounded-t-md relative group transition-all hover:bg-primary" style="height: 45%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">120</div>
+</div>
+<div class="w-12 bg-primary/20 rounded-t-md relative group transition-all hover:bg-primary" style="height: 65%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">185</div>
+</div>
+<div class="w-12 bg-primary/20 rounded-t-md relative group transition-all hover:bg-primary" style="height: 85%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">240</div>
+</div>
+<div class="w-12 bg-primary/40 rounded-t-md relative group transition-all hover:bg-primary" style="height: 55%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">155</div>
+</div>
+<div class="w-12 bg-primary/20 rounded-t-md relative group transition-all hover:bg-primary" style="height: 95%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">290</div>
+</div>
+<div class="w-12 bg-primary/20 rounded-t-md relative group transition-all hover:bg-primary" style="height: 75%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">210</div>
+</div>
+<div class="w-12 bg-primary rounded-t-md relative group transition-all" style="height: 100%;">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">312</div>
+</div>
+<!-- Y-axis labels -->
+<div class="absolute left-[-40px] h-full flex flex-col justify-between text-[10px] text-on-surface-variant font-medium">
+<span>400</span><span>300</span><span>200</span><span>100</span><span>0</span>
+</div>
+</div>
+<div class="flex justify-between px-4 mt-4 text-label-sm text-on-surface-variant font-medium">
+<span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+</div>
+</div>
+<!-- Recent Activity Feed -->
+<div class="bg-white p-lg rounded-xl border border-slate-200 shadow-sm flex flex-col">
+<div class="mb-lg">
+<h3 class="text-h3 font-h3 text-primary">Aktivitas Terkini</h3>
+<p class="text-body-sm text-on-surface-variant">Update dokumen dan registrasi</p>
+</div>
+<div class="flex-1 space-y-md overflow-y-auto pr-2">
+<!-- Activity Item 1 -->
+<div class="flex gap-md p-md hover:bg-slate-50 rounded-lg transition-colors border-l-4 border-secondary">
+<div class="flex-shrink-0 h-10 w-10 bg-secondary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="upload_file">upload_file</span>
+</div>
+<div class="flex-1">
+<p class="text-body-sm text-on-surface"><span class="font-bold">Andi Wijaya</span> mengunggah Laporan Mingguan</p>
+<p class="text-[12px] text-on-surface-variant mt-1">2 menit yang lalu • SMK Negeri 1</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex gap-md p-md hover:bg-slate-50 rounded-lg transition-colors border-l-4 border-primary">
+<div class="flex-shrink-0 h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="how_to_reg">how_to_reg</span>
+</div>
+<div class="flex-1">
+<p class="text-body-sm text-on-surface"><span class="font-bold">SMA Pelita Harapan</span> terverifikasi dalam sistem</p>
+<p class="text-[12px] text-on-surface-variant mt-1">45 menit yang lalu • Admin</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex gap-md p-md hover:bg-slate-50 rounded-lg transition-colors border-l-4 border-error">
+<div class="flex-shrink-0 h-10 w-10 bg-error/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-error" data-icon="error">error</span>
+</div>
+<div class="flex-1">
+<p class="text-body-sm text-on-surface"><span class="font-bold">Dokumen KRS</span> ditolak untuk Sarah Azizah</p>
+<p class="text-[12px] text-on-surface-variant mt-1">2 jam yang lalu • Reviewer</p>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="flex gap-md p-md hover:bg-slate-50 rounded-lg transition-colors border-l-4 border-secondary">
+<div class="flex-shrink-0 h-10 w-10 bg-secondary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="description">description</span>
+</div>
+<div class="flex-1">
+<p class="text-body-sm text-on-surface"><span class="font-bold">Budi Santoso</span> menyelesaikan pendaftaran PPL</p>
+<p class="text-[12px] text-on-surface-variant mt-1">5 jam yang lalu • Mandiri</p>
+</div>
+</div>
+</div>
+<button class="mt-lg w-full py-2 text-primary font-label-md hover:bg-primary/5 rounded-lg transition-colors">
+                        Lihat Semua Aktivitas
+                    </button>
+</div>
+</section>
+<!-- Bottom Information Section -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="bg-blue-900 rounded-xl p-xl text-white relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="text-h3 font-h3 mb-md">Panduan Admin SIPEP v2.0</h4>
+<p class="text-blue-100 mb-lg max-w-md">Pelajari fitur-fitur baru dalam manajemen penempatan sekolah dan otomatisasi laporan nilai untuk semester ini.</p>
+<button class="bg-teal-400 text-blue-900 px-lg py-md rounded-lg font-label-md hover:bg-teal-300 transition-all">Baca Panduan</button>
+</div>
+<!-- Decorative element -->
+<span class="material-symbols-outlined absolute -bottom-8 -right-8 text-[180px] text-blue-800 opacity-50" data-icon="menu_book">menu_book</span>
+</div>
+<div class="bg-surface-container-high rounded-xl p-xl flex items-center gap-xl">
+<div class="flex-1">
+<h4 class="text-h3 font-h3 text-primary mb-md">Butuh Bantuan Teknis?</h4>
+<p class="text-on-surface-variant mb-lg">Tim IT kami tersedia 24/7 untuk membantu kendala sistem Anda.</p>
+<div class="flex gap-md">
+<a class="text-primary font-label-md flex items-center gap-1 hover:underline" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="mail">mail</span> Hubungi IT
+                            </a>
+<a class="text-primary font-label-md flex items-center gap-1 hover:underline" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="call">call</span> 0812-3456-789
+                            </a>
+</div>
+</div>
+<div class="hidden sm:block h-32 w-32 rounded-2xl overflow-hidden shadow-lg">
+<img alt="IT Support Service" data-alt="A clean and professional tech support environment featuring a friendly staff member with a headset. The image uses bright, high-key lighting to emphasize a helpful and efficient service atmosphere. The background is a minimalist office with subtle blue and teal accents that match the corporate modern UI style of the SIPEP portal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADXGo46GXnmN1VEEQZX67zoa1l4a0pmt9IzXvYq8cyLppghxPrJYjX_xAo6Y59OKmLhTtRGCrKwmDPb1QNgkSVjwPRUdP79znM2Ebu_a26rNlLpLeSy6WQgMFqBEe9f3By_Fb9C1bwBYG6fji-jzcYn8q7OpH225QLGwXsHzkHmho5NEms4_9ILTt6-iQbt6txS-WGBF_K9Xphb0XfsL1tkd1Ql3mRtIjI61R5NHV-Vu3YnA_gX31ZFEaHs-jmqw_y82hjEE1s47k"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Shell -->
+<footer class="mt-auto w-full py-6 px-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 border-t border-slate-200 font-public-sans text-xs">
+<div class="flex flex-col md:flex-row items-center gap-4">
+<span class="font-bold text-slate-900">SIPEP</span>
+<span class="text-slate-500">© 2024 SIPEP Universitas. All Rights Reserved.</span>
+</div>
+<div class="flex gap-6">
+<a class="text-slate-500 hover:text-blue-600 transition-colors opacity-80 hover:opacity-100" href="#">Panduan Pengguna</a>
+<a class="text-slate-500 hover:text-blue-600 transition-colors opacity-80 hover:opacity-100" href="#">Kebijakan Privasi</a>
+<a class="text-slate-500 hover:text-blue-600 transition-colors opacity-80 hover:opacity-100" href="#">Kontak</a>
+</div>
+</footer>
+</main>
+</body></html>

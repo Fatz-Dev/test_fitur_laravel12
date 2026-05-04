@@ -1,81 +1,239 @@
 <!DOCTYPE html>
-<html lang="id">
+<html class="light" lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'KPM-PPL Manager')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet">
-    <style>body{font-family:'Inter',ui-sans-serif,system-ui;}</style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>@yield('title', 'SIPEP') - Portal Akademik</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                'primary':                    '#00236f',
+                'primary-container':          '#1e3a8a',
+                'on-primary':                 '#ffffff',
+                'on-primary-container':       '#90a8ff',
+                'primary-fixed':              '#dce1ff',
+                'primary-fixed-dim':          '#b6c4ff',
+                'on-primary-fixed':           '#00164e',
+                'on-primary-fixed-variant':   '#264191',
+                'inverse-primary':            '#b6c4ff',
+                'secondary':                  '#006a61',
+                'secondary-container':        '#86f2e4',
+                'on-secondary':               '#ffffff',
+                'on-secondary-container':     '#006f66',
+                'error':                      '#ba1a1a',
+                'error-container':            '#ffdad6',
+                'on-error':                   '#ffffff',
+                'on-error-container':         '#93000a',
+                'background':                 '#f8f9ff',
+                'on-background':              '#0d1c2e',
+                'surface':                    '#f8f9ff',
+                'surface-bright':             '#f8f9ff',
+                'surface-variant':            '#d5e3fc',
+                'surface-container-lowest':   '#ffffff',
+                'surface-container-low':      '#eff4ff',
+                'surface-container':          '#e6eeff',
+                'surface-container-high':     '#dce9ff',
+                'surface-container-highest':  '#d5e3fc',
+                'on-surface':                 '#0d1c2e',
+                'on-surface-variant':         '#444651',
+                'outline':                    '#757682',
+                'outline-variant':            '#c5c5d3',
+                'inverse-surface':            '#233144',
+                'inverse-on-surface':         '#eaf1ff',
+            },
+            borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem', full: '9999px' },
+            spacing: { xs: '4px', sm: '8px', md: '16px', lg: '24px', xl: '32px', '2xl': '48px', gutter: '24px', base: '4px', 'container-max': '1280px' },
+            fontFamily: {
+                'h1': ['"Public Sans"'], 'h2': ['"Public Sans"'], 'h3': ['"Public Sans"'],
+                'body-lg': ['"Public Sans"'], 'body-md': ['"Public Sans"'], 'body-sm': ['"Public Sans"'],
+                'label-md': ['"Public Sans"'], 'label-sm': ['"Public Sans"'],
+            },
+            fontSize: {
+                'h1':       ['36px', { lineHeight: '1.2', fontWeight: '700' }],
+                'h2':       ['30px', { lineHeight: '1.3', fontWeight: '600' }],
+                'h3':       ['24px', { lineHeight: '1.3', fontWeight: '600' }],
+                'body-lg':  ['18px', { lineHeight: '1.6', fontWeight: '400' }],
+                'body-md':  ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+                'body-sm':  ['14px', { lineHeight: '1.5', fontWeight: '400' }],
+                'label-md': ['14px', { lineHeight: '1',   fontWeight: '600' }],
+                'label-sm': ['12px', { lineHeight: '1',   fontWeight: '500' }],
+            },
+        },
+    },
+}
+</script>
+<style>
+    body { font-family: 'Public Sans', sans-serif; }
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        vertical-align: middle;
+    }
+</style>
+@stack('styles')
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
-@auth
-    <header class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center gap-6">
-                <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('mahasiswa.dashboard') }}"
-                   class="font-bold text-lg text-indigo-700">
-                    KPM-PPL Manager
-                </a>
-                @if(auth()->user()->isAdmin())
-                    <nav class="hidden md:flex gap-4 text-sm">
-                        <a href="{{ route('admin.dashboard') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.dashboard') ? 'text-indigo-700 font-semibold' : '' }}">Dashboard</a>
-                        <a href="{{ route('admin.mahasiswa.index') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.mahasiswa.*') ? 'text-indigo-700 font-semibold' : '' }}">Mahasiswa</a>
-                        <a href="{{ route('admin.schools.index') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.schools.*') ? 'text-indigo-700 font-semibold' : '' }}">Lokasi</a>
-                        <a href="{{ route('admin.gelombang.index') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.gelombang.*') ? 'text-indigo-700 font-semibold' : '' }}">Gelombang</a>
-                        <a href="{{ route('admin.registrations.index') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.registrations.*') ? 'text-indigo-700 font-semibold' : '' }}">Penempatan</a>
-                        <a href="{{ route('admin.settings.edit') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.settings.*') ? 'text-indigo-700 font-semibold' : '' }}">Pengaturan</a>
-                    </nav>
-                @else
-                    <nav class="hidden md:flex gap-4 text-sm">
-                        <a href="{{ route('mahasiswa.dashboard') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('mahasiswa.dashboard') ? 'text-indigo-700 font-semibold' : '' }}">Dashboard</a>
-                    </nav>
-                @endif
+<body class="bg-background text-on-surface min-h-screen">
+
+{{-- Mobile overlay --}}
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+{{-- Sidebar --}}
+<aside id="sidebar" class="fixed left-0 top-0 h-screen w-64 bg-blue-900 z-40 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300">
+    <div class="px-6 py-8">
+        <h1 class="text-2xl font-black text-white tracking-tight">SIPEP</h1>
+        <p class="text-teal-400 font-medium text-sm">Portal Akademik</p>
+    </div>
+
+    <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+        @if(auth()->user()?->isAdmin())
+            <a href="{{ route('admin.dashboard') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.dashboard') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('admin.mahasiswa.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.mahasiswa.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+                <span>Mahasiswa</span>
+            </a>
+            <a href="{{ route('admin.schools.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.schools.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">location_on</span>
+                <span>Lokasi</span>
+            </a>
+            <a href="{{ route('admin.gelombang.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.gelombang.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+                <span>Gelombang</span>
+            </a>
+            <a href="{{ route('admin.registrations.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.registrations.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+                <span>Penempatan</span>
+            </a>
+            <a href="{{ route('admin.settings.edit') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.settings.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">settings</span>
+                <span>Pengaturan</span>
+            </a>
+        @else
+            <a href="{{ route('mahasiswa.dashboard') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('mahasiswa.dashboard') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="{{ route('mahasiswa.profile.create') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('mahasiswa.profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <span class="material-symbols-outlined text-[20px]">person</span>
+                <span>Profil Saya</span>
+            </a>
+        @endif
+    </nav>
+
+    <div class="p-4 border-t border-blue-800">
+        <div class="flex items-center gap-3 px-4 py-2 mb-2">
+            <div class="h-8 w-8 rounded-full bg-teal-400 flex items-center justify-center text-blue-900 font-bold text-sm flex-shrink-0">
+                {{ strtoupper(substr(auth()->user()?->name ?? 'U', 0, 1)) }}
             </div>
-            <div class="flex items-center gap-3">
-                <span class="text-sm text-slate-600">{{ auth()->user()->name }}
-                    <span class="ml-1 inline-block px-2 py-0.5 text-xs rounded {{ auth()->user()->isAdmin() ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700' }}">
-                        {{ ucfirst(auth()->user()->role) }}
-                    </span>
-                </span>
-                <form method="POST" action="{{ route('logout') }}">@csrf
-                    <button class="text-sm text-slate-600 hover:text-rose-600">Keluar</button>
-                </form>
+            <div class="min-w-0">
+                <p class="text-white text-sm font-medium truncate">{{ auth()->user()?->name }}</p>
+                <p class="text-teal-400 text-xs capitalize">{{ auth()->user()?->role }}</p>
+            </div>
+        </div>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit"
+                    class="flex items-center gap-3 px-4 py-2 text-slate-300 hover:text-white w-full hover:bg-blue-800/50 rounded-lg transition-all text-sm">
+                <span class="material-symbols-outlined text-[20px]">logout</span>
+                <span>Keluar</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+{{-- Main canvas --}}
+<div class="md:ml-64 min-h-screen flex flex-col">
+
+    {{-- Top AppBar --}}
+    <header class="sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 h-16 bg-white border-b border-slate-200 shadow-sm">
+        <div class="flex items-center gap-4 flex-1">
+            {{-- Mobile hamburger --}}
+            <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            {{-- Page title on mobile --}}
+            <span class="md:hidden font-bold text-primary text-sm">SIPEP</span>
+            {{-- Search on desktop --}}
+            <div class="relative hidden md:block w-full max-w-md">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+                <input class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                       placeholder="Cari data mahasiswa atau lokasi..." type="text"/>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                <span class="material-symbols-outlined text-[20px]">notifications</span>
+            </button>
+            <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
+                {{ strtoupper(substr(auth()->user()?->name ?? 'U', 0, 1)) }}
             </div>
         </div>
     </header>
-@endauth
 
-<main class="flex-1">
-    <div class="max-w-7xl mx-auto px-4 py-6">
-        @if(session('status'))
-            <div class="mb-4 rounded-md bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-800">
-                {{ session('status') }}
-            </div>
-        @endif
-        @if($errors->any() && !$errors->has('email') && !$errors->has('password'))
-            <div class="mb-4 rounded-md bg-rose-50 border border-rose-200 px-4 py-3 text-sm text-rose-800">
-                <ul class="list-disc pl-5">
-                    @foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach
-                </ul>
-            </div>
-        @endif
+    {{-- Flash messages --}}
+    @if(session('status'))
+        <div class="mx-6 mt-4 px-4 py-3 rounded-xl bg-secondary/10 border border-secondary/30 text-secondary text-sm flex items-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+            {{ session('status') }}
+        </div>
+    @endif
+    @if($errors->any())
+        <div class="mx-6 mt-4 px-4 py-3 rounded-xl bg-error/10 border border-error/30 text-error text-sm">
+            <ul class="list-disc pl-5 space-y-1">
+                @foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Page content --}}
+    <main class="flex-1 p-4 md:p-6 lg:p-8 max-w-[1280px] w-full mx-auto">
         @yield('content')
-    </div>
-</main>
+    </main>
 
-<footer class="border-t border-slate-200 bg-white">
-    <div class="max-w-7xl mx-auto px-4 py-4 text-xs text-slate-500 text-center">
-        &copy; {{ date('Y') }} KPM-PPL Manager
-    </div>
-</footer>
+    {{-- Footer --}}
+    <footer class="mt-auto w-full py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-2 bg-slate-50 border-t border-slate-200 text-xs text-slate-500">
+        <div class="flex items-center gap-2">
+            <span class="font-bold text-slate-900">SIPEP</span>
+            <span>&copy; {{ date('Y') }} SIPEP Universitas. All Rights Reserved.</span>
+        </div>
+        <div class="flex gap-6">
+            <a class="hover:text-blue-600 transition-colors" href="#">Panduan Pengguna</a>
+            <a class="hover:text-blue-600 transition-colors" href="#">Kebijakan Privasi</a>
+        </div>
+    </footer>
+</div>
+
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+}
+</script>
+@stack('scripts')
 </body>
 </html>

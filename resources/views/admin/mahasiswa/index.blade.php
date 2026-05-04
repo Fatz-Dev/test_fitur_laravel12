@@ -1,55 +1,90 @@
 @extends('layouts.app')
 @section('title', 'Daftar Mahasiswa')
 @section('content')
-<div class="flex items-center justify-between mb-4">
-    <h1 class="text-2xl font-bold">Daftar Mahasiswa</h1>
+
+<div class="flex items-center justify-between mb-lg">
+    <div>
+        <h2 class="font-h2 text-h2 text-primary">Daftar Mahasiswa</h2>
+        <p class="font-body-sm text-on-surface-variant">Kelola dan tinjau data mahasiswa yang terdaftar</p>
+    </div>
 </div>
 
-<form method="GET" class="flex gap-2 mb-4">
-    <input name="q" value="{{ request('q') }}" placeholder="Cari nama / NIM / email"
-           class="border border-slate-300 rounded px-3 py-2 text-sm">
-    <select name="status" class="border border-slate-300 rounded px-3 py-2 text-sm">
+{{-- Filter --}}
+<form method="GET" class="flex flex-wrap gap-3 mb-lg">
+    <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+        <input name="q" value="{{ request('q') }}" placeholder="Cari nama / NIM / email"
+               class="pl-10 pr-4 py-2 border border-outline-variant rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 bg-white w-64"/>
+    </div>
+    <select name="status" class="border border-outline-variant rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-secondary/30">
         <option value="">Semua Status</option>
         @foreach(['pending', 'approved', 'rejected'] as $s)
             <option value="{{ $s }}" @selected(request('status')===$s)>{{ ucfirst($s) }}</option>
         @endforeach
     </select>
-    <button class="bg-slate-700 text-white text-sm px-4 rounded hover:bg-slate-800">Filter</button>
+    <button class="bg-primary text-white text-sm px-md py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+    </button>
 </form>
 
-<div class="bg-white border border-slate-200 rounded overflow-x-auto">
-    <table class="w-full text-sm">
-        <thead class="text-left text-xs text-slate-500 border-b bg-slate-50">
-            <tr>
-                <th class="px-3 py-2">Nama</th>
-                <th>NIM</th>
-                <th>Email</th>
-                <th>Microteaching</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody class="divide-y">
-        @forelse($mahasiswas as $m)
-            <tr>
-                <td class="px-3 py-2 font-medium">{{ $m->user->name }}</td>
-                <td>{{ $m->nim }}</td>
-                <td class="text-slate-500">{{ $m->user->email }}</td>
-                <td>{{ $m->microteaching_grade }}</td>
-                <td>
-                    @php $sc = ['pending'=>'amber','approved'=>'emerald','rejected'=>'rose'][$m->status]; @endphp
-                    <span class="text-xs px-2 py-1 rounded bg-{{ $sc }}-100 text-{{ $sc }}-700 capitalize">{{ $m->status }}</span>
-                </td>
-                <td class="text-right pr-3">
-                    <a href="{{ route('admin.mahasiswa.show', $m) }}" class="text-indigo-600 hover:underline text-xs">Detail</a>
-                </td>
-            </tr>
-        @empty
-            <tr><td colspan="6" class="text-center py-6 text-slate-500">Belum ada data.</td></tr>
-        @endforelse
-        </tbody>
-    </table>
+{{-- Table --}}
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="text-left border-b border-slate-200 bg-surface-container-low">
+                <tr>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Mahasiswa</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">NIM</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Email</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Microteaching</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
+                    <th class="px-md py-3"></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            @forelse($mahasiswas as $m)
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-md py-3">
+                        <div class="flex items-center gap-3">
+                            <div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
+                                {{ strtoupper(substr($m->user->name, 0, 1)) }}
+                            </div>
+                            <a href="{{ route('admin.mahasiswa.show', $m) }}" class="font-label-md text-on-surface hover:text-primary transition-colors">
+                                {{ $m->user->name }}
+                            </a>
+                        </div>
+                    </td>
+                    <td class="px-md py-3 font-body-sm text-on-surface">{{ $m->nim }}</td>
+                    <td class="px-md py-3 font-body-sm text-on-surface-variant">{{ $m->user->email }}</td>
+                    <td class="px-md py-3">
+                        <span class="font-label-md text-secondary">{{ $m->microteaching_grade }}</span>
+                    </td>
+                    <td class="px-md py-3">
+                        @php $badges = ['pending'=>'bg-amber-100 text-amber-700','approved'=>'bg-emerald-100 text-emerald-700','rejected'=>'bg-error/10 text-error']; @endphp
+                        <span class="text-[12px] px-2 py-1 rounded-full font-medium {{ $badges[$m->status] ?? 'bg-slate-100 text-slate-600' }} capitalize">
+                            {{ $m->status }}
+                        </span>
+                    </td>
+                    <td class="px-md py-3 text-right">
+                        <a href="{{ route('admin.mahasiswa.show', $m) }}"
+                           class="inline-flex items-center gap-1 text-[12px] text-primary hover:underline font-medium">
+                            Detail
+                            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center py-12 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-[48px] opacity-30 block mb-2">group</span>
+                        <p class="font-body-sm">Belum ada data mahasiswa.</p>
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="mt-4">{{ $mahasiswas->links() }}</div>
+<div class="mt-md">{{ $mahasiswas->links() }}</div>
 @endsection

@@ -1,29 +1,94 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 @section('title', 'Masuk')
-@section('content')
-<div class="max-w-md mx-auto mt-8 bg-white rounded-lg shadow border border-slate-200 p-6">
-    <h1 class="text-xl font-bold mb-1">Masuk Akun</h1>
-    <p class="text-sm text-slate-500 mb-4">KPM-PPL Manager</p>
-    <form method="POST" action="{{ route('login') }}" class="space-y-4">
-        @csrf
-        <div>
-            <label class="block text-sm font-medium mb-1">Email</label>
-            <input name="email" type="email" value="{{ old('email') }}" required
-                   class="w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            @error('email') <p class="text-xs text-rose-600 mt-1">{{ $message }}</p> @enderror
+@section('body-class', 'bg-overlay')
+@section('footer-class', 'text-white/50 bg-transparent')
+
+@section('body')
+<main class="relative z-10 flex-grow flex items-center justify-center px-lg py-2xl">
+    <div class="w-full max-w-[440px]">
+        {{-- Branding --}}
+        <div class="text-center mb-xl">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-xl shadow-lg mb-md">
+                <span class="material-symbols-outlined text-primary" style="font-size:40px">school</span>
+            </div>
+            <h1 class="font-h1 text-h1 text-white tracking-tight mb-xs">SIPEP</h1>
+            <p class="font-body-md text-surface-variant/80 tracking-wide">Portal Akademik Terpadu</p>
         </div>
-        <div>
-            <label class="block text-sm font-medium mb-1">Password</label>
-            <input name="password" type="password" required
-                   class="w-full border border-slate-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+        {{-- Login Card --}}
+        <div class="bg-surface-container-lowest rounded-xl shadow-2xl border border-outline-variant p-xl">
+            <div class="mb-lg">
+                <h2 class="font-h3 text-h3 text-on-surface">Selamat Datang</h2>
+                <p class="font-body-sm text-on-surface-variant mt-xs">Silakan masuk dengan akun institusi Anda.</p>
+            </div>
+
+            {{-- Error --}}
+            @error('email')
+                <div class="mb-lg px-md py-sm rounded-lg bg-error-container border border-error/20 flex items-center gap-sm">
+                    <span class="material-symbols-outlined text-error text-[18px]">error</span>
+                    <p class="font-label-sm text-error">{{ $message }}</p>
+                </div>
+            @enderror
+
+            <form method="POST" action="{{ route('login') }}" class="space-y-lg">
+                @csrf
+                {{-- Email --}}
+                <div class="space-y-xs">
+                    <label class="font-label-md text-label-md text-on-surface block" for="email">Email Kampus</label>
+                    <div class="relative group">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]">mail</span>
+                        <input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all placeholder:text-outline font-body-sm text-on-surface"
+                               id="email" name="email" type="email"
+                               value="{{ old('email') }}"
+                               placeholder="nama@universitas.ac.id" required autocomplete="email"/>
+                    </div>
+                </div>
+
+                {{-- Password --}}
+                <div class="space-y-xs">
+                    <div class="flex justify-between items-center">
+                        <label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
+                    </div>
+                    <div class="relative group">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]">lock</span>
+                        <input class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all placeholder:text-outline font-body-sm text-on-surface"
+                               id="password" name="password" type="password"
+                               placeholder="••••••••" required autocomplete="current-password"/>
+                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button"
+                                onclick="const i=document.getElementById('password');i.type=i.type==='password'?'text':'password';this.querySelector('span').textContent=i.type==='password'?'visibility':'visibility_off'">
+                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Remember --}}
+                <label class="flex items-center gap-sm cursor-pointer">
+                    <input type="checkbox" name="remember" class="rounded border-outline-variant text-secondary focus:ring-secondary">
+                    <span class="font-body-sm text-on-surface-variant">Ingat saya</span>
+                </label>
+
+                {{-- Submit --}}
+                <div class="pt-md">
+                    <button class="w-full bg-primary text-on-primary font-label-md py-4 rounded-lg shadow-md hover:bg-primary-container hover:shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
+                        <span>Masuk</span>
+                        <span class="material-symbols-outlined text-[20px]">login</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-xl pt-lg border-t border-outline-variant text-center">
+                <p class="font-body-sm text-on-surface-variant">
+                    Belum memiliki akun?
+                    <a class="text-secondary font-label-md hover:underline ml-1" href="{{ route('register') }}">Daftar Akun Baru</a>
+                </p>
+            </div>
         </div>
-        <label class="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="remember"> Ingat saya
-        </label>
-        <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded">Masuk</button>
-    </form>
-    <p class="text-sm text-center mt-4">
-        Belum punya akun? <a href="{{ route('register') }}" class="text-indigo-600 hover:underline">Daftar</a>
-    </p>
-</div>
+
+        {{-- Security notice --}}
+        <div class="mt-lg flex items-center justify-center gap-3 text-white/60">
+            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            <p class="font-label-sm">Koneksi aman terenkripsi SSL 256-bit</p>
+        </div>
+    </div>
+</main>
 @endsection

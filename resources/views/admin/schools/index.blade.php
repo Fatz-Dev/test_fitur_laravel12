@@ -1,90 +1,96 @@
 @extends('layouts.app')
-@section('title', 'Daftar Lokasi (Desa & Sekolah)')
+@section('title', 'Lokasi KPM & PPL')
 @section('content')
-<div class="flex items-center justify-between mb-4">
+
+<div class="flex items-center justify-between mb-lg">
     <div>
-        <h1 class="text-2xl font-bold">Lokasi KPM &amp; PPL</h1>
-        <p class="text-xs text-slate-500 mt-0.5">KPM &rarr; Desa &nbsp;|&nbsp; PPL &rarr; Sekolah</p>
+        <h2 class="font-h2 text-h2 text-primary">Lokasi KPM &amp; PPL</h2>
+        <p class="font-body-sm text-on-surface-variant">KPM &rarr; Desa &nbsp;|&nbsp; PPL &rarr; Sekolah</p>
     </div>
     <a href="{{ route('admin.schools.create') }}"
-       class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded">
-        + Tambah Lokasi
+       class="bg-primary text-white text-sm px-md py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2 font-label-md">
+        <span class="material-symbols-outlined text-[18px]">add_location</span>
+        Tambah Lokasi
     </a>
 </div>
 
-<div class="bg-white border border-slate-200 rounded overflow-x-auto">
-    <table class="w-full text-sm">
-        <thead class="text-left text-xs text-slate-500 border-b bg-slate-50">
-            <tr>
-                <th class="px-3 py-2">Nama Lokasi</th>
-                <th>Tipe</th>
-                <th>Jenjang / Kategori</th>
-                <th>Program</th>
-                <th>Kuota KPM / PPL</th>
-                <th>Koordinat</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody class="divide-y">
-        @forelse($schools as $s)
-            <tr>
-                <td class="px-3 py-2 font-medium">{{ $s->name }}</td>
-                <td>
-                    @if($s->program === 'KPM')
-                        <span class="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-700">Desa</span>
-                    @elseif($s->program === 'PPL')
-                        <span class="text-xs px-2 py-0.5 rounded bg-sky-100 text-sky-700">Sekolah</span>
-                    @else
-                        <span class="text-xs px-2 py-0.5 rounded bg-violet-100 text-violet-700">Desa &amp; Sekolah</span>
-                    @endif
-                </td>
-                <td class="text-slate-600">{{ $s->jenjang ?: '-' }}</td>
-                <td>{{ $s->program }}</td>
-                <td>
-                    @if($s->program !== 'PPL')
-                        <span class="text-amber-700">{{ $s->kuota_kpm }}</span>
-                    @else
-                        <span class="text-slate-400">-</span>
-                    @endif
-                    /
-                    @if($s->program !== 'KPM')
-                        <span class="text-sky-700">{{ $s->kuota_ppl }}</span>
-                    @else
-                        <span class="text-slate-400">-</span>
-                    @endif
-                </td>
-                <td class="text-xs text-slate-500">
-                    <a target="_blank" class="hover:underline"
-                       href="https://www.google.com/maps?q={{ $s->latitude }},{{ $s->longitude }}">
-                        {{ $s->latitude }}, {{ $s->longitude }}
-                    </a>
-                </td>
-                <td>
-                    <span class="text-xs px-2 py-1 rounded {{ $s->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }}">
-                        {{ $s->is_active ? 'Aktif' : 'Nonaktif' }}
-                    </span>
-                </td>
-                <td class="text-right pr-3 space-x-2">
-                    <a href="{{ route('admin.schools.edit', $s) }}"
-                       class="text-xs text-indigo-600 hover:underline">Edit</a>
-                    <form method="POST" action="{{ route('admin.schools.destroy', $s) }}" class="inline"
-                          onsubmit="return confirm('Hapus lokasi ini?');">
-                        @csrf @method('DELETE')
-                        <button class="text-xs text-rose-600 hover:underline">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="8" class="text-center py-6 text-slate-500">
-                    Belum ada lokasi terdaftar.
-                </td>
-            </tr>
-        @endforelse
-        </tbody>
-    </table>
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="text-left border-b border-slate-200 bg-surface-container-low">
+                <tr>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Nama Lokasi</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Tipe</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Jenjang</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Program</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Kuota KPM/PPL</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Koordinat</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
+                    <th class="px-md py-3"></th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            @forelse($schools as $s)
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-md py-3">
+                        <p class="font-label-md text-on-surface">{{ $s->name }}</p>
+                    </td>
+                    <td class="px-md py-3">
+                        @if($s->program === 'KPM')
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">Desa</span>
+                        @elseif($s->program === 'PPL')
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">Sekolah</span>
+                        @else
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 font-medium">Desa & Sekolah</span>
+                        @endif
+                    </td>
+                    <td class="px-md py-3 text-[12px] text-on-surface-variant">{{ $s->jenjang ?: '-' }}</td>
+                    <td class="px-md py-3 text-[12px] text-on-surface font-medium">{{ $s->program }}</td>
+                    <td class="px-md py-3 text-[12px]">
+                        <span class="{{ $s->program !== 'PPL' ? 'text-amber-700 font-medium' : 'text-outline' }}">
+                            {{ $s->program !== 'PPL' ? $s->kuota_kpm : '-' }}
+                        </span>
+                        <span class="text-outline mx-1">/</span>
+                        <span class="{{ $s->program !== 'KPM' ? 'text-blue-700 font-medium' : 'text-outline' }}">
+                            {{ $s->program !== 'KPM' ? $s->kuota_ppl : '-' }}
+                        </span>
+                    </td>
+                    <td class="px-md py-3">
+                        <a target="_blank" class="text-[12px] text-secondary hover:underline flex items-center gap-1"
+                           href="https://www.google.com/maps?q={{ $s->latitude }},{{ $s->longitude }}">
+                            <span class="material-symbols-outlined text-[14px]">map</span>
+                            {{ $s->latitude }}, {{ $s->longitude }}
+                        </a>
+                    </td>
+                    <td class="px-md py-3">
+                        <span class="text-[12px] px-2 py-1 rounded-full font-medium {{ $s->is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500' }}">
+                            {{ $s->is_active ? 'Aktif' : 'Nonaktif' }}
+                        </span>
+                    </td>
+                    <td class="px-md py-3 text-right">
+                        <div class="flex items-center justify-end gap-3">
+                            <a href="{{ route('admin.schools.edit', $s) }}"
+                               class="text-[12px] text-primary hover:underline font-medium">Edit</a>
+                            <form method="POST" action="{{ route('admin.schools.destroy', $s) }}" class="inline"
+                                  onsubmit="return confirm('Hapus lokasi ini?');">
+                                @csrf @method('DELETE')
+                                <button class="text-[12px] text-error hover:underline font-medium">Hapus</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="8" class="text-center py-12 text-on-surface-variant">
+                        <span class="material-symbols-outlined text-[48px] opacity-30 block mb-2">location_off</span>
+                        <p class="font-body-sm">Belum ada lokasi terdaftar.</p>
+                    </td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="mt-4">{{ $schools->links() }}</div>
+<div class="mt-md">{{ $schools->links() }}</div>
 @endsection

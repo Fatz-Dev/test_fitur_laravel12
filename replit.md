@@ -1,13 +1,43 @@
-# KPM-PPL Manager
+# SIPEP — Sistem Informasi Praktik & Edukasi Profesional
 
-Aplikasi web Laravel 12 untuk mengelola pendaftaran dan penempatan mahasiswa pada program **KPM** (Kuliah Pengabdian Masyarakat) dan **PPL** (Praktik Pengalaman Lapangan), dengan rekomendasi sekolah berdasarkan jarak dari tempat tinggal mahasiswa.
+Aplikasi web Laravel 12 untuk mengelola pendaftaran dan penempatan mahasiswa pada program **KPM** (Kuliah Pengabdian Masyarakat) dan **PPL** (Praktik Pengalaman Lapangan), dengan rekomendasi lokasi berdasarkan jarak dari tempat tinggal mahasiswa.
 
 ## Stack
 - PHP 8.4 + Laravel 12
 - Database: SQLite (`database/database.sqlite`)
-- View: Blade + Tailwind CSS via CDN
+- View: Blade + Tailwind CSS via CDN (`https://cdn.tailwindcss.com?plugins=forms,container-queries`)
 - Auth: **JWT custom** (firebase/php-jwt) — token disimpan di HTTP-only cookie `kpm_token`
 - Geocoding: **OpenStreetMap Nominatim API** (gratis, tanpa API key)
+- Font: **Public Sans** (Google Fonts CDN)
+- Icons: **Material Symbols Outlined** (Google Fonts CDN)
+
+## Design System (SIPEP Branding)
+- **Primary**: `#00236f` (blue-900) — sidebar, buttons, headings
+- **Secondary**: `#006a61` (teal) — accents, CTAs, links
+- **Error**: `#ba1a1a`
+- Layout: Fixed sidebar 256px (blue-900), sticky top AppBar (white), content area fluid 1280px max
+- Tailwind config inline di setiap layout (`tailwind.config.js` juga tersedia sebagai referensi)
+- Semua view extend `layouts.auth` (login/register) atau `layouts.app` (authenticated)
+
+## Views Redesigned (SIPEP UI)
+| View | Status |
+|------|--------|
+| `layouts/auth.blade.php` | ✅ Background foto kampus + overlay |
+| `layouts/app.blade.php` | ✅ Sidebar blue-900, AppBar, flash messages |
+| `auth/login.blade.php` | ✅ Dark overlay, SIPEP branding, Material icons |
+| `auth/register.blade.php` | ✅ Split layout: foto kampus kiri + form kanan |
+| `admin/dashboard.blade.php` | ✅ Stats cards, recent lists, banner section |
+| `mahasiswa/dashboard.blade.php` | ✅ Status cards, gelombang, penempatan grid, modal lokasi |
+| `admin/mahasiswa/index.blade.php` | ✅ Table dengan avatar, filter, badge status |
+| `admin/mahasiswa/show.blade.php` | ✅ Detail profil, aksi approve/reject, peta Leaflet |
+| `admin/registrations/index.blade.php` | ✅ Table penempatan dengan filter |
+| `admin/schools/index.blade.php` | ✅ Table lokasi KPM/PPL |
+| `admin/schools/form.blade.php` | ✅ Form + peta Leaflet interaktif |
+| `admin/gelombang/index.blade.php` | ✅ Table gelombang per program |
+| `admin/gelombang/form.blade.php` | ✅ Form tambah/edit gelombang |
+| `admin/settings/edit.blade.php` | ✅ Form pengaturan sistem |
+| `mahasiswa/profile-create.blade.php` | ✅ Pilih program cards, form data diri, peta, upload berkas |
+| `mahasiswa/choose-school.blade.php` | ✅ Grid rekomendasi lokasi |
 
 ## Akun Seeder Default
 | Role | Email | Password |
