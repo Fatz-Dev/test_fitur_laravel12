@@ -13,10 +13,10 @@ use Illuminate\Support\Collection;
 class AutoAssignService
 {
     /**
-     * Otomatis menetapkan sekolah KPM dan PPL untuk mahasiswa.
+     * Otomatis menetapkan lokasi KPM (desa) dan PPL (sekolah) untuk mahasiswa.
      *
-     * Kondisi 1: Cari sekolah terdekat dari domisili mahasiswa dalam radius max_radius_km.
-     * Kondisi 2: Jika kondisi 1 tidak terpenuhi, cari pasangan sekolah KPM+PPL
+     * Kondisi 1: Cari lokasi terdekat dari domisili mahasiswa dalam radius max_radius_km.
+     * Kondisi 2: Jika kondisi 1 tidak terpenuhi, cari pasangan desa KPM + sekolah PPL
      *            yang paling berdekatan satu sama lain (dengan kuota tersedia).
      *
      * @return array{KPM: array|null, PPL: array|null}

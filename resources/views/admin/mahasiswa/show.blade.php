@@ -79,7 +79,7 @@
                 <tr>
                     <th class="py-2">Program</th>
                     <th>Gelombang</th>
-                    <th>Sekolah</th>
+                    <th>Lokasi (Desa/Sekolah)</th>
                     <th>Jarak</th>
                     <th>Status</th>
                 </tr>

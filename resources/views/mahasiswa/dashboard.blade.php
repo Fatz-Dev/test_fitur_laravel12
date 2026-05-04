@@ -90,7 +90,11 @@
                     </div>
                     @if($reg)
                         <p class="text-sm font-medium text-slate-800">{{ $reg->school->name }}</p>
-                        <p class="text-xs text-slate-500">{{ $reg->school->jenjang }} &bull; {{ $reg->school->address }}</p>
+                        <p class="text-xs text-slate-500">
+                            {{ $reg->school->locationType() }}
+                            @if($reg->school->jenjang) &bull; {{ $reg->school->jenjang }}@endif
+                            &bull; {{ $reg->school->address }}
+                        </p>
                         <p class="text-xs text-slate-400 mt-1">Jarak dari domisili: {{ number_format($reg->distance_km, 2) }} km</p>
                         <div class="flex items-center justify-between mt-3">
                             @php $sc = ['pending'=>'amber','approved'=>'emerald','rejected'=>'rose','cancelled'=>'slate'][$reg->status]; @endphp

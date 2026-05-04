@@ -34,7 +34,7 @@
                 <th class="px-3 py-2">Mahasiswa</th>
                 <th>Program</th>
                 <th>Gelombang</th>
-                <th>Sekolah</th>
+                <th>Lokasi (Desa/Sekolah)</th>
                 <th>Jarak</th>
                 <th>Status</th>
                 <th>Diajukan</th>

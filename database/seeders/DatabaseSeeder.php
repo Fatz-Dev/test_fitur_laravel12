@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Kosongkan semua data
         DB::statement('PRAGMA foreign_keys = OFF');
         Registration::query()->delete();
         MahasiswaProfile::query()->delete();
@@ -56,34 +55,109 @@ class DatabaseSeeder extends Seeder
             'is_active'      => true,
         ]);
 
-        // ─── Sekolah ──────────────────────────────────────────────────────────
-        $schools = [
-            ['SDN 01 Jakarta Pusat',    'SD',  'Jl. Merdeka No. 1',        -6.1751, 106.8650, 'BOTH', 5, 5],
-            ['SMPN 02 Jakarta Selatan', 'SMP', 'Jl. Kebon Jeruk',          -6.2615, 106.8106, 'BOTH', 4, 4],
-            ['SMAN 03 Jakarta Timur',   'SMA', 'Jl. Matraman 88',          -6.2088, 106.8519, 'PPL',  0, 6],
-            ['SMKN 4 Jakarta Barat',    'SMK', 'Jl. Daan Mogot 12',        -6.1683, 106.7589, 'PPL',  0, 5],
-            ['MI Al-Hidayah',           'MI',  'Jl. Cempaka Putih 5',      -6.1722, 106.8730, 'KPM',  6, 0],
-            ['MTs Al-Falah',            'MTs', 'Jl. Tebet Raya 22',        -6.2295, 106.8543, 'BOTH', 3, 3],
-            ['MAN 1 Jakarta',           'MA',  'Jl. Asem Baris 9',         -6.2440, 106.8453, 'BOTH', 4, 4],
-            ['SDN 05 Bekasi',           'SD',  'Jl. Cut Mutia, Bekasi',    -6.2349, 106.9896, 'BOTH', 5, 5],
-        ];
+        // ─── Lokasi KPM (Desa) ────────────────────────────────────────────────
+        // KPM = penempatan di desa / kelurahan, bukan sekolah
+        $desaCempaka = School::create([
+            'name'      => 'Desa Cempaka Putih',
+            'jenjang'   => 'Kelurahan',
+            'address'   => 'Jl. Cempaka Putih Tengah, Jakarta Pusat',
+            'latitude'  => -6.1722,
+            'longitude' => 106.8730,
+            'program'   => 'KPM',
+            'kuota_kpm' => 8,
+            'kuota_ppl' => 0,
+            'is_active' => true,
+        ]);
 
-        $createdSchools = [];
-        foreach ($schools as [$name, $jenjang, $addr, $lat, $lng, $prog, $kpm, $ppl]) {
-            $createdSchools[$name] = School::create([
-                'name'       => $name,
-                'jenjang'    => $jenjang,
-                'address'    => $addr,
-                'latitude'   => $lat,
-                'longitude'  => $lng,
-                'program'    => $prog,
-                'kuota_kpm'  => $kpm,
-                'kuota_ppl'  => $ppl,
-                'is_active'  => true,
-            ]);
-        }
+        $desaTebet = School::create([
+            'name'      => 'Kelurahan Tebet Barat',
+            'jenjang'   => 'Kelurahan',
+            'address'   => 'Jl. Tebet Barat Dalam, Jakarta Selatan',
+            'latitude'  => -6.2295,
+            'longitude' => 106.8543,
+            'program'   => 'KPM',
+            'kuota_kpm' => 6,
+            'kuota_ppl' => 0,
+            'is_active' => true,
+        ]);
 
-        // ─── Mahasiswa 1: Profil kosong (tidak ada penempatan) ────────────────
+        $desaBekasi = School::create([
+            'name'      => 'Desa Margahayu Bekasi',
+            'jenjang'   => 'Desa',
+            'address'   => 'Jl. Cut Mutia, Bekasi Timur',
+            'latitude'  => -6.2349,
+            'longitude' => 106.9896,
+            'program'   => 'KPM',
+            'kuota_kpm' => 5,
+            'kuota_ppl' => 0,
+            'is_active' => true,
+        ]);
+
+        // ─── Lokasi PPL (Sekolah) ─────────────────────────────────────────────
+        // PPL = penempatan di sekolah
+        $sman3 = School::create([
+            'name'      => 'SMAN 03 Jakarta Timur',
+            'jenjang'   => 'SMA',
+            'address'   => 'Jl. Matraman Raya No. 88, Jakarta Timur',
+            'latitude'  => -6.2088,
+            'longitude' => 106.8519,
+            'program'   => 'PPL',
+            'kuota_kpm' => 0,
+            'kuota_ppl' => 6,
+            'is_active' => true,
+        ]);
+
+        $smkn4 = School::create([
+            'name'      => 'SMKN 4 Jakarta Barat',
+            'jenjang'   => 'SMK',
+            'address'   => 'Jl. Daan Mogot No. 12, Jakarta Barat',
+            'latitude'  => -6.1683,
+            'longitude' => 106.7589,
+            'program'   => 'PPL',
+            'kuota_kpm' => 0,
+            'kuota_ppl' => 5,
+            'is_active' => true,
+        ]);
+
+        $man1 = School::create([
+            'name'      => 'MAN 1 Jakarta',
+            'jenjang'   => 'MA',
+            'address'   => 'Jl. Asem Baris No. 9, Jakarta Selatan',
+            'latitude'  => -6.2440,
+            'longitude' => 106.8453,
+            'program'   => 'PPL',
+            'kuota_kpm' => 0,
+            'kuota_ppl' => 5,
+            'is_active' => true,
+        ]);
+
+        // ─── Lokasi BOTH (Sekolah yang juga menerima KPM) ────────────────────
+        // Beberapa sekolah dapat menampung mahasiswa KPM sekaligus PPL
+        $sdn01 = School::create([
+            'name'      => 'SDN 01 Jakarta Pusat',
+            'jenjang'   => 'SD',
+            'address'   => 'Jl. Merdeka Selatan No. 1, Jakarta Pusat',
+            'latitude'  => -6.1751,
+            'longitude' => 106.8650,
+            'program'   => 'BOTH',
+            'kuota_kpm' => 4,
+            'kuota_ppl' => 4,
+            'is_active' => true,
+        ]);
+
+        $smpn2 = School::create([
+            'name'      => 'SMPN 02 Jakarta Selatan',
+            'jenjang'   => 'SMP',
+            'address'   => 'Jl. Kebon Jeruk Raya, Jakarta Selatan',
+            'latitude'  => -6.2615,
+            'longitude' => 106.8106,
+            'program'   => 'BOTH',
+            'kuota_kpm' => 3,
+            'kuota_ppl' => 3,
+            'is_active' => true,
+        ]);
+
+        // ─── Mahasiswa 1: Profil kosong — belum ada penempatan ────────────────
         $u1 = User::create([
             'name'     => 'Andi Kosong',
             'email'    => 'andi.kosong@kampus.ac.id',
@@ -102,7 +176,7 @@ class DatabaseSeeder extends Seeder
             'reviewed_at'         => now(),
         ]);
 
-        // ─── Mahasiswa 2: Sudah ada penempatan KPM ────────────────────────────
+        // ─── Mahasiswa 2: Sudah ada penempatan KPM (desa) ────────────────────
         $u2 = User::create([
             'name'     => 'Budi Nur KPM',
             'email'    => 'budi.kpm@kampus.ac.id',
@@ -122,14 +196,14 @@ class DatabaseSeeder extends Seeder
         ]);
         Registration::create([
             'mahasiswa_profile_id' => $p2->id,
-            'school_id'            => $createdSchools['MI Al-Hidayah']->id,
+            'school_id'            => $desaCempaka->id,
             'gelombang_id'         => $gelombangKpm->id,
             'program'              => 'KPM',
-            'distance_km'          => 0.24,
+            'distance_km'          => 0.03,
             'status'               => 'pending',
         ]);
 
-        // ─── Mahasiswa 3: Sudah ada penempatan PPL ────────────────────────────
+        // ─── Mahasiswa 3: Sudah ada penempatan PPL (sekolah) ─────────────────
         $u3 = User::create([
             'name'     => 'Citra Hanya PPL',
             'email'    => 'citra.ppl@kampus.ac.id',
@@ -149,14 +223,14 @@ class DatabaseSeeder extends Seeder
         ]);
         Registration::create([
             'mahasiswa_profile_id' => $p3->id,
-            'school_id'            => $createdSchools['SMAN 03 Jakarta Timur']->id,
+            'school_id'            => $sman3->id,
             'gelombang_id'         => $gelombangPpl->id,
             'program'              => 'PPL',
             'distance_km'          => 0.00,
             'status'               => 'pending',
         ]);
 
-        // ─── Mahasiswa 4: Sudah ada penempatan KPM & PPL ─────────────────────
+        // ─── Mahasiswa 4: Sudah ada penempatan KPM (desa) + PPL (sekolah) ─────
         $u4 = User::create([
             'name'     => 'Dewi Lengkap KPM PPL',
             'email'    => 'dewi.keduanya@kampus.ac.id',
@@ -167,7 +241,7 @@ class DatabaseSeeder extends Seeder
             'user_id'             => $u4->id,
             'nim'                 => '2110004',
             'phone'               => '084444444444',
-            'address'             => 'Jl. Tebet Raya No. 22, Jakarta Selatan',
+            'address'             => 'Jl. Tebet Barat Dalam No. 12, Jakarta Selatan',
             'latitude'            => -6.2295,
             'longitude'           => 106.8543,
             'microteaching_grade' => 'A',
@@ -176,7 +250,7 @@ class DatabaseSeeder extends Seeder
         ]);
         Registration::create([
             'mahasiswa_profile_id' => $p4->id,
-            'school_id'            => $createdSchools['MTs Al-Falah']->id,
+            'school_id'            => $desaTebet->id,
             'gelombang_id'         => $gelombangKpm->id,
             'program'              => 'KPM',
             'distance_km'          => 0.00,
@@ -185,7 +259,7 @@ class DatabaseSeeder extends Seeder
         ]);
         Registration::create([
             'mahasiswa_profile_id' => $p4->id,
-            'school_id'            => $createdSchools['MAN 1 Jakarta']->id,
+            'school_id'            => $man1->id,
             'gelombang_id'         => $gelombangPpl->id,
             'program'              => 'PPL',
             'distance_km'          => 1.71,

@@ -24,7 +24,7 @@ class School extends Model
     protected function casts(): array
     {
         return [
-            'latitude' => 'decimal:7',
+            'latitude'  => 'decimal:7',
             'longitude' => 'decimal:7',
             'is_active' => 'boolean',
         ];
@@ -49,5 +49,26 @@ class School extends Model
     public function acceptsProgram(string $program): bool
     {
         return $this->program === $program || $this->program === 'BOTH';
+    }
+
+    /**
+     * Label tipe lokasi berdasarkan program.
+     * KPM → Desa, PPL → Sekolah, BOTH → Desa & Sekolah
+     */
+    public function locationType(): string
+    {
+        return match ($this->program) {
+            'KPM'  => 'Desa',
+            'PPL'  => 'Sekolah',
+            default => 'Desa & Sekolah',
+        };
+    }
+
+    /**
+     * Sebutan lokasi berdasarkan konteks program tertentu.
+     */
+    public static function labelFor(string $program): string
+    {
+        return $program === 'KPM' ? 'Desa' : 'Sekolah';
     }
 }

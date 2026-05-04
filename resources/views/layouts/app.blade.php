@@ -25,7 +25,7 @@
                         <a href="{{ route('admin.mahasiswa.index') }}"
                            class="hover:text-indigo-600 {{ request()->routeIs('admin.mahasiswa.*') ? 'text-indigo-700 font-semibold' : '' }}">Mahasiswa</a>
                         <a href="{{ route('admin.schools.index') }}"
-                           class="hover:text-indigo-600 {{ request()->routeIs('admin.schools.*') ? 'text-indigo-700 font-semibold' : '' }}">Sekolah</a>
+                           class="hover:text-indigo-600 {{ request()->routeIs('admin.schools.*') ? 'text-indigo-700 font-semibold' : '' }}">Lokasi</a>
                         <a href="{{ route('admin.gelombang.index') }}"
                            class="hover:text-indigo-600 {{ request()->routeIs('admin.gelombang.*') ? 'text-indigo-700 font-semibold' : '' }}">Gelombang</a>
                         <a href="{{ route('admin.registrations.index') }}"
