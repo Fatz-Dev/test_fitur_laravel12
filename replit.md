@@ -13,9 +13,12 @@ Aplikasi web Laravel 12 untuk mengelola pendaftaran dan penempatan mahasiswa pad
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | `admin@kampus.ac.id` | `admin123` |
-| Mahasiswa | `mahasiswa@kampus.ac.id` | `mahasiswa123` |
+| Mahasiswa (KPM) | `andi.kosong@kampus.ac.id` | `password123` |
+| Mahasiswa (KPM ditempatkan) | `budi.kpm@kampus.ac.id` | `password123` |
+| Mahasiswa (PPL ditempatkan) | `citra.ppl@kampus.ac.id` | `password123` |
+| Mahasiswa (PKPPM lengkap) | `dewi.keduanya@kampus.ac.id` | `password123` |
 
-Mahasiswa default sudah `approved`, NIM `2110001`, alamat di Jakarta Pusat (-6.1751, 106.8650), nilai microteaching A. Mahasiswa baru juga bisa daftar mandiri lewat halaman *Daftar*.
+Semua mahasiswa sudah `approved`. Mahasiswa baru juga bisa daftar mandiri lewat halaman *Daftar*.
 
 ## Alur Mahasiswa
 1. Daftar akun (nama, email kampus, password)
