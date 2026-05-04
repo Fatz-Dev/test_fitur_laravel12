@@ -11,6 +11,7 @@ class MahasiswaProfile extends Model
     protected $fillable = [
         'user_id',
         'nim',
+        'program_choice',
         'phone',
         'address',
         'latitude',
@@ -28,8 +29,8 @@ class MahasiswaProfile extends Model
     protected function casts(): array
     {
         return [
-            'latitude' => 'decimal:7',
-            'longitude' => 'decimal:7',
+            'latitude'    => 'decimal:7',
+            'longitude'   => 'decimal:7',
             'reviewed_at' => 'datetime',
         ];
     }
@@ -47,5 +48,32 @@ class MahasiswaProfile extends Model
     public function isApproved(): bool
     {
         return $this->status === 'approved';
+    }
+
+    /**
+     * Label pilihan program mahasiswa.
+     */
+    public function programChoiceLabel(): string
+    {
+        return match ($this->program_choice) {
+            'KPM'   => 'KPM (Desa)',
+            'PPL'   => 'PPL (Sekolah)',
+            'PKPPM' => 'PKPPM (Desa + Sekolah)',
+            default => $this->program_choice,
+        };
+    }
+
+    /**
+     * Daftar program yang harus ditetapkan berdasarkan pilihan.
+     *
+     * @return string[]
+     */
+    public function programsToAssign(): array
+    {
+        return match ($this->program_choice) {
+            'KPM'  => ['KPM'],
+            'PPL'  => ['PPL'],
+            default => ['KPM', 'PPL'], // PKPPM
+        };
     }
 }

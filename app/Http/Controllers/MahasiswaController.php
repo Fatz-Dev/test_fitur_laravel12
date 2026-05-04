@@ -45,6 +45,7 @@ class MahasiswaController extends Controller
 
         $data = $request->validate([
             'nim'                => ['required', 'string', 'max:30', 'unique:mahasiswa_profiles,nim'],
+            'program_choice'     => ['required', 'in:KPM,PPL,PKPPM'],
             'phone'              => ['nullable', 'string', 'max:30'],
             'address'            => ['required', 'string'],
             'latitude'           => ['required', 'numeric', 'between:-90,90'],
@@ -67,6 +68,7 @@ class MahasiswaController extends Controller
         MahasiswaProfile::create([
             'user_id'             => $userId,
             'nim'                 => $data['nim'],
+            'program_choice'      => $data['program_choice'],
             'phone'               => $data['phone'] ?? null,
             'address'             => $data['address'],
             'latitude'            => $data['latitude'],

@@ -1,6 +1,6 @@
 # Fitur Pemilihan Lokasi Otomatis — KPM & PPL
 
-> Dokumentasi teknis sistem penetapan lokasi KPM (Desa) dan PPL (Sekolah) secara otomatis berdasarkan domisili mahasiswa.
+> Dokumentasi teknis sistem penetapan lokasi KPM (Desa) dan PPL (Sekolah) secara otomatis berdasarkan domisili mahasiswa dan pilihan program.
 
 ---
 
@@ -11,7 +11,7 @@
 3. [API Pihak Ketiga yang Digunakan](#3-api-pihak-ketiga-yang-digunakan)
 4. [Skema Database](#4-skema-database)
 5. [Sisi Mahasiswa — Pemilihan Lokasi](#5-sisi-mahasiswa--pemilihan-lokasi)
-6. [Sisi Admin — Input Lokasi Sekolah](#6-sisi-admin--input-lokasi-sekolah)
+6. [Sisi Admin — Input Lokasi Desa & Sekolah](#6-sisi-admin--input-lokasi-desa--sekolah)
 7. [Algoritma Haversine (Perhitungan Jarak)](#7-algoritma-haversine-perhitungan-jarak)
 8. [Logika Filter Radius & Rekomendasi](#8-logika-filter-radius--rekomendasi)
 9. [Daftar File Penting](#9-daftar-file-penting)
@@ -21,66 +21,76 @@
 
 ## 1. Ringkasan Fitur
 
-Sistem ini menetapkan lokasi KPM (Kuliah Pengabdian Masyarakat) dan PPL (Praktik Pengalaman Lapangan) untuk setiap mahasiswa **secara otomatis** — tanpa mahasiswa memilih sendiri. Penempatan dipicu ketika admin menyetujui profil mahasiswa.
+Sistem ini menetapkan lokasi penempatan mahasiswa **secara otomatis** — tanpa mahasiswa memilih lokasi sendiri. Mahasiswa hanya memilih **jenis program** dan **mengisi koordinat domisili**. Penempatan dipicu ketika admin menyetujui profil mahasiswa.
 
-| Program | Lokasi Tujuan | Basis Penetapan |
-|---------|--------------|-----------------|
-| **KPM** | Desa / Kelurahan | Lokasi terdekat dari domisili mahasiswa dengan kuota tersedia |
-| **PPL** | Sekolah (SD–MA/SMK) | Lokasi terdekat dari domisili mahasiswa dengan kuota tersedia |
+### Tiga Pilihan Program
 
-**Dua kondisi penetapan:**
+| Kode | Nama | Lokasi Tujuan | Algoritma |
+|------|------|--------------|-----------|
+| **KPM** | Kuliah Pengabdian Masyarakat | 1 Desa / Kelurahan | Kondisi 1 → Kondisi 2 |
+| **PPL** | Praktik Pengalaman Lapangan | 1 Sekolah (SD–MA/SMK) | Kondisi 1 → Kondisi 2 |
+| **PKPPM** | KPM + PPL sekaligus | 1 Desa + 1 Sekolah | Kondisi 2 langsung |
 
-- **Kondisi 1 — Berbasis Radius:** Sistem mencari desa/sekolah terdekat dari koordinat domisili mahasiswa dalam radius yang dapat dikonfigurasi (default 10 km). Jika ditemukan lokasi dengan kuota tersedia, langsung ditetapkan.
-- **Kondisi 2 — Berbasis Kedekatan Antar-Lokasi:** Jika tidak ada lokasi dalam radius, sistem mencari pasangan desa KPM + sekolah PPL yang saling paling berdekatan satu sama lain (meminimalkan jarak tempuh mahasiswa antar dua lokasi penempatan).
+### Dua Kondisi Penetapan
+
+- **Kondisi 1 — Berbasis Radius** *(untuk KPM saja atau PPL saja)*: Sistem mencari desa/sekolah terdekat dari koordinat domisili dalam radius yang dapat dikonfigurasi (default 10 km). Jika ada lokasi dengan kuota tersedia, langsung ditetapkan.
+
+- **Kondisi 2 — Berbasis Kedekatan Antar-Lokasi** *(selalu digunakan untuk PKPPM; fallback untuk KPM/PPL jika Kondisi 1 kosong)*: Sistem mencari pasangan desa KPM + sekolah PPL yang paling dekat **satu sama lain**, meminimalkan jarak tempuh mahasiswa antar dua lokasi penempatan.
+
+> **Mengapa PKPPM langsung ke Kondisi 2?** Karena untuk mahasiswa yang mengikuti dua program sekaligus, lebih penting bahwa desa dan sekolah yang ditetapkan *berdekatan satu sama lain* daripada masing-masing dekat ke domisili. Ini mengurangi beban perjalanan antar lokasi selama program berlangsung.
 
 ---
 
 ## 2. Arsitektur & Alur Sistem
 
 ```
-Mahasiswa mengisi profil
+Mahasiswa mengisi formulir pendaftaran
+  │
+  ├─ Pilih Program: KPM | PPL | PKPPM
+  ├─ Isi alamat domisili + koordinat (via peta Leaflet / geocoding / GPS)
+  └─ Upload 4 berkas persyaratan
   │
   ▼
-Mahasiswa mengisi alamat domisili
-  │  ↳ Browser mengirim koordinat (latitude/longitude) via geocoding
-  │    atau GPS browser
-  ▼
-Admin mereview profil
+Admin mereview profil mahasiswa
   │
   ▼
 Admin klik "Setujui & Tetapkan Penempatan"
   │
   ▼
 MahasiswaManagementController@approve()
-  │
-  ├─► Gelombang::activeFor('KPM') → cek apakah gelombang KPM aktif & terbuka
-  ├─► Gelombang::activeFor('PPL') → cek apakah gelombang PPL aktif & terbuka
+  │  → profile->status = 'approved'
+  │  → memanggil AutoAssignService::assign($profile)
   │
   ▼
-AutoAssignService@assign(MahasiswaProfile $profile)
+AutoAssignService::assign(MahasiswaProfile $profile)
   │
-  ├─ [Kondisi 1] findNearestWithinRadius()
-  │     • Ambil semua lokasi aktif dengan program KPM atau PPL
-  │     • Hitung jarak ke setiap lokasi dengan formula Haversine
-  │     • Filter: jarak ≤ max_radius_km DAN kuota tersedia > 0
-  │     • Ambil yang terdekat
+  ├─ Baca profile->program_choice → ['KPM'], ['PPL'], atau ['KPM','PPL']
+  ├─ Baca profile->programsToAssign() → daftar program yang perlu ditetapkan
   │
-  ├─ [Kondisi 2] assignByProximity()
-  │     • Jika 1 program belum terpenuhi: cari lokasi terdekat dari
-  │       lokasi program lain yang sudah ditetapkan (atau dari domisili)
-  │     • Jika 2 program belum terpenuhi: iterasi semua kombinasi
-  │       (desa_kpm × sekolah_ppl), pilih pasangan dengan jarak terkecil
+  ├─ Cek gelombang aktif per program:
+  │    Gelombang::activeFor('KPM') → is_active=true & isOpen() = true?
+  │    Gelombang::activeFor('PPL') → is_active=true & isOpen() = true?
+  │    Jika tidak ada → skip program tersebut (reason: no_active_wave)
+  │
+  ├─ [PKPPM] → langsung Kondisi 2
+  │    Iterasi semua kombinasi (desa_kpm × sekolah_ppl)
+  │    Pilih pasangan dengan jarak antar-lokasi terkecil
+  │
+  └─ [KPM atau PPL saja]
+       ├─ Kondisi 1: findNearestWithinRadius()
+       │    Haversine(domisili, lokasi) ≤ radius && kuota > 0 → tetapkan
+       │
+       └─ Kondisi 2 (fallback): assignByProximity()
+            Jika tidak ada dalam radius → cari lokasi paling dekat
+            (dari anchor lokasi lain jika ada, atau dari domisili)
   │
   ▼
 Registration::create() → simpan ke tabel registrations
-  │  • mahasiswa_profile_id
-  │  • school_id (desa untuk KPM, sekolah untuk PPL)
-  │  • gelombang_id
-  │  • program ('KPM' atau 'PPL')
-  │  • distance_km (jarak domisili ke lokasi)
-  │  • status = 'pending'
+  • mahasiswa_profile_id, school_id, gelombang_id
+  • program ('KPM' atau 'PPL'), distance_km, status='pending'
+  │
   ▼
-Mahasiswa & admin dapat melihat hasil penempatan di dashboard
+Admin & mahasiswa melihat hasil penempatan di dashboard masing-masing
 ```
 
 ---
@@ -113,11 +123,9 @@ GET https://nominatim.openstreetmap.org/search
 ```json
 [
   {
-    "place_id": 123456,
     "display_name": "Jalan Merdeka, Gambir, Jakarta Pusat, DKI Jakarta",
     "lat": "-6.1751",
-    "lon": "106.8650",
-    "type": "residential"
+    "lon": "106.8650"
   }
 ]
 ```
@@ -125,57 +133,65 @@ GET https://nominatim.openstreetmap.org/search
 **Controller yang menangani:** `app/Http/Controllers/GeocodeController.php`
 
 ```php
-// Meneruskan query ke Nominatim dan mengembalikan hasilnya ke frontend
 public function search(Request $request): JsonResponse
 {
     $q = $request->validate(['q' => 'required|string|min:3'])['q'];
 
-    $response = Http::withHeaders([
-        'User-Agent' => 'KPM-PPL-Manager/1.0',
-    ])->get('https://nominatim.openstreetmap.org/search', [
-        'q'            => $q,
-        'format'       => 'json',
-        'limit'        => 5,
-        'countrycodes' => 'id',
-        'addressdetails' => 1,
-    ]);
+    $response = Http::withHeaders(['User-Agent' => 'KPM-PPL-Manager/1.0'])
+        ->get('https://nominatim.openstreetmap.org/search', [
+            'q' => $q, 'format' => 'json', 'limit' => 5,
+            'countrycodes' => 'id', 'addressdetails' => 1,
+        ]);
 
     return response()->json(['results' => $response->json()]);
 }
 ```
 
-**Tidak ada API key yang diperlukan.** Cukup sertakan `User-Agent` yang jelas agar tidak diblokir oleh server OSM.
+### Leaflet.js + OpenStreetMap Tiles
+
+**Digunakan untuk:** Peta interaktif di halaman form profil mahasiswa, form lokasi admin, dan halaman detail mahasiswa.
+
+| Detail | Nilai |
+|--------|-------|
+| Library | Leaflet.js 1.9.4 |
+| CDN | `https://unpkg.com/leaflet@1.9.4/dist/leaflet.js` |
+| Tile Provider | OpenStreetMap (`{s}.tile.openstreetmap.org`) |
+| API Key | Tidak diperlukan |
+
+Fungsionalitas peta:
+- **Form lokasi admin:** klik peta → mengisi lat/lng otomatis; drag marker untuk perbaikan presisi
+- **Form profil mahasiswa:** klik peta → mengisi koordinat domisili
+- **Detail mahasiswa (admin):** marker biru (domisili), amber (desa KPM), biru langit (sekolah PPL), dengan garis putus-putus
 
 ### Geolocation API (Browser)
 
-**Digunakan untuk:** Mendapatkan koordinat GPS langsung dari browser mahasiswa (alternatif dari pencarian teks).
+**Digunakan untuk:** Koordinat GPS real-time dari perangkat pengguna (alternatif pencarian teks).
 
 ```javascript
 navigator.geolocation.getCurrentPosition(position => {
-    // position.coords.latitude
-    // position.coords.longitude
+    // position.coords.latitude / longitude
 });
 ```
 
-Tidak memerlukan API key. Berjalan di sisi client (JavaScript), bukan server.
+Tidak memerlukan API key. Berjalan di sisi client.
 
 ---
 
 ## 4. Skema Database
 
-### Tabel `schools` — Menyimpan Desa (KPM) & Sekolah (PPL)
+### Tabel `schools` — Desa (KPM) & Sekolah (PPL)
 
 ```sql
 CREATE TABLE schools (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    name            TEXT    NOT NULL,           -- "Desa Cempaka Putih" atau "SMAN 03 Jakarta"
-    jenjang         TEXT,                       -- SD/SMP/SMA/SMK/MI/MTs/MA (PPL) atau Desa/Kelurahan (KPM)
+    name            TEXT    NOT NULL,     -- "Desa Cempaka Putih" atau "SMAN 03 Jakarta"
+    jenjang         TEXT,                 -- SD/SMP/.../MA (PPL) atau Desa/Kelurahan (KPM)
     address         TEXT    NOT NULL,
     latitude        DECIMAL(10,7) NOT NULL,
     longitude       DECIMAL(10,7) NOT NULL,
-    program         TEXT    NOT NULL DEFAULT 'BOTH', -- 'KPM' | 'PPL' | 'BOTH'
-    kuota_kpm       INTEGER NOT NULL DEFAULT 0,  -- max mahasiswa KPM (0 jika PPL only)
-    kuota_ppl       INTEGER NOT NULL DEFAULT 0,  -- max mahasiswa PPL (0 jika KPM only)
+    program         TEXT    NOT NULL DEFAULT 'BOTH',  -- 'KPM' | 'PPL' | 'BOTH'
+    kuota_kpm       INTEGER NOT NULL DEFAULT 0,
+    kuota_ppl       INTEGER NOT NULL DEFAULT 0,
     contact_person  TEXT,
     phone           TEXT,
     is_active       BOOLEAN NOT NULL DEFAULT 1,
@@ -188,26 +204,43 @@ CREATE TABLE schools (
 
 | Kolom | Peran |
 |-------|-------|
-| `latitude`, `longitude` | Titik koordinat lokasi — digunakan Haversine untuk menghitung jarak ke domisili mahasiswa |
+| `latitude`, `longitude` | Titik koordinat lokasi — dipakai Haversine untuk menghitung jarak ke domisili mahasiswa |
 | `program` | Menentukan apakah lokasi ini untuk `KPM` (desa), `PPL` (sekolah), atau `BOTH` |
-| `kuota_kpm`, `kuota_ppl` | Batas mahasiswa per lokasi per program — sistem tidak akan menetapkan ke lokasi yang sudah penuh |
+| `kuota_kpm`, `kuota_ppl` | Batas mahasiswa per lokasi — lokasi penuh tidak akan dipilih |
 | `is_active` | Hanya lokasi aktif yang dipertimbangkan sistem |
 
-### Tabel `mahasiswa_profiles` — Menyimpan Domisili Mahasiswa
+### Tabel `mahasiswa_profiles` — Profil & Pilihan Program Mahasiswa
 
 ```sql
 CREATE TABLE mahasiswa_profiles (
-    id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id         INTEGER NOT NULL,
-    nim             TEXT    NOT NULL,
-    address         TEXT    NOT NULL,       -- Teks alamat lengkap
-    latitude        DECIMAL(10,7) NOT NULL, -- Koordinat domisili — titik acuan jarak
-    longitude       DECIMAL(10,7) NOT NULL,
-    ...
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id              INTEGER NOT NULL,
+    nim                  TEXT    NOT NULL UNIQUE,
+    program_choice       TEXT    NOT NULL DEFAULT 'PKPPM', -- 'KPM' | 'PPL' | 'PKPPM'
+    phone                TEXT,
+    address              TEXT    NOT NULL,
+    latitude             DECIMAL(10,7) NOT NULL,   -- titik asal perhitungan jarak
+    longitude            DECIMAL(10,7) NOT NULL,
+    microteaching_grade  TEXT    NOT NULL,
+    transkrip_path       TEXT,
+    ktm_path             TEXT,
+    surat_pengantar_path TEXT,
+    pas_foto_path        TEXT,
+    status               TEXT    NOT NULL DEFAULT 'pending',  -- pending|approved|rejected
+    admin_note           TEXT,
+    reviewed_at          TIMESTAMP,
+    created_at           TIMESTAMP,
+    updated_at           TIMESTAMP
 );
 ```
 
-**Kolom kunci:** `latitude` dan `longitude` adalah titik asal perhitungan jarak ke semua desa/sekolah.
+**Kolom `program_choice`** menentukan alur penetapan di `AutoAssignService`:
+
+| Nilai | Program Yang Ditetapkan | Algoritma |
+|-------|------------------------|-----------|
+| `KPM` | Hanya KPM (desa) | Kondisi 1 → Kondisi 2 |
+| `PPL` | Hanya PPL (sekolah) | Kondisi 1 → Kondisi 2 |
+| `PKPPM` | KPM + PPL keduanya | Kondisi 2 langsung (pasangan berdekatan) |
 
 ### Tabel `registrations` — Hasil Penempatan
 
@@ -217,8 +250,8 @@ CREATE TABLE registrations (
     mahasiswa_profile_id  INTEGER NOT NULL REFERENCES mahasiswa_profiles(id),
     school_id             INTEGER NOT NULL REFERENCES schools(id),
     gelombang_id          INTEGER REFERENCES gelombang(id),
-    program               TEXT    NOT NULL,  -- 'KPM' atau 'PPL'
-    distance_km           DECIMAL(8,3),      -- Jarak domisili ke lokasi saat penetapan
+    program               TEXT    NOT NULL,           -- 'KPM' atau 'PPL'
+    distance_km           DECIMAL(8,3),               -- jarak domisili → lokasi
     status                TEXT    NOT NULL DEFAULT 'pending',
     note                  TEXT,
     confirmed_at          TIMESTAMP,
@@ -232,9 +265,9 @@ CREATE TABLE registrations (
 ```sql
 CREATE TABLE gelombang (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    program         TEXT    NOT NULL,  -- 'KPM' atau 'PPL'
-    nomor           INTEGER NOT NULL,  -- Nomor urut gelombang
-    tahun_akademik  TEXT    NOT NULL,  -- Contoh: "2024/2025"
+    program         TEXT    NOT NULL,   -- 'KPM' atau 'PPL'
+    nomor           INTEGER NOT NULL,
+    tahun_akademik  TEXT    NOT NULL,
     tanggal_buka    DATE,
     tanggal_tutup   DATE,
     is_active       BOOLEAN NOT NULL DEFAULT 0,
@@ -243,19 +276,12 @@ CREATE TABLE gelombang (
 );
 ```
 
-Sistem hanya menetapkan lokasi jika ada gelombang **aktif** (`is_active = 1`) **dan terbuka** (`tanggal_buka ≤ hari ini ≤ tanggal_tutup`) untuk program yang bersangkutan.
+Penempatan hanya terjadi jika gelombang **aktif** (`is_active=1`) **dan terbuka** (`tanggal_buka ≤ hari ini ≤ tanggal_tutup`) per program.
 
-### Tabel `settings` — Konfigurasi Global
+### Tabel `settings` — Konfigurasi
 
-```sql
-CREATE TABLE settings (
-    key   TEXT PRIMARY KEY,
-    value TEXT
-);
-```
-
-| Key | Nilai Default | Keterangan |
-|-----|--------------|------------|
+| Key | Default | Keterangan |
+|-----|---------|------------|
 | `max_radius_km` | `10` | Radius pencarian Kondisi 1 (km) |
 | `institution_name` | `Kampus Pendidikan` | Nama institusi |
 
@@ -263,87 +289,85 @@ CREATE TABLE settings (
 
 ## 5. Sisi Mahasiswa — Pemilihan Lokasi
 
-Mahasiswa **tidak dapat** memilih desa atau sekolah secara manual. Yang dapat dilakukan mahasiswa hanyalah **memasukkan koordinat domisili** dengan akurat — sistem yang kemudian menetapkan lokasi terbaik.
+### Langkah 1 — Pilih Program
 
-### Cara Mahasiswa Mengisi Koordinat Domisili
+Di halaman `mahasiswa/profile/create`, mahasiswa memilih satu dari tiga program melalui kartu pilihan interaktif:
 
-Mahasiswa memiliki dua cara di halaman profil:
-
-#### A. Pencarian Alamat Teks (via Nominatim)
-
-1. Mahasiswa mengetik alamat lengkap di kolom "Alamat Tempat Tinggal"
-2. Klik tombol **"Cari Koordinat (OpenStreetMap)"**
-3. Sistem mengirim request ke `GeocodeController` → diteruskan ke Nominatim
-4. Hasil pencarian muncul sebagai daftar — mahasiswa klik untuk memilih
-5. Kolom `latitude` dan `longitude` terisi otomatis
-
-```javascript
-// Alur di frontend (resources/views/mahasiswa/dashboard.blade.php)
-async function modalSearchAddress() {
-    const q = document.getElementById('modal-address').value.trim();
-
-    const r = await fetch(`/geocode?q=${encodeURIComponent(q)}`, {
-        headers: { 'X-CSRF-TOKEN': csrf },
-        credentials: 'same-origin',
-    });
-    const data = await r.json();
-
-    // Tampilkan hasil → mahasiswa klik → isi lat/lng
-}
+```
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────────┐
+│  🏘️ KPM         │  │  🏫 PPL         │  │  🏘️🏫 PKPPM         │
+│  Desa saja      │  │  Sekolah saja   │  │  Desa + Sekolah     │
+│                 │  │                 │  │                     │
+│  1 penempatan   │  │  1 penempatan   │  │  2 penempatan       │
+│  Kondisi 1→2    │  │  Kondisi 1→2    │  │  Kondisi 2 langsung │
+└─────────────────┘  └─────────────────┘  └─────────────────────┘
 ```
 
-#### B. GPS Browser
+Ketika PKPPM dipilih, muncul info box penjelasan algoritma kedekatan antar-lokasi.
 
-1. Mahasiswa klik **"Gunakan lokasi saya"**
-2. Browser meminta izin akses GPS
-3. Koordinat diisi otomatis dari `navigator.geolocation.getCurrentPosition()`
+### Langkah 2 — Isi Koordinat Domisili
 
+Tiga cara mengisi koordinat:
+
+**A. Klik Peta (Leaflet)**
+```
+Peta interaktif muncul di sisi kanan form.
+Klik di mana saja → marker muncul → lat/lng terisi otomatis.
+Drag marker untuk presisi lebih baik.
+```
+
+**B. Pencarian Alamat (Nominatim)**
+```javascript
+// Ketik alamat → klik "Cari dari Alamat"
+// → request ke /geocode → Nominatim → tampil daftar hasil
+// → klik hasil → marker pindah ke lokasi tersebut
+```
+
+**C. GPS Browser**
 ```javascript
 navigator.geolocation.getCurrentPosition(p => {
-    document.getElementById('modal-lat').value = p.coords.latitude.toFixed(7);
-    document.getElementById('modal-lng').value = p.coords.longitude.toFixed(7);
+    setCoords(p.coords.latitude, p.coords.longitude);
 });
 ```
 
-### Kapan Lokasi Dapat Diperbarui
+### Kapan Koordinat Dapat Diubah
 
-- Koordinat **hanya dapat diubah** saat status profil masih `pending`
-- Setelah admin menyetujui (`approved`), tombol "Perbarui Lokasi Domisili" disembunyikan
-- Ini mencegah manipulasi koordinat setelah penempatan ditetapkan
+- Hanya saat status profil masih `pending`
+- Setelah admin menyetujui, tombol "Perbarui Lokasi Domisili" disembunyikan
+- Mencegah manipulasi koordinat setelah penempatan ditetapkan
+
+### Upload Berkas
+
+Mahasiswa mengunggah 4 berkas sekaligus melalui satu drop zone:
+- Drop zone utama → pilih hingga 4 file sekaligus → JS mengisi slot secara urut
+- Atau pilih file individual per slot
+- 4 slot: Transkrip, KTM, Surat Pengantar, Pas Foto
+- Backend menerima 4 field terpisah (`transkrip`, `ktm`, `surat_pengantar`, `pas_foto`)
 
 ---
 
-## 6. Sisi Admin — Input Lokasi Sekolah
+## 6. Sisi Admin — Input Lokasi Desa & Sekolah
 
-Admin mendaftarkan desa (untuk KPM) dan sekolah (untuk PPL) melalui menu **Lokasi** di panel admin.
+Admin mendaftarkan desa (KPM) dan sekolah (PPL) via menu **Lokasi**.
 
 ### Membedakan Desa vs Sekolah
 
-Saat menambah lokasi, admin memilih **Program**:
+| Program | Tipe | Jenjang |
+|---------|------|---------|
+| `KPM` | Desa | Desa / Kelurahan / Kecamatan |
+| `PPL` | Sekolah | SD / SMP / SMA / SMK / MI / MTs / MA |
+| `BOTH` | Keduanya | Jenjang sekolah (juga menerima KPM) |
 
-| Pilihan Program | Tipe Lokasi | Kuota yang Diisi |
-|----------------|-------------|-----------------|
-| `KPM saja (Desa)` | Desa / Kelurahan | Kuota KPM saja |
-| `PPL saja (Sekolah)` | Sekolah | Kuota PPL saja |
-| `KPM & PPL` | Sekolah yang juga menerima KPM | Kuota KPM + PPL |
+Form menyesuaikan label dan pilihan jenjang secara dinamis (JavaScript `updateLabels()`).
 
-Form secara dinamis menyesuaikan label dan field yang tampil sesuai pilihan program (menggunakan JavaScript `updateLabels()`).
+### Peta di Form Lokasi
 
-### Cara Admin Mengisi Koordinat Lokasi
-
-Sama seperti mahasiswa — admin dapat menggunakan:
-- **"Cari Koordinat via Alamat"** → Nominatim
-- **"Gunakan Lokasi GPS Saya"** → Geolocation API
-
-Koordinat ini adalah titik tujuan yang akan diukur jaraknya dari domisili setiap mahasiswa saat penetapan.
+Peta Leaflet interaktif di sisi kanan form:
+- Klik peta → mengisi kolom Latitude & Longitude
+- Drag marker → memperbarui koordinat
+- Tombol GPS / Cari Alamat → memindahkan marker ke posisi baru
 
 ### Kuota Lokasi
-
-Setiap lokasi memiliki kuota per program:
-- `kuota_kpm`: maksimum mahasiswa KPM yang dapat ditempatkan di lokasi ini
-- `kuota_ppl`: maksimum mahasiswa PPL yang dapat ditempatkan di lokasi ini
-
-Sistem menghitung sisa kuota secara real-time:
 
 ```php
 // app/Models/School.php
@@ -354,20 +378,23 @@ public function availableSlots(string $program): int
         ->where('program', $program)
         ->whereIn('status', ['pending', 'approved'])
         ->count();
-
     return max(0, $kuota - $taken);
 }
 ```
 
-> Penempatan dengan status `pending` **sudah dihitung** sebagai slot terpakai — mencegah double-booking saat admin belum menyetujui registrasi.
+> Slot `pending` sudah dihitung sebagai terpakai — mencegah overbooking.
+
+### Peta di Halaman Detail Mahasiswa
+
+Menampilkan 3 jenis marker sekaligus:
+- 🔵 Biru — domisili mahasiswa
+- 🟡 Amber — desa KPM
+- 🔵 Biru Langit — sekolah PPL
+- Garis putus-putus menghubungkan domisili ke masing-masing lokasi
 
 ---
 
 ## 7. Algoritma Haversine (Perhitungan Jarak)
-
-Semua perhitungan jarak menggunakan **formula Haversine** — formula trigonometri bola yang memperhitungkan kelengkungan bumi, menghasilkan jarak garis lurus (great-circle distance) dalam kilometer.
-
-### Implementasi
 
 **File:** `app/Support/Geo.php`
 
@@ -393,60 +420,30 @@ class Geo
 
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-        return $earthRadius * $c; // hasil dalam km
+        return $earthRadius * $c;
     }
 }
 ```
 
-### Penjelasan Langkah-langkah
+### Formula Matematika
 
 ```
-1. Konversi derajat → radian (semua koordinat)
-   lat_rad = lat_derajat × (π / 180)
-
-2. Hitung selisih koordinat
-   Δlat = lat2_rad − lat1_rad
-   Δlon = lon2_rad − lon1_rad
-
-3. Formula Haversine
-   a = sin²(Δlat/2) + cos(lat1) × cos(lat2) × sin²(Δlon/2)
-   c = 2 × atan2(√a, √(1−a))
-
-4. Jarak = R × c
-   R = 6371 km (jari-jari rata-rata bumi)
+a = sin²(Δlat/2) + cos(lat1) × cos(lat2) × sin²(Δlon/2)
+c = 2 × atan2(√a, √(1−a))
+d = R × c          (R = 6371 km)
 ```
 
-### Contoh Perhitungan
+### Akurasi & Batas
 
-```
-Domisili mahasiswa : -6.2295° LS, 106.8543° BT (Tebet, Jakarta Selatan)
-Desa KPM           : -6.2349° LS, 106.9896° BT (Bekasi)
-
-Δlat = -6.2349 − (-6.2295) = -0.0054° → rad = -0.0000942
-Δlon = 106.9896 − 106.8543 = 0.1353°  → rad =  0.002362
-
-a = sin²(-0.0000942/2) + cos(-0.1087) × cos(-0.1088) × sin²(0.002362/2)
-  = 0.00000000222 + 0.9941 × 0.9941 × 0.000001385
-  = 0.00000137
-
-c = 2 × atan2(√0.00000137, √0.99999863)
-  = 2 × 0.001172
-  = 0.002344 radian
-
-Jarak = 6371 × 0.002344 ≈ 14.93 km
-```
-
-### Akurasi
-
-Formula Haversine akurat hingga ~0.5% untuk jarak di bawah 100 km. Untuk cakupan satu kota atau kabupaten, presisinya lebih dari cukup. Untuk jarak sangat jauh (>1000 km) disarankan menggunakan formula Vincenty, namun ini di luar kebutuhan sistem penempatan lokal.
+- Akurat hingga ~0,5% untuk jarak di bawah 100 km
+- Sangat cukup untuk cakupan kota/kabupaten
+- Tidak memerlukan library tambahan — hanya PHP bawaan
 
 ---
 
 ## 8. Logika Filter Radius & Rekomendasi
 
-### Kondisi 1 — Nearest Within Radius
-
-**File:** `AutoAssignService::findNearestWithinRadius()`
+### Kondisi 1 — Nearest Within Radius (KPM/PPL saja)
 
 ```php
 private function findNearestWithinRadius(
@@ -456,99 +453,77 @@ private function findNearestWithinRadius(
 ): ?School {
     return School::query()
         ->where('is_active', true)
-        ->where(function ($q) use ($program) {
-            // Lokasi yang menerima program ini
-            $q->where('program', $program)->orWhere('program', 'BOTH');
-        })
+        ->where(fn($q) => $q->where('program', $program)->orWhere('program', 'BOTH'))
         ->get()
         ->map(function (School $s) use ($profile) {
-            // Hitung jarak ke setiap lokasi
             $s->distance = Geo::distanceKm(
-                (float) $profile->latitude,
-                (float) $profile->longitude,
-                (float) $s->latitude,
-                (float) $s->longitude,
+                $profile->latitude, $profile->longitude,
+                $s->latitude, $s->longitude
             );
             return $s;
         })
-        ->filter(fn (School $s) =>
-            $s->distance <= $radius          // dalam radius
-            && $s->availableSlots($program) > 0  // ada kuota
-        )
+        ->filter(fn($s) => $s->distance <= $radius && $s->availableSlots($program) > 0)
         ->sortBy('distance')
-        ->first(); // lokasi terdekat yang memenuhi syarat
+        ->first();
 }
 ```
 
-**Diagram keputusan Kondisi 1:**
-
+**Diagram keputusan:**
 ```
 Untuk setiap lokasi aktif yang menerima program X:
-  ┌─ Hitung jarak Haversine (domisili → lokasi)
-  ├─ Apakah jarak ≤ max_radius_km? ──Tidak──► Skip
-  └─ Apakah availableSlots > 0?   ──Tidak──► Skip
-       │
-       Ya → Masukkan ke daftar kandidat
-       
-Urutkan kandidat dari terdekat → pilih yang pertama
+  Hitung Haversine(domisili, lokasi) → distance
+  Apakah distance ≤ max_radius_km?  ──Tidak──► Skip
+  Apakah availableSlots > 0?         ──Tidak──► Skip
+  → Masuk daftar kandidat
+
+Urutkan ascending → ambil pertama (terdekat)
 ```
 
-### Kondisi 2 — Proximity-Based Assignment
+### Kondisi 2 — Proximity-Based (PKPPM atau fallback)
 
-Dipicu ketika Kondisi 1 tidak menghasilkan lokasi. Tiga sub-skenario:
-
-#### Skenario A: Hanya 1 Program Belum Terpenuhi
-
+**Skenario A: 1 program belum terpenuhi**
 ```
-Jika program lain (anchor) sudah punya lokasi:
-  → Cari lokasi program ini yang terdekat dari anchor
+Jika program lain sudah ada lokasi (anchor):
+  → Cari lokasi program ini terdekat dari anchor
 
-Jika program lain belum punya lokasi:
-  → Cari lokasi program ini yang terdekat dari domisili mahasiswa
+Jika tidak ada anchor:
+  → Cari lokasi program ini terdekat dari domisili
 ```
 
-#### Skenario B: Kedua Program Belum Terpenuhi
-
+**Skenario B: Kedua program belum terpenuhi (utama untuk PKPPM)**
 ```
-Iterasi semua kombinasi (desa_kpm × sekolah_ppl):
-  Untuk setiap pasangan (desa_i, sekolah_j):
-    dist = Haversine(desa_i.lat, desa_i.lng, sekolah_j.lat, sekolah_j.lng)
-    
-  Pilih pasangan dengan dist terkecil
-  → Tetapkan desa_i ke KPM, sekolah_j ke PPL
+Iterasi SEMUA kombinasi (desa_kpm × sekolah_ppl):
+  dist = Haversine(desa_i, sekolah_j)
+  
+Pilih pasangan dengan dist terkecil
+→ desa_i → KPM, sekolah_j → PPL
 ```
 
-**Tujuan Skenario B:** Meminimalkan jarak tempuh mahasiswa **antar** lokasi KPM dan PPL, agar keduanya berdekatan meski mungkin jauh dari domisili.
+**Kompleksitas waktu:**
 
-#### Kompleksitas Waktu
+| Kondisi | Kompleksitas |
+|---------|-------------|
+| Kondisi 1 | O(n) |
+| Kondisi 2A | O(n) |
+| Kondisi 2B (PKPPM) | O(k × p) — k=jumlah desa, p=jumlah sekolah |
 
-| Skenario | Kompleksitas |
-|----------|-------------|
-| Kondisi 1 | O(n) — satu iterasi semua lokasi per program |
-| Kondisi 2A | O(n) — satu iterasi lokasi program yang belum |
-| Kondisi 2B | O(k × p) — k = jumlah desa KPM, p = jumlah sekolah PPL |
+Seluruh komputasi berjalan in-memory setelah satu query database. Performanya sangat baik untuk ratusan hingga ribuan lokasi.
 
-Untuk jumlah lokasi ratusan hingga ribuan, performa masih sangat baik karena semuanya berjalan in-memory setelah query database.
+### Tabel Keputusan Lengkap
 
-### Konfigurasi Radius
-
-Radius default (10 km) dapat diubah di panel admin → menu **Pengaturan**.
-
-```php
-// Dibaca dari database saat runtime
-$radius = (float) Setting::get('max_radius_km', 10);
 ```
-
-**Panduan nilai radius:**
-
-| Konteks | Radius Disarankan |
-|---------|-----------------|
-| Kota padat (Jakarta, Surabaya) | 5–10 km |
-| Kota menengah | 10–20 km |
-| Kabupaten / pedesaan | 20–50 km |
-
-Jika radius terlalu kecil → banyak mahasiswa masuk Kondisi 2.  
-Jika radius terlalu besar → mahasiswa yang dekat dan jauh mendapat lokasi yang sama, mengurangi keadilan.
+program_choice  gelombang aktif?   kuota ada?    hasil
+─────────────────────────────────────────────────────────
+KPM             Tidak              -             Tidak ditetapkan (no_active_wave)
+KPM             Ya                 Ya (radius)   Kondisi 1: desa terdekat
+KPM             Ya                 Tidak (radius) Kondisi 2A: desa terdekat (tanpa radius)
+PPL             Tidak              -             Tidak ditetapkan (no_active_wave)
+PPL             Ya                 Ya (radius)   Kondisi 1: sekolah terdekat
+PPL             Ya                 Tidak (radius) Kondisi 2A: sekolah terdekat (tanpa radius)
+PKPPM           KPM/PPL aktif      Ada keduanya  Kondisi 2B: pasangan desa+sekolah terdekat
+PKPPM           Hanya KPM aktif    -             Hanya desa ditetapkan
+PKPPM           Hanya PPL aktif    -             Hanya sekolah ditetapkan
+```
 
 ---
 
@@ -556,109 +531,120 @@ Jika radius terlalu besar → mahasiswa yang dekat dan jauh mendapat lokasi yang
 
 | File | Fungsi |
 |------|--------|
-| `app/Services/AutoAssignService.php` | **Inti** — seluruh logika penetapan lokasi KPM & PPL |
-| `app/Support/Geo.php` | Formula Haversine untuk menghitung jarak (km) |
-| `app/Models/School.php` | Model lokasi (desa/sekolah); `availableSlots()`, `acceptsProgram()`, `locationType()` |
-| `app/Models/MahasiswaProfile.php` | Menyimpan `latitude`/`longitude` domisili mahasiswa |
-| `app/Models/Registration.php` | Hasil penempatan; menyimpan `distance_km` dan `gelombang_id` |
+| `app/Services/AutoAssignService.php` | **Inti** — logika penetapan KPM/PPL/PKPPM |
+| `app/Support/Geo.php` | Formula Haversine |
+| `app/Models/School.php` | Model lokasi; `availableSlots()`, `locationType()`, `labelFor()` |
+| `app/Models/MahasiswaProfile.php` | Menyimpan `latitude/longitude` dan `program_choice`; `programsToAssign()` |
+| `app/Models/Registration.php` | Hasil penempatan; menyimpan `distance_km`, `gelombang_id` |
 | `app/Models/Gelombang.php` | Periode pendaftaran; `activeFor()`, `isOpen()` |
 | `app/Models/Setting.php` | Konfigurasi `max_radius_km` |
-| `app/Http/Controllers/GeocodeController.php` | Proxy ke Nominatim OSM untuk geocoding alamat |
-| `app/Http/Controllers/Admin/MahasiswaManagementController.php` | Memanggil `AutoAssignService::assign()` saat admin approve |
-| `app/Http/Controllers/Admin/SchoolController.php` | CRUD desa & sekolah oleh admin |
-| `database/migrations/..._create_schools_table.php` | Skema tabel `schools` |
-| `database/migrations/..._create_registrations_table.php` | Skema tabel `registrations` |
-| `database/migrations/..._create_gelombang_table.php` | Skema tabel `gelombang` |
-| `resources/views/mahasiswa/dashboard.blade.php` | Dashboard mahasiswa — menampilkan hasil penempatan & form lokasi |
-| `resources/views/admin/schools/` | Halaman CRUD lokasi (desa/sekolah) untuk admin |
+| `app/Http/Controllers/GeocodeController.php` | Proxy ke Nominatim OSM |
+| `app/Http/Controllers/Admin/MahasiswaManagementController.php` | Memanggil `AutoAssignService::assign()` saat approve |
+| `app/Http/Controllers/Admin/SchoolController.php` | CRUD desa & sekolah |
+| `app/Http/Controllers/MahasiswaController.php` | Menyimpan `program_choice` saat pendaftaran |
+| `resources/views/mahasiswa/profile-create.blade.php` | Form pendaftaran: pilih program + peta + upload berkas |
+| `resources/views/admin/schools/form.blade.php` | Form CRUD lokasi dengan peta Leaflet |
+| `resources/views/admin/mahasiswa/show.blade.php` | Detail mahasiswa + peta penempatan |
 
 ---
 
 ## 10. Cara Menerapkan di Project Lain
 
-Berikut langkah-langkah untuk mengadaptasi fitur ini ke project Laravel lain:
-
 ### Langkah 1 — Salin Kelas Inti
 
 ```
-app/Support/Geo.php              ← Formula Haversine, tidak ada dependensi
-app/Services/AutoAssignService.php ← Sesuaikan dengan model Anda
+app/Support/Geo.php                → Formula Haversine (tidak ada dependensi)
+app/Services/AutoAssignService.php → Sesuaikan nama model
 ```
 
 ### Langkah 2 — Struktur Tabel Minimal
 
-Tabel "lokasi" (desa/sekolah) membutuhkan minimal:
+**Tabel "lokasi"** membutuhkan:
 ```sql
 latitude   DECIMAL(10,7) NOT NULL
 longitude  DECIMAL(10,7) NOT NULL
 kuota      INTEGER       NOT NULL DEFAULT 0
 is_active  BOOLEAN       NOT NULL DEFAULT 1
+program    TEXT          NOT NULL  -- 'KPM' | 'PPL' | 'BOTH'
 ```
 
-Tabel "pengguna/mahasiswa" membutuhkan:
+**Tabel "pengguna"** membutuhkan:
 ```sql
-latitude   DECIMAL(10,7) NOT NULL
-longitude  DECIMAL(10,7) NOT NULL
+latitude        DECIMAL(10,7) NOT NULL
+longitude       DECIMAL(10,7) NOT NULL
+program_choice  TEXT NOT NULL DEFAULT 'PKPPM'  -- 'KPM' | 'PPL' | 'PKPPM'
 ```
 
 ### Langkah 3 — Geocoding Route
-
-Tambahkan route dan controller untuk proxy ke Nominatim:
 
 ```php
 // routes/web.php
 Route::get('/geocode', [GeocodeController::class, 'search'])->name('geocode');
 ```
 
-```php
-// app/Http/Controllers/GeocodeController.php
-public function search(Request $request): JsonResponse
-{
-    $q = $request->validate(['q' => 'required|string|min:3'])['q'];
-    $response = Http::withHeaders(['User-Agent' => 'NamaApp/1.0'])
-        ->get('https://nominatim.openstreetmap.org/search', [
-            'q' => $q, 'format' => 'json', 'limit' => 5,
-            'countrycodes' => 'id', 'addressdetails' => 1,
-        ]);
-    return response()->json(['results' => $response->json()]);
-}
+### Langkah 4 — Peta Leaflet (CDN, tanpa API key)
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<div id="map" style="height:400px;"></div>
+<script>
+const map = L.map('map').setView([-6.2, 106.8], 10);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+const marker = L.marker([-6.2, 106.8], { draggable: true }).addTo(map);
+map.on('click', e => marker.setLatLng(e.latlng));
+marker.on('dragend', e => {
+    const ll = e.target.getLatLng();
+    // simpan ke input form
+});
+</script>
 ```
 
-### Langkah 4 — Form Input Koordinat di Frontend
+### Langkah 5 — Pilihan Program di Form
 
-Tambahkan dua input tersembunyi (`lat`, `lng`) dan dua tombol (GPS + cari alamat) ke form apapun yang memerlukan koordinat. Gunakan pola JavaScript dari `resources/views/mahasiswa/dashboard.blade.php` sebagai referensi.
+```html
+<input type="radio" name="program_choice" value="KPM">  KPM (Desa saja)
+<input type="radio" name="program_choice" value="PPL">  PPL (Sekolah saja)
+<input type="radio" name="program_choice" value="PKPPM"> PKPPM (Desa + Sekolah)
+```
 
-### Langkah 5 — Panggil AutoAssignService
-
-Panggil service saat event tertentu (misal: approval, pendaftaran):
+### Langkah 6 — Panggil AutoAssignService
 
 ```php
 use App\Services\AutoAssignService;
 
-// Di controller
 $service = new AutoAssignService();
 $results = $service->assign($mahasiswaProfile);
 
-// $results['KPM']['school'] → School|null
-// $results['PPL']['school'] → School|null
-// $results['KPM']['method'] → 'domisili' | 'proximity' | null
-// $results['KPM']['reason'] → 'no_active_wave' (jika gelombang tidak aktif)
+// $results['KPM']['school']  → School|null (desa yang ditetapkan)
+// $results['PPL']['school']  → School|null (sekolah yang ditetapkan)
+// $results['KPM']['method']  → 'domisili' | 'proximity' | null
+// $results['KPM']['reason']  → 'no_active_wave' (jika gelombang tidak aktif)
 ```
 
-### Langkah 6 — Konfigurasi Radius
-
-Simpan `max_radius_km` di tabel `settings` atau file `.env`, lalu baca di `AutoAssignService`:
+### Langkah 7 — Konfigurasi Radius
 
 ```php
 $radius = (float) Setting::get('max_radius_km', 10);
-// atau
-$radius = (float) config('app.max_radius_km', 10);
+// atau: config('app.max_radius_km', 10)
 ```
+
+**Panduan nilai:**
+
+| Konteks | Radius Disarankan |
+|---------|-----------------|
+| Kota padat | 5–10 km |
+| Kota menengah | 10–20 km |
+| Kabupaten / pedesaan | 20–50 km |
 
 ### Dependensi Composer
 
-Tidak ada dependensi tambahan yang diperlukan — semua logika menggunakan PHP murni dan `illuminate/http` (sudah ada di Laravel).
+Tidak ada dependensi tambahan. Semua logika menggunakan PHP murni + `illuminate/http` (sudah ada di Laravel).
 
 ---
 
-*Dokumentasi ini mencakup implementasi per **Mei 2026**. Perubahan pada skema database atau logika service perlu diperbarui sesuai.*
+*Dokumentasi ini mencakup implementasi per **Mei 2026**.*

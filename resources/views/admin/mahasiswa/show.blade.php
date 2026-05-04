@@ -15,6 +15,15 @@
         <p><span class="text-slate-500">No. HP:</span> {{ $mahasiswa->phone ?? '-' }}</p>
         <p><span class="text-slate-500">Alamat:</span> {{ $mahasiswa->address }}</p>
         <p class="text-slate-500 text-xs">Koordinat: {{ $mahasiswa->latitude }}, {{ $mahasiswa->longitude }}</p>
+        <p><span class="text-slate-500">Program:</span>
+            @php
+                $pc = $mahasiswa->program_choice ?? 'PKPPM';
+                $pcColor = ['KPM'=>'amber','PPL'=>'sky','PKPPM'=>'violet'][$pc] ?? 'slate';
+            @endphp
+            <span class="text-xs px-2 py-0.5 rounded bg-{{ $pcColor }}-100 text-{{ $pcColor }}-700 font-medium">
+                {{ $mahasiswa->programChoiceLabel() }}
+            </span>
+        </p>
         <p><span class="text-slate-500">Nilai Microteaching:</span> <strong>{{ $mahasiswa->microteaching_grade }}</strong></p>
         <div>
             <p class="text-slate-500 mb-1">Berkas:</p>
