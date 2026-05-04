@@ -11,7 +11,7 @@
 <div class="mb-lg">
     <a href="{{ route('admin.mahasiswa.index') }}"
        class="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary transition-colors mb-md font-label-md">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Kembali
+        <i class="ti ti-arrow-left text-[18px]"></i> Kembali
     </a>
     <div class="flex items-center gap-md">
         <div class="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
@@ -60,20 +60,20 @@
             <p class="text-on-surface-variant text-[12px] mb-md">Berkas Persyaratan</p>
             <div class="grid sm:grid-cols-2 gap-2">
                 @foreach([
-                    ['Transkrip', $mahasiswa->transkrip_path, 'description'],
-                    ['Kartu Tanda Mahasiswa', $mahasiswa->ktm_path, 'badge'],
-                    ['Surat Pengantar', $mahasiswa->surat_pengantar_path, 'mail'],
-                    ['Pas Foto', $mahasiswa->pas_foto_path, 'person'],
+                    ['Transkrip', $mahasiswa->transkrip_path, 'ti-file-description'],
+                    ['Kartu Tanda Mahasiswa', $mahasiswa->ktm_path, 'ti-id-badge'],
+                    ['Surat Pengantar', $mahasiswa->surat_pengantar_path, 'ti-mail'],
+                    ['Pas Foto', $mahasiswa->pas_foto_path, 'ti-user'],
                 ] as [$label, $path, $icon])
                     @if($path)
                         <a target="_blank" href="{{ asset('storage/'.$path) }}"
                            class="flex items-center gap-2 p-sm rounded-lg border border-secondary/20 bg-secondary/5 hover:bg-secondary/10 transition-colors">
-                            <span class="material-symbols-outlined text-secondary text-[18px]">{{ $icon }}</span>
+                            <i class="ti {{ $icon }} text-secondary text-[18px]"></i>
                             <span class="text-[12px] text-secondary font-medium">{{ $label }}</span>
                         </a>
                     @else
                         <div class="flex items-center gap-2 p-sm rounded-lg border border-slate-200 bg-slate-50 opacity-50">
-                            <span class="material-symbols-outlined text-outline text-[18px]">{{ $icon }}</span>
+                            <i class="ti {{ $icon }} text-outline text-[18px]"></i>
                             <span class="text-[12px] text-on-surface-variant">{{ $label }} — belum diunggah</span>
                         </div>
                     @endif
@@ -105,7 +105,7 @@
                 <textarea name="admin_note" rows="2" placeholder="Catatan (opsional)"
                           class="w-full border border-outline-variant rounded-lg px-sm py-xs text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none resize-none"></textarea>
                 <button class="w-full bg-secondary hover:opacity-90 text-white text-sm py-2 rounded-lg font-label-md flex items-center justify-center gap-2 transition-opacity">
-                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                    <i class="ti ti-circle-check text-[18px]"></i>
                     Setujui &amp; Tetapkan Penempatan
                 </button>
             </form>
@@ -120,7 +120,7 @@
                 <textarea name="admin_note" rows="2" required placeholder="Alasan penolakan (wajib)"
                           class="w-full border border-outline-variant rounded-lg px-sm py-xs text-sm focus:ring-2 focus:ring-error/50 outline-none resize-none"></textarea>
                 <button class="w-full bg-error hover:opacity-90 text-white text-sm py-2 rounded-lg font-label-md flex items-center justify-center gap-2 transition-opacity">
-                    <span class="material-symbols-outlined text-[18px]">cancel</span>
+                    <i class="ti ti-circle-x text-[18px]"></i>
                     Tolak
                 </button>
             </form>
@@ -161,7 +161,7 @@
     <h3 class="font-label-md text-on-surface-variant uppercase tracking-wider text-[11px] mb-md">Riwayat Penempatan</h3>
     @if($mahasiswa->registrations->isEmpty())
         <div class="text-center py-8">
-            <span class="material-symbols-outlined text-[40px] opacity-30">assignment</span>
+            <i class="ti ti-clipboard text-[40px] opacity-30 block mb-2"></i>
             <p class="font-body-sm text-on-surface-variant mt-2">Belum ada penempatan.</p>
         </div>
     @else

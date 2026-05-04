@@ -11,13 +11,13 @@
     </div>
     <a href="{{ route('mahasiswa.dashboard') }}"
        class="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary transition-colors font-label-md">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Kembali
+        <i class="ti ti-arrow-left text-[18px]"></i> Kembali
     </a>
 </div>
 
 @if($schools->isEmpty())
     <div class="bg-amber-50 border border-amber-200 rounded-xl p-lg flex items-start gap-md">
-        <span class="material-symbols-outlined text-amber-600 text-[24px] flex-shrink-0">warning</span>
+        <i class="ti ti-alert-triangle text-amber-600 text-[24px] flex-shrink-0"></i>
         <div>
             <p class="font-label-md text-amber-900 text-sm">Tidak ada lokasi tersedia</p>
             <p class="font-body-sm text-amber-800 mt-1">
@@ -46,17 +46,17 @@
                     </div>
                     <div class="mt-md flex flex-wrap gap-2">
                         <span class="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                            <span class="material-symbols-outlined text-[14px]">near_me</span>
+                            <i class="ti ti-navigation text-[14px]"></i>
                             {{ number_format($s->distance, 2) }} km
                         </span>
                         @if($s->slots > 0)
                             <span class="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 font-medium">
-                                <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                <i class="ti ti-circle-check text-[14px]"></i>
                                 {{ $s->slots }} slot tersedia
                             </span>
                         @else
                             <span class="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-full bg-error/10 text-error font-medium">
-                                <span class="material-symbols-outlined text-[14px]">block</span>
+                                <i class="ti ti-ban text-[14px]"></i>
                                 Slot penuh
                             </span>
                         @endif
@@ -67,13 +67,13 @@
 
         @error('school_id')
             <p class="text-sm text-error mt-md flex items-center gap-1">
-                <span class="material-symbols-outlined text-[16px]">error</span>{{ $message }}
+                <i class="ti ti-alert-circle text-[16px]"></i>{{ $message }}
             </p>
         @enderror
 
         <div class="mt-lg flex justify-end">
             <button class="bg-primary hover:bg-primary-container text-white font-label-md py-2 px-lg rounded-lg transition-colors flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">send</span>
+                <i class="ti ti-send text-[18px]"></i>
                 Daftar Lokasi Terpilih
             </button>
         </div>

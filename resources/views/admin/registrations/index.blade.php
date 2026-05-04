@@ -32,7 +32,7 @@
         @endforeach
     </select>
     <button class="bg-primary text-white text-sm px-md py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+        <i class="ti ti-adjustments-horizontal text-[16px]"></i> Filter
     </button>
 </form>
 
@@ -102,7 +102,7 @@
             @empty
                 <tr>
                     <td colspan="8" class="text-center py-12 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-[48px] opacity-30 block mb-2">assignment</span>
+                        <i class="ti ti-clipboard text-[48px] opacity-30 block mb-2"></i>
                         <p class="font-body-sm">Belum ada data penempatan.</p>
                     </td>
                 </tr>

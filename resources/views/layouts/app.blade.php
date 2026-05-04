@@ -6,7 +6,7 @@
 <title>@yield('title', 'SIPEP') - Portal Akademik</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="{{ asset('tabler-icons/tabler-icons.min.css') }}"/>
 <script>
 tailwind.config = {
     darkMode: 'class',
@@ -70,10 +70,7 @@ tailwind.config = {
 </script>
 <style>
     body { font-family: 'Public Sans', sans-serif; }
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        vertical-align: middle;
-    }
+    .ti { vertical-align: middle; line-height: 1; }
 </style>
 @stack('styles')
 </head>
@@ -94,50 +91,50 @@ tailwind.config = {
             <a href="{{ route('admin.dashboard') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.dashboard') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <i class="ti ti-layout-dashboard text-[20px]"></i>
                 <span>Dashboard</span>
             </a>
             <a href="{{ route('admin.mahasiswa.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.mahasiswa.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+                <i class="ti ti-user-check text-[20px]"></i>
                 <span>Mahasiswa</span>
             </a>
             <a href="{{ route('admin.schools.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.schools.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">location_on</span>
+                <i class="ti ti-map-pin text-[20px]"></i>
                 <span>Lokasi</span>
             </a>
             <a href="{{ route('admin.gelombang.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.gelombang.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">calendar_month</span>
+                <i class="ti ti-calendar text-[20px]"></i>
                 <span>Gelombang</span>
             </a>
             <a href="{{ route('admin.registrations.index') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.registrations.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">assignment_turned_in</span>
+                <i class="ti ti-clipboard-check text-[20px]"></i>
                 <span>Penempatan</span>
             </a>
             <a href="{{ route('admin.settings.edit') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.settings.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">settings</span>
+                <i class="ti ti-settings text-[20px]"></i>
                 <span>Pengaturan</span>
             </a>
         @else
             <a href="{{ route('mahasiswa.dashboard') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('mahasiswa.dashboard') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <i class="ti ti-layout-dashboard text-[20px]"></i>
                 <span>Dashboard</span>
             </a>
             <a href="{{ route('mahasiswa.profile.create') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('mahasiswa.profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <span class="material-symbols-outlined text-[20px]">person</span>
+                <i class="ti ti-user text-[20px]"></i>
                 <span>Profil Saya</span>
             </a>
         @endif
@@ -157,7 +154,7 @@ tailwind.config = {
             @csrf
             <button type="submit"
                     class="flex items-center gap-3 px-4 py-2 text-slate-300 hover:text-white w-full hover:bg-blue-800/50 rounded-lg transition-all text-sm">
-                <span class="material-symbols-outlined text-[20px]">logout</span>
+                <i class="ti ti-logout text-[20px]"></i>
                 <span>Keluar</span>
             </button>
         </form>
@@ -170,22 +167,19 @@ tailwind.config = {
     {{-- Top AppBar --}}
     <header class="sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 h-16 bg-white border-b border-slate-200 shadow-sm">
         <div class="flex items-center gap-4 flex-1">
-            {{-- Mobile hamburger --}}
             <button onclick="toggleSidebar()" class="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
-                <span class="material-symbols-outlined">menu</span>
+                <i class="ti ti-menu-2 text-[22px]"></i>
             </button>
-            {{-- Page title on mobile --}}
             <span class="md:hidden font-bold text-primary text-sm">SIPEP</span>
-            {{-- Search on desktop --}}
             <div class="relative hidden md:block w-full max-w-md">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
+                <i class="ti ti-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]"></i>
                 <input class="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                        placeholder="Cari data mahasiswa atau lokasi..." type="text"/>
             </div>
         </div>
         <div class="flex items-center gap-2">
             <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
-                <span class="material-symbols-outlined text-[20px]">notifications</span>
+                <i class="ti ti-bell text-[20px]"></i>
             </button>
             <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
                 {{ strtoupper(substr(auth()->user()?->name ?? 'U', 0, 1)) }}
@@ -193,10 +187,9 @@ tailwind.config = {
         </div>
     </header>
 
-    {{-- Flash messages --}}
     @if(session('status'))
         <div class="mx-6 mt-4 px-4 py-3 rounded-xl bg-secondary/10 border border-secondary/30 text-secondary text-sm flex items-center gap-2">
-            <span class="material-symbols-outlined text-[18px]">check_circle</span>
+            <i class="ti ti-circle-check text-[18px]"></i>
             {{ session('status') }}
         </div>
     @endif
@@ -208,12 +201,10 @@ tailwind.config = {
         </div>
     @endif
 
-    {{-- Page content --}}
     <main class="flex-1 p-4 md:p-6 lg:p-8 max-w-[1280px] w-full mx-auto">
         @yield('content')
     </main>
 
-    {{-- Footer --}}
     <footer class="mt-auto w-full py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-2 bg-slate-50 border-t border-slate-200 text-xs text-slate-500">
         <div class="flex items-center gap-2">
             <span class="font-bold text-slate-900">SIPEP</span>

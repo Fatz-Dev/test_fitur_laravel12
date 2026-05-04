@@ -12,7 +12,7 @@
 {{-- Filter --}}
 <form method="GET" class="flex flex-wrap gap-3 mb-lg">
     <div class="relative">
-        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+        <i class="ti ti-search absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]"></i>
         <input name="q" value="{{ request('q') }}" placeholder="Cari nama / NIM / email"
                class="pl-10 pr-4 py-2 border border-outline-variant rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/30 bg-white w-64"/>
     </div>
@@ -23,7 +23,7 @@
         @endforeach
     </select>
     <button class="bg-primary text-white text-sm px-md py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-1">
-        <span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+        <i class="ti ti-adjustments-horizontal text-[16px]"></i> Filter
     </button>
 </form>
 
@@ -69,14 +69,14 @@
                         <a href="{{ route('admin.mahasiswa.show', $m) }}"
                            class="inline-flex items-center gap-1 text-[12px] text-primary hover:underline font-medium">
                             Detail
-                            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                            <i class="ti ti-arrow-right text-[14px]"></i>
                         </a>
                     </td>
                 </tr>
             @empty
                 <tr>
                     <td colspan="6" class="text-center py-12 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-[48px] opacity-30 block mb-2">group</span>
+                        <i class="ti ti-users text-[48px] opacity-30 block mb-2"></i>
                         <p class="font-body-sm">Belum ada data mahasiswa.</p>
                     </td>
                 </tr>

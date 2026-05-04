@@ -143,9 +143,7 @@ class AutoAssignService
     {
         return School::query()
             ->where('is_active', true)
-            ->where(function ($q) use ($program) {
-                $q->where('program', $program)->orWhere('program', 'BOTH');
-            })
+            ->where('program', $program)
             ->get()
             ->map(function (School $s) use ($profile) {
                 $s->distance = Geo::distanceKm(
@@ -263,9 +261,7 @@ class AutoAssignService
     {
         return School::query()
             ->where('is_active', true)
-            ->where(function ($q) use ($program) {
-                $q->where('program', $program)->orWhere('program', 'BOTH');
-            })
+            ->where('program', $program)
             ->get()
             ->filter(fn (School $s) => $s->availableSlots($program) > 0);
     }

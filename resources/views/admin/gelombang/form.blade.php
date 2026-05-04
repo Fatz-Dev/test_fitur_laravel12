@@ -5,12 +5,12 @@
 <div class="mb-lg">
     <a href="{{ route('admin.gelombang.index') }}"
        class="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary transition-colors font-label-md">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Kembali
+        <i class="ti ti-arrow-left text-[18px]"></i> Kembali
     </a>
     <h2 class="font-h2 text-h2 text-primary mt-sm">{{ $gelombang ? 'Edit Gelombang' : 'Tambah Gelombang' }}</h2>
 </div>
 
-<div class="max-w-2xl">
+<div class="w-full">
     <form method="POST"
           action="{{ $gelombang ? route('admin.gelombang.update', $gelombang) : route('admin.gelombang.store') }}"
           class="bg-white border border-slate-200 rounded-xl p-lg shadow-sm space-y-md">
@@ -76,7 +76,7 @@
 
         <div class="flex justify-end pt-sm">
             <button class="bg-primary hover:bg-primary-container text-white font-label-md py-2 px-lg rounded-lg transition-colors flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">save</span>
+                <i class="ti ti-device-floppy text-[18px]"></i>
                 {{ $gelombang ? 'Simpan Perubahan' : 'Tambah Gelombang' }}
             </button>
         </div>

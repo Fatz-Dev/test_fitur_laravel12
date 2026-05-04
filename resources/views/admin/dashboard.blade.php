@@ -11,7 +11,7 @@
     <div class="flex gap-md">
         <a href="{{ route('admin.mahasiswa.index') }}?status=pending"
            class="px-md py-2 bg-secondary text-white rounded-lg font-label-md hover:opacity-90 transition-opacity flex items-center gap-2 text-sm">
-            <span class="material-symbols-outlined text-[18px]">pending_actions</span>
+            <i class="ti ti-clock-pause text-[18px]"></i>
             Review Pending
         </a>
     </div>
@@ -21,7 +21,7 @@
 <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-lg">
     <div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
         <div class="bg-blue-50 p-3 rounded-lg flex-shrink-0">
-            <span class="material-symbols-outlined text-primary text-[28px]">groups</span>
+            <i class="ti ti-users text-primary text-[28px]"></i>
         </div>
         <div>
             <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Total Mahasiswa</p>
@@ -32,7 +32,7 @@
 
     <div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
         <div class="bg-amber-50 p-3 rounded-lg flex-shrink-0">
-            <span class="material-symbols-outlined text-amber-600 text-[28px]">pending_actions</span>
+            <i class="ti ti-clock-pause text-amber-600 text-[28px]"></i>
         </div>
         <div>
             <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Menunggu Review</p>
@@ -47,10 +47,10 @@
 
     <div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
         <div class="bg-secondary/10 p-3 rounded-lg flex-shrink-0">
-            <span class="material-symbols-outlined text-secondary text-[28px]">school</span>
+            <i class="ti ti-map-pin text-secondary text-[28px]"></i>
         </div>
         <div>
-            <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Sekolah Terdaftar</p>
+            <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Lokasi Terdaftar</p>
             <h3 class="font-h3 text-h3 text-primary mt-1">{{ $stats['schools'] }}</h3>
             <p class="text-[12px] text-on-surface-variant font-medium mt-1">Lokasi KPM &amp; PPL</p>
         </div>
@@ -58,7 +58,7 @@
 
     <div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 flex items-start gap-4">
         <div class="bg-blue-50 p-3 rounded-lg flex-shrink-0">
-            <span class="material-symbols-outlined text-blue-600 text-[28px]">assignment_turned_in</span>
+            <i class="ti ti-clipboard-check text-blue-600 text-[28px]"></i>
         </div>
         <div>
             <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Penempatan Pending</p>
@@ -80,7 +80,7 @@
             <a href="{{ route('admin.mahasiswa.index') }}"
                class="text-secondary font-label-md hover:underline text-sm flex items-center gap-1">
                 Lihat Semua
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                <i class="ti ti-arrow-right text-[16px]"></i>
             </a>
         </div>
         <div class="space-y-2">
@@ -105,7 +105,7 @@
                 </div>
             @empty
                 <div class="text-center py-8 text-on-surface-variant">
-                    <span class="material-symbols-outlined text-[40px] opacity-30">group</span>
+                    <i class="ti ti-users text-[40px] opacity-30 block mb-2"></i>
                     <p class="font-body-sm mt-2">Belum ada mahasiswa terdaftar.</p>
                 </div>
             @endforelse
@@ -122,7 +122,7 @@
             <a href="{{ route('admin.registrations.index') }}"
                class="text-secondary font-label-md hover:underline text-sm flex items-center gap-1">
                 Lihat Semua
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                <i class="ti ti-arrow-right text-[16px]"></i>
             </a>
         </div>
         <div class="space-y-2">
@@ -145,7 +145,7 @@
                 </div>
             @empty
                 <div class="text-center py-8 text-on-surface-variant">
-                    <span class="material-symbols-outlined text-[40px] opacity-30">assignment</span>
+                    <i class="ti ti-clipboard text-[40px] opacity-30 block mb-2"></i>
                     <p class="font-body-sm mt-2">Belum ada penempatan.</p>
                 </div>
             @endforelse
@@ -161,11 +161,11 @@
             <p class="text-blue-100 mb-lg max-w-md text-sm">Kelola mahasiswa, lokasi, dan penempatan KPM/PPL dengan mudah menggunakan fitur-fitur yang tersedia.</p>
             <a href="{{ route('admin.settings.edit') }}"
                class="inline-flex items-center gap-2 bg-teal-400 text-blue-900 px-lg py-2 rounded-lg font-label-md hover:bg-teal-300 transition-all text-sm">
-                <span class="material-symbols-outlined text-[18px]">settings</span>
+                <i class="ti ti-settings text-[18px]"></i>
                 Pengaturan Sistem
             </a>
         </div>
-        <span class="material-symbols-outlined absolute -bottom-8 -right-8 text-blue-800 opacity-50" style="font-size:160px">menu_book</span>
+        <i class="ti ti-book absolute -bottom-4 -right-4 text-blue-800 opacity-20" style="font-size:120px"></i>
     </div>
 
     <div class="bg-surface-container-high rounded-xl p-xl flex items-center gap-xl">
@@ -173,7 +173,7 @@
             <h4 class="font-h3 text-h3 text-primary mb-md">Statistik Program</h4>
             <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                    <span class="font-body-sm text-on-surface-variant">Lokasi KPM</span>
+                    <span class="font-body-sm text-on-surface-variant">Lokasi Terdaftar</span>
                     <span class="font-label-md text-on-surface">{{ $stats['schools'] }} lokasi</span>
                 </div>
                 <div class="flex items-center justify-between">
@@ -187,7 +187,7 @@
             </div>
             <a href="{{ route('admin.mahasiswa.index') }}"
                class="mt-lg inline-flex items-center gap-1 text-primary font-label-md hover:underline text-sm">
-                <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+                <i class="ti ti-external-link text-[16px]"></i>
                 Kelola Mahasiswa
             </a>
         </div>

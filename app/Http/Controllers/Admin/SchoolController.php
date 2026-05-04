@@ -56,7 +56,7 @@ class SchoolController extends Controller
             'address' => ['required', 'string'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
-            'program' => ['required', 'in:KPM,PPL,BOTH'],
+            'program' => ['required', 'in:KPM,PPL'],
             'kuota_kpm' => ['required', 'integer', 'min:0'],
             'kuota_ppl' => ['required', 'integer', 'min:0'],
             'contact_person' => ['nullable', 'string', 'max:150'],

@@ -9,7 +9,7 @@
         {{-- Branding --}}
         <div class="text-center mb-xl">
             <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-xl shadow-lg mb-md">
-                <span class="material-symbols-outlined text-primary" style="font-size:40px">school</span>
+                <i class="ti ti-school text-primary" style="font-size:40px"></i>
             </div>
             <h1 class="font-h1 text-h1 text-white tracking-tight mb-xs">SIPEP</h1>
             <p class="font-body-md text-surface-variant/80 tracking-wide">Portal Akademik Terpadu</p>
@@ -25,7 +25,7 @@
             {{-- Error --}}
             @error('email')
                 <div class="mb-lg px-md py-sm rounded-lg bg-error-container border border-error/20 flex items-center gap-sm">
-                    <span class="material-symbols-outlined text-error text-[18px]">error</span>
+                    <i class="ti ti-alert-circle text-error text-[18px]"></i>
                     <p class="font-label-sm text-error">{{ $message }}</p>
                 </div>
             @enderror
@@ -36,7 +36,7 @@
                 <div class="space-y-xs">
                     <label class="font-label-md text-label-md text-on-surface block" for="email">Email Kampus</label>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]">mail</span>
+                        <i class="ti ti-mail absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]"></i>
                         <input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all placeholder:text-outline font-body-sm text-on-surface"
                                id="email" name="email" type="email"
                                value="{{ old('email') }}"
@@ -50,13 +50,13 @@
                         <label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
                     </div>
                     <div class="relative group">
-                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]">lock</span>
+                        <i class="ti ti-lock absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]"></i>
                         <input class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all placeholder:text-outline font-body-sm text-on-surface"
                                id="password" name="password" type="password"
                                placeholder="••••••••" required autocomplete="current-password"/>
                         <button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button"
-                                onclick="const i=document.getElementById('password');i.type=i.type==='password'?'text':'password';this.querySelector('span').textContent=i.type==='password'?'visibility':'visibility_off'">
-                            <span class="material-symbols-outlined text-[20px]">visibility</span>
+                                onclick="const i=document.getElementById('password');const pw=i.type==='password';i.type=pw?'text':'password';const ic=this.querySelector('i');ic.className=pw?'ti ti-eye-off text-[20px]':'ti ti-eye text-[20px]';">
+                            <i class="ti ti-eye text-[20px]"></i>
                         </button>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 <div class="pt-md">
                     <button class="w-full bg-primary text-on-primary font-label-md py-4 rounded-lg shadow-md hover:bg-primary-container hover:shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
                         <span>Masuk</span>
-                        <span class="material-symbols-outlined text-[20px]">login</span>
+                        <i class="ti ti-login text-[20px]"></i>
                     </button>
                 </div>
             </form>
@@ -86,7 +86,7 @@
 
         {{-- Security notice --}}
         <div class="mt-lg flex items-center justify-center gap-3 text-white/60">
-            <span class="material-symbols-outlined text-[18px]">verified_user</span>
+            <i class="ti ti-shield-check text-[18px]"></i>
             <p class="font-label-sm">Koneksi aman terenkripsi SSL 256-bit</p>
         </div>
     </div>

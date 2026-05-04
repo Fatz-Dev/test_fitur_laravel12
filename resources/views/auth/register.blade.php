@@ -31,7 +31,7 @@
                     <ul class="space-y-1">
                         @foreach($errors->all() as $err)
                             <li class="font-label-sm text-error flex items-center gap-xs">
-                                <span class="material-symbols-outlined text-[16px]">error</span>{{ $err }}
+                                <i class="ti ti-alert-circle text-[16px]"></i>{{ $err }}
                             </li>
                         @endforeach
                     </ul>
@@ -44,7 +44,7 @@
                 <div class="space-y-xs">
                     <label class="font-label-md text-label-md text-on-surface block" for="name">Nama Lengkap</label>
                     <div class="relative">
-                        <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">person</span>
+                        <i class="ti ti-user absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]"></i>
                         <input class="w-full pl-xl pr-md py-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-on-surface"
                                id="name" name="name" type="text"
                                value="{{ old('name') }}"
@@ -56,14 +56,14 @@
                 <div class="space-y-xs">
                     <label class="font-label-md text-label-md text-on-surface block" for="email">Email Kampus</label>
                     <div class="relative">
-                        <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">mail</span>
+                        <i class="ti ti-mail absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]"></i>
                         <input class="w-full pl-xl pr-md py-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-on-surface"
                                id="email" name="email" type="email"
                                value="{{ old('email') }}"
                                placeholder="nama@univ.ac.id" required autocomplete="email"/>
                     </div>
                     <div class="flex items-start gap-sm p-sm bg-surface-container-low rounded-lg border border-surface-variant">
-                        <span class="material-symbols-outlined text-primary text-[18px] mt-0.5">info</span>
+                        <i class="ti ti-info-circle text-primary text-[18px] mt-0.5"></i>
                         <p class="font-label-sm text-on-primary-fixed-variant">Gunakan email kampus resmi untuk verifikasi status mahasiswa aktif.</p>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                     <div class="space-y-xs">
                         <label class="font-label-md text-label-md text-on-surface block" for="password">Password</label>
                         <div class="relative">
-                            <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">lock</span>
+                            <i class="ti ti-lock absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]"></i>
                             <input class="w-full pl-xl pr-md py-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-on-surface"
                                    id="password" name="password" type="password"
                                    placeholder="••••••••" required autocomplete="new-password"/>
@@ -82,7 +82,7 @@
                     <div class="space-y-xs">
                         <label class="font-label-md text-label-md text-on-surface block" for="password_confirmation">Konfirmasi Password</label>
                         <div class="relative">
-                            <span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]">enhanced_encryption</span>
+                            <i class="ti ti-shield-lock absolute left-md top-1/2 -translate-y-1/2 text-outline text-[20px]"></i>
                             <input class="w-full pl-xl pr-md py-md bg-surface-bright border border-outline-variant rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all font-body-md text-on-surface"
                                    id="password_confirmation" name="password_confirmation" type="password"
                                    placeholder="••••••••" required autocomplete="new-password"/>
@@ -94,7 +94,7 @@
                 <div class="pt-md">
                     <button class="w-full py-md bg-primary text-on-primary font-label-md text-body-md rounded-lg hover:bg-primary-container transition-all shadow-md active:scale-[0.98] duration-150 flex items-center justify-center gap-sm" type="submit">
                         Daftar
-                        <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                        <i class="ti ti-arrow-right text-[20px]"></i>
                     </button>
                 </div>
             </form>

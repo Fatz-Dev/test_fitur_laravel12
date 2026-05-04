@@ -32,15 +32,15 @@
             <input type="radio" name="program_choice" id="prog-kpm" value="KPM"
                    class="absolute top-3 right-3 accent-amber-500"
                    @checked(old('program_choice') === 'KPM')>
-            <span class="material-symbols-outlined text-amber-600 text-[28px]">location_city</span>
+            <i class="ti ti-building-community text-amber-600 text-[28px]"></i>
             <div class="font-label-md text-on-surface">KPM</div>
             <div class="text-[11px] font-bold px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full w-fit">Desa saja</div>
             <p class="font-body-sm text-on-surface-variant text-[13px]">
                 Kuliah Pengabdian Masyarakat — ditempatkan di satu <strong>desa/kelurahan</strong>.
             </p>
             <div class="text-[12px] text-on-surface-variant space-y-1">
-                <p class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">near_me</span> Radius {{ \App\Models\Setting::get('max_radius_km', 10) }} km dari domisili</p>
-                <p class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">home</span> 1 lokasi penempatan (desa)</p>
+                <p class="flex items-center gap-1"><i class="ti ti-navigation text-[14px]"></i> Radius {{ \App\Models\Setting::get('max_radius_km', 10) }} km dari domisili</p>
+                <p class="flex items-center gap-1"><i class="ti ti-home text-[14px]"></i> 1 lokasi penempatan (desa)</p>
             </div>
         </label>
 
@@ -50,15 +50,15 @@
             <input type="radio" name="program_choice" id="prog-ppl" value="PPL"
                    class="absolute top-3 right-3 accent-blue-500"
                    @checked(old('program_choice') === 'PPL')>
-            <span class="material-symbols-outlined text-blue-600 text-[28px]">school</span>
+            <i class="ti ti-school text-blue-600 text-[28px]"></i>
             <div class="font-label-md text-on-surface">PPL</div>
             <div class="text-[11px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full w-fit">Sekolah saja</div>
             <p class="font-body-sm text-on-surface-variant text-[13px]">
                 Praktik Pengalaman Lapangan — ditempatkan di satu <strong>sekolah</strong> (SD s.d. MA/SMK).
             </p>
             <div class="text-[12px] text-on-surface-variant space-y-1">
-                <p class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">near_me</span> Radius {{ \App\Models\Setting::get('max_radius_km', 10) }} km dari domisili</p>
-                <p class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">school</span> 1 lokasi penempatan (sekolah)</p>
+                <p class="flex items-center gap-1"><i class="ti ti-navigation text-[14px]"></i> Radius {{ \App\Models\Setting::get('max_radius_km', 10) }} km dari domisili</p>
+                <p class="flex items-center gap-1"><i class="ti ti-school text-[14px]"></i> 1 lokasi penempatan (sekolah)</p>
             </div>
         </label>
 
@@ -68,22 +68,22 @@
             <input type="radio" name="program_choice" id="prog-pkppm" value="PKPPM"
                    class="absolute top-3 right-3 accent-violet-500"
                    @checked(old('program_choice', 'PKPPM') === 'PKPPM')>
-            <span class="material-symbols-outlined text-violet-600 text-[28px]">hub</span>
+            <i class="ti ti-topology-star-3 text-violet-600 text-[28px]"></i>
             <div class="font-label-md text-on-surface">PKPPM</div>
             <div class="text-[11px] font-bold px-2 py-0.5 bg-violet-100 text-violet-700 rounded-full w-fit">Desa + Sekolah</div>
             <p class="font-body-sm text-on-surface-variant text-[13px]">
                 KPM + PPL sekaligus — ditempatkan di <strong>satu desa</strong> dan <strong>satu sekolah</strong> yang berdekatan.
             </p>
             <div class="text-[12px] text-on-surface-variant space-y-1">
-                <p class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">join</span> Pasangan desa + sekolah terdekat</p>
-                <p class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">layers</span> 2 lokasi penempatan</p>
+                <p class="flex items-center gap-1"><i class="ti ti-arrows-join text-[14px]"></i> Pasangan desa + sekolah terdekat</p>
+                <p class="flex items-center gap-1"><i class="ti ti-layers-intersect text-[14px]"></i> 2 lokasi penempatan</p>
             </div>
         </label>
     </div>
 
     <div id="info-pkppm" class="hidden mt-md bg-violet-50 border border-violet-200 rounded-xl p-md">
         <div class="flex items-start gap-sm">
-            <span class="material-symbols-outlined text-violet-600 text-[18px]">info</span>
+            <i class="ti ti-info-circle text-violet-600 text-[18px]"></i>
             <div>
                 <p class="font-label-md text-violet-800 text-sm mb-1">Cara Kerja Penempatan PKPPM</p>
                 <p class="text-[12px] text-violet-700">Sistem tidak mencari desa dan sekolah terdekat dari domisili Anda secara terpisah. Sebaliknya, sistem mencari <strong>pasangan</strong> desa + sekolah yang letaknya paling dekat satu sama lain. Tujuannya agar jarak tempuh antar dua lokasi penempatan sesedikit mungkin.</p>
@@ -139,11 +139,11 @@
             <div class="flex flex-wrap gap-2">
                 <button type="button" onclick="searchAddress()"
                         class="flex items-center gap-1 text-[12px] bg-primary/10 text-primary hover:bg-primary/20 px-md py-xs rounded-lg font-medium transition-colors">
-                    <span class="material-symbols-outlined text-[16px]">search</span> Cari dari Alamat
+                    <i class="ti ti-search text-[16px]"></i> Cari dari Alamat
                 </button>
                 <button type="button" onclick="useGeo()"
                         class="flex items-center gap-1 text-[12px] bg-secondary/10 text-secondary hover:bg-secondary/20 px-md py-xs rounded-lg font-medium transition-colors">
-                    <span class="material-symbols-outlined text-[16px]">my_location</span> Lokasi Saya
+                    <i class="ti ti-current-location text-[16px]"></i> Lokasi Saya
                 </button>
             </div>
             <div id="geo-results" class="space-y-1"></div>
@@ -185,7 +185,7 @@
          ondragover="event.preventDefault();this.classList.add('border-secondary','bg-secondary/5')"
          ondragleave="this.classList.remove('border-secondary','bg-secondary/5')"
          ondrop="handleDrop(event)">
-        <span class="material-symbols-outlined text-[36px] text-outline block mb-2">folder_open</span>
+        <i class="ti ti-folder-open text-[36px] text-outline block mb-2"></i>
         <p class="font-label-md text-on-surface text-sm">Klik di sini atau seret berkas</p>
         <p class="font-body-sm text-on-surface-variant text-[12px] mt-1">PDF, JPG, JPEG, PNG — maksimum 4 berkas</p>
         <input id="bulk-input" type="file" multiple accept=".pdf,image/*" class="hidden" onchange="handleFiles(this.files)">
@@ -194,17 +194,17 @@
     <div class="grid sm:grid-cols-2 gap-md">
         @php
         $slots = [
-            ['key'=>'transkrip',       'label'=>'Transkrip',            'icon'=>'description',         'accept'=>'.pdf,image/*', 'hint'=>'PDF atau gambar'],
-            ['key'=>'ktm',             'label'=>'Kartu Tanda Mahasiswa', 'icon'=>'badge',               'accept'=>'.pdf,image/*', 'hint'=>'PDF atau gambar'],
-            ['key'=>'surat_pengantar', 'label'=>'Surat Pengantar',       'icon'=>'mail',                'accept'=>'.pdf,image/*', 'hint'=>'PDF atau gambar'],
-            ['key'=>'pas_foto',        'label'=>'Pas Foto',              'icon'=>'person',              'accept'=>'image/jpeg,image/png', 'hint'=>'JPG atau PNG'],
+            ['key'=>'transkrip',       'label'=>'Transkrip',            'icon'=>'ti-file-description', 'accept'=>'.pdf,image/*', 'hint'=>'PDF atau gambar'],
+            ['key'=>'ktm',             'label'=>'Kartu Tanda Mahasiswa', 'icon'=>'ti-id-badge',         'accept'=>'.pdf,image/*', 'hint'=>'PDF atau gambar'],
+            ['key'=>'surat_pengantar', 'label'=>'Surat Pengantar',       'icon'=>'ti-mail',             'accept'=>'.pdf,image/*', 'hint'=>'PDF atau gambar'],
+            ['key'=>'pas_foto',        'label'=>'Pas Foto',              'icon'=>'ti-user',             'accept'=>'image/jpeg,image/png', 'hint'=>'JPG atau PNG'],
         ];
         @endphp
         @foreach($slots as $slot)
         <div class="border border-outline-variant rounded-xl p-md space-y-sm transition-colors" id="slot-{{ $slot['key'] }}">
             <div class="flex items-center justify-between">
                 <label class="flex items-center gap-2 font-label-md text-on-surface text-sm cursor-pointer" for="file-{{ $slot['key'] }}">
-                    <span class="material-symbols-outlined text-on-surface-variant text-[18px]">{{ $slot['icon'] }}</span>
+                    <i class="ti {{ $slot['icon'] }} text-on-surface-variant text-[18px]"></i>
                     {{ $slot['label'] }} <span class="text-error">*</span>
                 </label>
                 <span id="badge-{{ $slot['key'] }}"
@@ -212,10 +212,10 @@
             </div>
             <p class="text-[12px] text-outline">{{ $slot['hint'] }}</p>
             <div id="preview-{{ $slot['key'] }}" class="hidden rounded-lg border border-slate-200 bg-slate-50 text-[12px] text-on-surface-variant p-sm flex items-center gap-2">
-                <span id="preview-icon-{{ $slot['key'] }}" class="material-symbols-outlined text-[18px]">description</span>
+                <i id="preview-icon-{{ $slot['key'] }}" class="ti ti-file-description text-[18px]"></i>
                 <span id="preview-name-{{ $slot['key'] }}" class="truncate flex-1"></span>
                 <button type="button" onclick="clearSlot('{{ $slot['key'] }}')" class="text-error hover:text-error/70 flex-shrink-0">
-                    <span class="material-symbols-outlined text-[16px]">close</span>
+                    <i class="ti ti-x text-[16px]"></i>
                 </button>
             </div>
             <div class="flex items-center gap-2">
@@ -236,7 +236,7 @@
 {{-- Submit --}}
 <div class="bg-white border border-slate-200 rounded-xl p-md shadow-sm flex justify-end">
     <button class="bg-primary hover:bg-primary-container text-white font-label-md py-2 px-xl rounded-lg transition-colors flex items-center gap-2">
-        <span class="material-symbols-outlined text-[18px]">send</span>
+        <i class="ti ti-send text-[18px]"></i>
         Kirim untuk Review
     </button>
 </div>
@@ -322,7 +322,8 @@ function assignFile(key, file) {
     if (!file) return;
     slotFiles[key] = file;
     try { const dt = new DataTransfer(); dt.items.add(file); document.getElementById('real-'+key).files = dt.files; } catch {}
-    document.getElementById('preview-icon-'+key).textContent = file.type.startsWith('image/') ? 'image' : 'description';
+    const iconEl = document.getElementById('preview-icon-'+key);
+    iconEl.className = file.type.startsWith('image/') ? 'ti ti-photo text-[18px]' : 'ti ti-file-description text-[18px]';
     document.getElementById('preview-name-'+key).textContent = file.name;
     document.getElementById('preview-'+key).classList.remove('hidden');
     document.getElementById('badge-'+key).classList.remove('hidden');

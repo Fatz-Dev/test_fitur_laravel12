@@ -9,7 +9,7 @@
     </div>
     <a href="{{ route('admin.gelombang.create') }}"
        class="bg-primary text-white text-sm px-md py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2 font-label-md">
-        <span class="material-symbols-outlined text-[18px]">add</span>
+        <i class="ti ti-plus text-[18px]"></i>
         Tambah Gelombang
     </a>
 </div>
@@ -17,7 +17,7 @@
 @foreach(['KPM','PPL'] as $prog)
 <div class="mb-lg">
     <div class="flex items-center gap-2 mb-md">
-        <span class="material-symbols-outlined text-[18px] {{ $prog === 'KPM' ? 'text-amber-600' : 'text-blue-600' }}">calendar_month</span>
+        <i class="ti ti-calendar text-[18px] {{ $prog === 'KPM' ? 'text-amber-600' : 'text-blue-600' }}"></i>
         <h3 class="font-label-md text-on-surface uppercase tracking-wider text-[12px]">Program {{ $prog }}</h3>
     </div>
     <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">

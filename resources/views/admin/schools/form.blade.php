@@ -10,7 +10,7 @@
 <div class="mb-lg">
     <a href="{{ route('admin.schools.index') }}"
        class="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-primary transition-colors font-label-md">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Kembali
+        <i class="ti ti-arrow-left text-[18px]"></i> Kembali
     </a>
     <h2 class="font-h2 text-h2 text-primary mt-sm">{{ $school->exists ? 'Edit Lokasi' : 'Tambah Lokasi' }}</h2>
     <p class="font-body-sm text-on-surface-variant">KPM &rarr; Desa &nbsp;|&nbsp; PPL &rarr; Sekolah</p>
@@ -30,8 +30,8 @@
             <select name="program" id="prog-select"
                     class="w-full border border-outline-variant rounded-lg px-md py-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all"
                     onchange="updateLabels()">
-                @foreach(['BOTH'=>'KPM (Desa) & PPL (Sekolah)','KPM'=>'KPM saja (Desa)','PPL'=>'PPL saja (Sekolah)'] as $v=>$l)
-                    <option value="{{ $v }}" @selected(old('program', $school->program ?? 'BOTH')===$v)>{{ $l }}</option>
+                @foreach(['KPM' => 'KPM — Desa / Kelurahan', 'PPL' => 'PPL — Sekolah (SD s.d. MA/SMK)'] as $v => $l)
+                    <option value="{{ $v }}" @selected(old('program', $school->program ?? 'KPM') === $v)>{{ $l }}</option>
                 @endforeach
             </select>
             @error('program') <p class="text-[12px] text-error mt-1">{{ $message }}</p> @enderror
@@ -92,11 +92,11 @@
         <div class="flex flex-wrap gap-2">
             <button type="button" onclick="useGeo()"
                     class="flex items-center gap-1 text-[12px] bg-secondary/10 text-secondary hover:bg-secondary/20 px-md py-xs rounded-lg font-medium transition-colors">
-                <span class="material-symbols-outlined text-[16px]">my_location</span> Lokasi GPS Saya
+                <i class="ti ti-current-location text-[16px]"></i> Lokasi GPS Saya
             </button>
             <button type="button" onclick="searchAddress()"
                     class="flex items-center gap-1 text-[12px] bg-primary/10 text-primary hover:bg-primary/20 px-md py-xs rounded-lg font-medium transition-colors">
-                <span class="material-symbols-outlined text-[16px]">search</span> Cari via Alamat
+                <i class="ti ti-search text-[16px]"></i> Cari via Alamat
             </button>
         </div>
         <div id="geo-results" class="space-y-1"></div>
@@ -137,7 +137,8 @@
         </label>
 
         <div class="flex justify-end pt-sm">
-            <button class="bg-primary hover:bg-primary-container text-white font-label-md py-2 px-lg rounded-lg transition-colors">
+            <button class="bg-primary hover:bg-primary-container text-white font-label-md py-2 px-lg rounded-lg transition-colors flex items-center gap-2">
+                <i class="ti ti-device-floppy text-[18px]"></i>
                 Simpan
             </button>
         </div>
@@ -147,7 +148,7 @@
     <div class="w-full lg:w-1/2 flex flex-col gap-md">
         <div class="bg-surface-container-low border border-slate-200 rounded-xl p-sm">
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-[18px]">map</span>
+                <i class="ti ti-map text-primary text-[18px]"></i>
                 <p class="font-label-md text-on-surface text-sm">Peta Lokasi</p>
             </div>
             <p class="text-[12px] text-on-surface-variant mt-1">Klik pada peta untuk menentukan koordinat, atau geser marker.</p>
@@ -193,14 +194,10 @@ function updateLabels() {
         namaEl.textContent = 'Nama Desa'; inputEl.placeholder = 'Nama desa / kelurahan';
         grpDesa.style.display = ''; grpSekolah.style.display = 'none';
         kuotaKpm.style.display = ''; kuotaPpl.style.display = 'none';
-    } else if (prog === 'PPL') {
+    } else {
         namaEl.textContent = 'Nama Sekolah'; inputEl.placeholder = 'Nama sekolah';
         grpDesa.style.display = 'none'; grpSekolah.style.display = '';
         kuotaKpm.style.display = 'none'; kuotaPpl.style.display = '';
-    } else {
-        namaEl.textContent = 'Nama Lokasi'; inputEl.placeholder = 'Nama desa atau sekolah';
-        grpDesa.style.display = ''; grpSekolah.style.display = '';
-        kuotaKpm.style.display = ''; kuotaPpl.style.display = '';
     }
 }
 document.addEventListener('DOMContentLoaded', () => { updateLabels(); map.invalidateSize(); });

@@ -48,20 +48,16 @@ class School extends Model
 
     public function acceptsProgram(string $program): bool
     {
-        return $this->program === $program || $this->program === 'BOTH';
+        return $this->program === $program;
     }
 
     /**
      * Label tipe lokasi berdasarkan program.
-     * KPM → Desa, PPL → Sekolah, BOTH → Desa & Sekolah
+     * KPM → Desa, PPL → Sekolah
      */
     public function locationType(): string
     {
-        return match ($this->program) {
-            'KPM'  => 'Desa',
-            'PPL'  => 'Sekolah',
-            default => 'Desa & Sekolah',
-        };
+        return $this->program === 'KPM' ? 'Desa' : 'Sekolah';
     }
 
     /**

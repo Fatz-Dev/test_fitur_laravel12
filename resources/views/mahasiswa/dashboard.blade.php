@@ -11,7 +11,7 @@
     @if(!$profile)
         <a href="{{ route('mahasiswa.profile.create') }}"
            class="px-md py-2 bg-secondary text-white rounded-lg font-label-md hover:opacity-90 transition-opacity flex items-center gap-2 text-sm">
-            <span class="material-symbols-outlined text-[18px]">edit_note</span>
+            <i class="ti ti-file-pencil text-[18px]"></i>
             Lengkapi Profil
         </a>
     @endif
@@ -22,7 +22,7 @@
     <div class="bg-amber-50 border border-amber-200 rounded-xl p-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-md mb-lg">
         <div class="flex items-start gap-md">
             <div class="bg-amber-100 p-3 rounded-lg flex-shrink-0">
-                <span class="material-symbols-outlined text-amber-700 text-[28px]">warning</span>
+                <i class="ti ti-alert-triangle text-amber-700 text-[28px]"></i>
             </div>
             <div>
                 <p class="font-label-md text-amber-900 text-sm">Profil belum lengkap</p>
@@ -42,15 +42,15 @@
         <div class="bg-white p-lg rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200">
             @php
                 $statusConfig = [
-                    'pending'  => ['bg-amber-50 border-amber-200', 'text-amber-700', 'pending_actions', 'Menunggu review admin'],
-                    'approved' => ['bg-emerald-50 border-emerald-200', 'text-emerald-700', 'check_circle', 'Profil telah disetujui'],
-                    'rejected' => ['bg-red-50 border-red-200', 'text-error', 'cancel', 'Profil ditolak'],
+                    'pending'  => ['bg-amber-50 border-amber-200', 'text-amber-700',  'ti-clock-pause',    'Menunggu review admin'],
+                    'approved' => ['bg-emerald-50 border-emerald-200', 'text-emerald-700', 'ti-circle-check', 'Profil telah disetujui'],
+                    'rejected' => ['bg-red-50 border-red-200', 'text-error', 'ti-circle-x', 'Profil ditolak'],
                 ];
                 $cfg = $statusConfig[$profile->status] ?? $statusConfig['pending'];
             @endphp
             <p class="text-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Status Pendaftaran</p>
             <div class="flex items-center gap-2 mb-2">
-                <span class="material-symbols-outlined {{ $cfg[1] }} text-[22px]">{{ $cfg[2] }}</span>
+                <i class="ti {{ $cfg[2] }} {{ $cfg[1] }} text-[22px]"></i>
                 <span class="font-label-md {{ $cfg[1] }} capitalize">{{ $profile->status }}</span>
             </div>
             <p class="font-body-sm text-on-surface-variant text-[13px]">{{ $cfg[3] }}</p>
@@ -67,7 +67,7 @@
             <p class="font-h3 text-h3 text-primary">{{ $profile->nim }}</p>
             <p class="font-body-sm text-on-surface-variant mt-1">NIM Mahasiswa</p>
             <div class="mt-3 flex items-center gap-2">
-                <span class="material-symbols-outlined text-secondary text-[18px]">grade</span>
+                <i class="ti ti-star text-secondary text-[18px]"></i>
                 <span class="font-label-md text-on-surface">Microteaching: <span class="text-secondary">{{ $profile->microteaching_grade }}</span></span>
             </div>
         </div>
@@ -80,7 +80,7 @@
             @if($profile->status === 'pending')
                 <button onclick="document.getElementById('modal-lokasi').classList.remove('hidden')"
                         class="mt-3 flex items-center gap-1 text-sm text-secondary hover:text-primary font-label-md transition-colors">
-                    <span class="material-symbols-outlined text-[16px]">edit_location</span>
+                    <i class="ti ti-map-pin-edit text-[16px]"></i>
                     Perbarui Lokasi
                 </button>
             @endif
@@ -93,7 +93,7 @@
             @foreach(['KPM','PPL'] as $prog)
                 <div class="bg-white p-lg rounded-xl border border-slate-200 shadow-sm">
                     <div class="flex items-center gap-2 mb-md">
-                        <span class="material-symbols-outlined text-[18px] {{ $prog === 'KPM' ? 'text-amber-600' : 'text-blue-600' }}">calendar_month</span>
+                        <i class="ti ti-calendar text-[18px] {{ $prog === 'KPM' ? 'text-amber-600' : 'text-blue-600' }}"></i>
                         <p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Gelombang Aktif {{ $prog }}</p>
                     </div>
                     @if($gelombang[$prog])
@@ -150,7 +150,7 @@
                         </p>
                         <p class="text-[12px] text-outline mt-1">{{ $reg->school->address }}</p>
                         <div class="flex items-center gap-1 mt-2">
-                            <span class="material-symbols-outlined text-[14px] text-outline">near_me</span>
+                            <i class="ti ti-navigation text-[14px] text-outline"></i>
                             <p class="text-[12px] text-on-surface-variant">{{ number_format($reg->distance_km, 2) }} km dari domisili</p>
                         </div>
                         <div class="flex items-center justify-between mt-lg">
@@ -168,13 +168,13 @@
                         </div>
                     @elseif($profile->isApproved())
                         <div class="flex flex-col items-center justify-center py-6 text-center">
-                            <span class="material-symbols-outlined text-[36px] text-error/40">location_off</span>
+                            <i class="ti ti-map-pin-off text-[36px] text-error/40"></i>
                             <p class="font-body-sm text-error mt-2">Tidak ada lokasi dengan kuota tersedia.</p>
                             <p class="text-[12px] text-on-surface-variant mt-1">Hubungi admin untuk bantuan.</p>
                         </div>
                     @else
                         <div class="flex flex-col items-center justify-center py-6 text-center">
-                            <span class="material-symbols-outlined text-[36px] text-outline/40">hourglass_empty</span>
+                            <i class="ti ti-hourglass text-[36px] text-outline/40"></i>
                             <p class="font-body-sm text-on-surface-variant mt-2">Menunggu persetujuan profil.</p>
                         </div>
                     @endif
@@ -188,16 +188,16 @@
 <div id="modal-lokasi" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg border border-outline-variant">
         <div class="flex justify-between items-center px-xl py-lg border-b border-outline-variant">
-            <h3 class="font-h3 text-h3 text-on-surface" style="font-size:20px">Perbarui Lokasi Domisili</h3>
+            <h3 class="font-h3 text-on-surface" style="font-size:20px">Perbarui Lokasi Domisili</h3>
             <button onclick="document.getElementById('modal-lokasi').classList.add('hidden')"
                     class="text-outline hover:text-on-surface transition-colors p-1 rounded-lg hover:bg-slate-100">
-                <span class="material-symbols-outlined">close</span>
+                <i class="ti ti-x text-[20px]"></i>
             </button>
         </div>
 
         <div class="px-xl py-lg">
             <div class="flex items-start gap-sm mb-lg p-sm bg-surface-container-low rounded-lg border border-surface-variant">
-                <span class="material-symbols-outlined text-primary text-[18px]">info</span>
+                <i class="ti ti-info-circle text-primary text-[18px]"></i>
                 <p class="font-label-sm text-on-primary-fixed-variant text-[12px]">Lokasi ini digunakan sistem untuk menetapkan lokasi KPM/PPL terdekat. Hanya dapat diubah saat profil masih menunggu review.</p>
             </div>
 
@@ -210,12 +210,12 @@
                     <div class="flex gap-2 mt-2">
                         <button type="button" onclick="modalSearchAddress()"
                                 class="flex items-center gap-1 text-[12px] bg-secondary/10 text-secondary hover:bg-secondary/20 px-md py-xs rounded-lg font-medium transition-colors">
-                            <span class="material-symbols-outlined text-[16px]">search</span>
+                            <i class="ti ti-search text-[16px]"></i>
                             Cari via OpenStreetMap
                         </button>
                         <button type="button" onclick="modalUseGeo()"
                                 class="flex items-center gap-1 text-[12px] bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-md py-xs rounded-lg font-medium transition-colors">
-                            <span class="material-symbols-outlined text-[16px]">my_location</span>
+                            <i class="ti ti-current-location text-[16px]"></i>
                             Lokasi Saya
                         </button>
                     </div>

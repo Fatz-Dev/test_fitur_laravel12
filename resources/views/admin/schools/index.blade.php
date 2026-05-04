@@ -9,7 +9,7 @@
     </div>
     <a href="{{ route('admin.schools.create') }}"
        class="bg-primary text-white text-sm px-md py-2 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2 font-label-md">
-        <span class="material-symbols-outlined text-[18px]">add_location</span>
+        <i class="ti ti-map-pin-plus text-[18px]"></i>
         Tambah Lokasi
     </a>
 </div>
@@ -23,7 +23,7 @@
                     <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Tipe</th>
                     <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Jenjang</th>
                     <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Program</th>
-                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Kuota KPM/PPL</th>
+                    <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Kuota KPM / PPL</th>
                     <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Koordinat</th>
                     <th class="px-md py-3 font-label-sm text-on-surface-variant uppercase tracking-wider">Status</th>
                     <th class="px-md py-3"></th>
@@ -38,27 +38,29 @@
                     <td class="px-md py-3">
                         @if($s->program === 'KPM')
                             <span class="text-[11px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">Desa</span>
-                        @elseif($s->program === 'PPL')
-                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">Sekolah</span>
                         @else
-                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-violet-100 text-violet-700 font-medium">Desa & Sekolah</span>
+                            <span class="text-[11px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">Sekolah</span>
                         @endif
                     </td>
                     <td class="px-md py-3 text-[12px] text-on-surface-variant">{{ $s->jenjang ?: '-' }}</td>
-                    <td class="px-md py-3 text-[12px] text-on-surface font-medium">{{ $s->program }}</td>
+                    <td class="px-md py-3">
+                        <span class="text-[11px] font-bold px-2 py-0.5 rounded {{ $s->program === 'KPM' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700' }}">
+                            {{ $s->program }}
+                        </span>
+                    </td>
                     <td class="px-md py-3 text-[12px]">
-                        <span class="{{ $s->program !== 'PPL' ? 'text-amber-700 font-medium' : 'text-outline' }}">
-                            {{ $s->program !== 'PPL' ? $s->kuota_kpm : '-' }}
+                        <span class="{{ $s->program === 'KPM' ? 'text-amber-700 font-medium' : 'text-outline' }}">
+                            {{ $s->program === 'KPM' ? $s->kuota_kpm : '-' }}
                         </span>
                         <span class="text-outline mx-1">/</span>
-                        <span class="{{ $s->program !== 'KPM' ? 'text-blue-700 font-medium' : 'text-outline' }}">
-                            {{ $s->program !== 'KPM' ? $s->kuota_ppl : '-' }}
+                        <span class="{{ $s->program === 'PPL' ? 'text-blue-700 font-medium' : 'text-outline' }}">
+                            {{ $s->program === 'PPL' ? $s->kuota_ppl : '-' }}
                         </span>
                     </td>
                     <td class="px-md py-3">
                         <a target="_blank" class="text-[12px] text-secondary hover:underline flex items-center gap-1"
                            href="https://www.google.com/maps?q={{ $s->latitude }},{{ $s->longitude }}">
-                            <span class="material-symbols-outlined text-[14px]">map</span>
+                            <i class="ti ti-map text-[14px]"></i>
                             {{ $s->latitude }}, {{ $s->longitude }}
                         </a>
                     </td>
@@ -82,7 +84,7 @@
             @empty
                 <tr>
                     <td colspan="8" class="text-center py-12 text-on-surface-variant">
-                        <span class="material-symbols-outlined text-[48px] opacity-30 block mb-2">location_off</span>
+                        <i class="ti ti-map-pin-off text-[48px] opacity-30 block mb-2"></i>
                         <p class="font-body-sm">Belum ada lokasi terdaftar.</p>
                     </td>
                 </tr>
