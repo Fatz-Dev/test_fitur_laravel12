@@ -4,27 +4,25 @@ Aplikasi web Laravel 12 untuk mengelola pendaftaran dan penempatan mahasiswa pad
 
 ## Stack
 - PHP 8.4 + Laravel 12
-- Database: SQLite (`database/database.sqlite`)
-- View: Blade + Tailwind CSS via CDN (`https://cdn.tailwindcss.com?plugins=forms,container-queries`)
+- Database: **PostgreSQL** (Replit managed, host: helium)
+- View: Blade + Tailwind CSS (built via Vite)
 - Auth: **JWT custom** (firebase/php-jwt) — token disimpan di HTTP-only cookie `kpm_token`
 - Geocoding: **OpenStreetMap Nominatim API** (gratis, tanpa API key)
-- Font: **Public Sans** (Google Fonts CDN)
-- Icons: **Material Symbols Outlined** (Google Fonts CDN)
+- Icons: **Tabler Icons** (via npm + Vite build)
 
 ## Design System (SIPEP Branding)
 - **Primary**: `#00236f` (blue-900) — sidebar, buttons, headings
 - **Secondary**: `#006a61` (teal) — accents, CTAs, links
 - **Error**: `#ba1a1a`
 - Layout: Fixed sidebar 256px (blue-900), sticky top AppBar (white), content area fluid 1280px max
-- Tailwind config inline di setiap layout (`tailwind.config.js` juga tersedia sebagai referensi)
 - Semua view extend `layouts.auth` (login/register) atau `layouts.app` (authenticated)
 
-## Views Redesigned (SIPEP UI)
+## Views
 | View | Status |
 |------|--------|
 | `layouts/auth.blade.php` | ✅ Background foto kampus + overlay |
 | `layouts/app.blade.php` | ✅ Sidebar blue-900, AppBar, flash messages |
-| `auth/login.blade.php` | ✅ Dark overlay, SIPEP branding, Material icons |
+| `auth/login.blade.php` | ✅ Dark overlay, SIPEP branding, Tabler icons |
 | `auth/register.blade.php` | ✅ Split layout: foto kampus kiri + form kanan |
 | `admin/dashboard.blade.php` | ✅ Stats cards, recent lists, banner section |
 | `mahasiswa/dashboard.blade.php` | ✅ Status cards, gelombang, penempatan grid, modal lokasi |
@@ -84,24 +82,33 @@ Semua mahasiswa sudah `approved`. Mahasiswa baru juga bisa daftar mandiri lewat 
 - Memanggil `https://nominatim.openstreetmap.org/search` dengan `User-Agent` & `countrycodes=id`
 - Tidak butuh API key, tetapi tunduk pada [Usage Policy Nominatim](https://operations.osmfoundation.org/policies/nominatim/) — max 1 req/s
 
-## Struktur Database
+## Struktur Database (PostgreSQL)
 - `users` — id, name, email, password, **role** (`admin`/`mahasiswa`)
 - `mahasiswa_profiles` — user_id, nim, phone, address, lat/lng, microteaching_grade (A-E), `transkrip_path`, `ktm_path`, `surat_pengantar_path`, `pas_foto_path`, status (pending/approved/rejected), admin_note
-- `schools` — name, jenjang, address, lat/lng, program (KPM/PPL/BOTH), kuota_kpm, kuota_ppl, kontak, is_active
+- `schools` — name, jenjang (string, no enum constraint), address, lat/lng, program (KPM/PPL/BOTH), kuota_kpm, kuota_ppl, kontak, is_active
 - `registrations` — mahasiswa_profile_id, school_id, program (KPM/PPL), distance_km, status (pending/approved/rejected/cancelled). Unique pada `(mahasiswa_profile_id, program)`
+- `gelombang` — program, nomor, tahun_akademik, tanggal_buka, tanggal_tutup, is_active
 - `settings` — key/value (radius, deadline, dll.)
 
 ## Perintah Penting
 ```bash
-php artisan migrate:fresh --seed   # reset DB + seed admin + mahasiswa + sekolah contoh
-php artisan storage:link           # symlink public/storage (sudah dijalankan)
+php artisan migrate --force          # run migrations
+php artisan db:seed --force          # seed sample data
+php artisan storage:link             # symlink public/storage (sudah dijalankan)
 php artisan serve --host=0.0.0.0 --port=5000   # server (workflow)
+npm run build                        # build Tailwind/Vite assets
 ```
 
 ## Workflow
-- **Start application**: `php artisan serve --host=0.0.0.0 --port=5000` (port 5000, webview)
+- **Start application**: `php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=5000` (port 5000, webview)
 
-## Catatan
+## Catatan Replit Migration
+- Database dimigrasi dari SQLite ke **PostgreSQL** (Replit managed)
+- Konfigurasi DB ada di `.env` (DB_CONNECTION=pgsql, DB_HOST=helium, DB_DATABASE=heliumdb, dll.)
+- Constraint `jenjang_check` di tabel `schools` dihapus agar bisa menerima nilai non-enum (seperti "Kelurahan", "Desa")
 - Trusted proxies di-set ke `*` (`bootstrap/app.php`) agar URL Laravel mengenali HTTPS dari proxy Replit
+- Session driver: **file** (bukan database)
+- Cache store: **file** (bukan database)
+- Queue: **sync**
 - Upload file disimpan di `storage/app/public/mahasiswa/{user_id}/...` dan diakses via `/storage/...`
-- Untuk produksi, ganti Tailwind CDN dengan build Vite (`npm install && npm run build`)
+- Frontend dibangun dengan Vite (`npm run build`), assets di `public/build/`
