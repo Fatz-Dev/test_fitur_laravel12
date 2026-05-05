@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Review Tugas Mahasiswa | SIPEP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d5e3fc",
+                        "on-primary-fixed-variant": "#264191",
+                        "secondary-container": "#86f2e4",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-secondary-container": "#006f66",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#e6eeff",
+                        "on-primary-container": "#90a8ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "primary": "#00236f",
+                        "secondary": "#006a61",
+                        "tertiary-fixed": "#e0e3e5",
+                        "on-tertiary-container": "#aaadaf",
+                        "on-background": "#0d1c2e",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#4059aa",
+                        "surface-dim": "#ccdbf3",
+                        "outline": "#757682",
+                        "tertiary": "#272b2d",
+                        "on-primary-fixed": "#00164e",
+                        "primary-container": "#1e3a8a",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#dce1ff",
+                        "surface-variant": "#d5e3fc",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#444651",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "secondary-fixed": "#89f5e7",
+                        "inverse-surface": "#233144",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-container": "#3d4143",
+                        "background": "#f8f9ff",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#0d1c2e",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#00201d",
+                        "outline-variant": "#c5c5d3",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-container-low": "#eff4ff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "inverse-primary": "#b6c4ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "base": "4px",
+                        "2xl": "48px",
+                        "container-max": "1280px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "h2": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "body-sm": ["Public Sans"],
+                        "h3": ["Public Sans"],
+                        "body-md": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "label-md": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "h1": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-border { border-left-width: 4px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Shell -->
+<aside class="hidden md:flex flex-col h-full fixed left-0 top-0 z-40 h-screen w-64 border-r border-blue-800 bg-blue-900 text-sm font-public-sans">
+<div class="p-6 flex flex-col gap-1">
+<h1 class="text-2xl font-black text-white tracking-tight">SIPEP</h1>
+<p class="text-teal-400 text-xs font-medium">Portal Akademik</p>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-800 text-teal-400 border-l-4 border-teal-400" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Dokumen</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span>Registrasi KPM/PPL</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">distance</span>
+<span>Pilih Sekolah</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Pengaturan</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-blue-800">
+<button class="w-full flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span>Keluar</span>
+</button>
+</div>
+</aside>
+<main class="md:ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar Shell -->
+<header class="sticky top-0 z-50 flex items-center justify-between px-6 h-16 w-full bg-white border-b border-slate-200 shadow-sm">
+<div class="flex items-center gap-4 flex-1">
+<div class="relative w-64">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50 focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all" placeholder="Cari laporan..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-px bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-blue-900 leading-none">Dr. Ahmad Faisal</p>
+<p class="text-xs text-slate-500 mt-1">Koordinator PPL</p>
+</div>
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXVNiZ-NhPWQQBkitTWQj5poUho-k7RbOlFeIaIyEypW7vB9jcwf9dQr0aC4BoYAn42V5kRraLnSlltU1TbFTuoquHuJeDgVnAD0skgQzHXZ8qGovLFCzGiIwKZNpqdK5WeNRhoUh8Vsea4CvOo6K6pHwSKlCVOQUqCnxuKd_5ABOgXeJ_mJTyGoRuMliJqcMgFZDGF3aKuUJAd1e6C-i5MxGVy0TX4tfVXjmbWAhbqqU_gW6SmuXaW6y4wuXHCDYgeqwK0oTvLBI"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-lg flex flex-col flex-1 gap-lg">
+<!-- Breadcrumbs & Navigation -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md">
+<nav class="flex items-center gap-2 text-sm font-medium">
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Dashboard</a>
+<span class="material-symbols-outlined text-slate-300 text-sm">chevron_right</span>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#">Tugas</a>
+<span class="material-symbols-outlined text-slate-300 text-sm">chevron_right</span>
+<span class="text-primary font-bold">Detail Pengumpulan</span>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-600 font-label-md hover:bg-slate-50 transition-all active:scale-95">
+<span class="material-symbols-outlined">arrow_back</span>
+<span>Sebelumnya</span>
+</button>
+<span class="text-sm font-medium text-slate-500 px-2">12 dari 45 Mahasiswa</span>
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-slate-600 font-label-md hover:bg-slate-50 transition-all active:scale-95">
+<span>Selanjutnya</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Main Submission Detail -->
+<div class="lg:col-span-8 flex flex-col gap-lg">
+<!-- Student & Header Card -->
+<div class="bg-white rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 p-lg">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-md">
+<div class="flex gap-md">
+<img alt="Student Photo" class="w-16 h-16 rounded-lg object-cover ring-2 ring-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG5K1zv_V64UTCLavqzg_SSMp7PRVVW0BnaZPRCME2WY-XRduSVEcv-f-9P8sA00EBvBbUmErC2Vh9J3tfUEqW6zu6Lv5YQiulQsmOX8Wc0ED3Pq4x6LwQP0Hw3PSJfa8cZZGzwGL3QSjgGHjqHdF25kyReaIf-FG1H69414sjwHm23DSH46qMl-kB91V7eG-X6l7jIjLJNecywvcsbCSUOXCsr6dLTpkWuftHlwW04N3XLkSOdOuKBGwvfvIaLlvTvnNrUY-Do0o"/>
+<div>
+<h2 class="font-h3 text-blue-900">Dimas Aditya Prayoga</h2>
+<p class="text-body-md text-slate-500">NIM: 20210810042</p>
+<div class="flex items-center gap-2 mt-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+<span class="material-symbols-outlined text-[14px] mr-1" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                            Diserahkan Tepat Waktu
+                                        </span>
+</div>
+</div>
+</div>
+<div class="text-left md:text-right">
+<p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Judul Tugas</p>
+<h3 class="font-label-md text-primary-container">Laporan Awal KPM - Mingguan 1</h3>
+<p class="text-body-sm text-slate-500 mt-1">Dikirim pada: 14 Okt 2023, 23:15 WIB</p>
+</div>
+</div>
+</div>
+<!-- Document Preview Area -->
+<div class="bg-white rounded-xl shadow-[0_2px_4px_rgba(0,35,111,0.05)] border border-slate-200 overflow-hidden flex flex-col">
+<div class="p-md bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-red-600">picture_as_pdf</span>
+<span class="text-sm font-semibold text-slate-700">Laporan_KPM_Dimas_Aditya.pdf</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-1.5 text-slate-600 hover:bg-slate-200 rounded transition-colors">
+<span class="material-symbols-outlined">zoom_in</span>
+</button>
+<button class="p-1.5 text-slate-600 hover:bg-slate-200 rounded transition-colors">
+<span class="material-symbols-outlined">zoom_out</span>
+</button>
+<a class="ml-2 flex items-center gap-1 px-3 py-1.5 bg-secondary text-white rounded text-xs font-bold hover:bg-on-secondary-container transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                                    Unduh
+                                </a>
+</div>
+</div>
+<div class="aspect-[1.85] bg-slate-800 relative group">
+<img class="w-full h-full object-contain" data-alt="A high-resolution digital preview of a formal academic document on a sleek digital interface. The document is a structured PDF displayed within a professional UI viewer, featuring clean columns, tables, and official university logos. The background workspace is a deep navy blue, contrasting with the crisp white paper of the digital document. Professional lighting highlights the texture of the digital UI components and navigation bars." src="https://lh3.googleusercontent.com/aida/ADBb0ugtRD6fdGv0dpmPyofzlzqLoEN5UqMXqzjTCC3qD0x-1HzvGNh2kCrMNxcjuGDjy-oxcoBBKg-n4cbQhjUKD0bBCX2eCj-GT4X0CawJIp-PRPgpPYpBIE3XQFNWSuWQ0XGheH29NhFwjNoSuJoFinxQKJvIYwHKjVsj6hNPL4jyb2UAwjCZ3cXgIiCAX1nRl4O6ksE56XM_yMGRy3c67sQnKzaQ1s5KEdFFJHimXe4NGF3Ga0QiC6a8feGRhcoyBfn7namEV_54QA"/>
+</div>
+<div class="p-lg grid grid-cols-2 md:grid-cols-4 gap-md border-t border-slate-200">
+<div class="p-3 border border-slate-100 rounded-lg bg-slate-50 flex flex-col gap-2 cursor-pointer hover:border-secondary transition-all">
+<div class="w-full aspect-[4/3] bg-slate-200 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional thumbnail gallery of academic submission documents. The images show varied pages of reports and field activity photos with sharp focus. Each thumbnail is framed within a minimalist card with subtle drop shadows. The lighting is bright and clean, emphasizing an organized and efficient administrative grading environment in a modern educational software platform." src="https://lh3.googleusercontent.com/aida/ADBb0uiSMBE6jyqA9sqyWj7wySmDYTG5gOy941FaSksToqkocrzdgXZ_o8fYId8tAkejMoPWA8JlaLsm_6Tpz9xmAxmswd9rd7BOWHekML1gZ8tGUh29vl6AdFXOKbjzHSWnmgqP1zFum52ggs0YKV3cfTPU2kQFvNui6vUV_D1MSXneUN2MhcRc4LDPx21vK8R9jUfGaAuCo-T1tvIBUJCKgSEG-gfL9bj4fXCvf1U-lAY4RkU_tRAyNE5Br9vwsyuLhyRT0slUSa65Eg"/>
+</div>
+<span class="text-[10px] font-bold text-slate-500 truncate">Lampiran_Foto.jpg</span>
+</div>
+<div class="p-3 border border-slate-100 rounded-lg bg-slate-50 flex flex-col gap-2 cursor-pointer hover:border-secondary transition-all">
+<div class="w-full aspect-[4/3] bg-slate-200 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-slate-400">description</span>
+</div>
+<span class="text-[10px] font-bold text-slate-500 truncate">Logbook_Harian.docx</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Grading Panel Sidebar -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<div class="bg-white rounded-xl shadow-[0_4px_6px_rgba(0,35,111,0.08)] border border-slate-200 p-lg sticky top-24">
+<h3 class="font-h3 text-blue-900 mb-md">Penilaian</h3>
+<form class="flex flex-col gap-lg">
+<!-- Numerical Grade -->
+<div>
+<label class="block text-sm font-bold text-slate-700 mb-2">Nilai Akhir (0-100)</label>
+<div class="relative">
+<input class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-lg font-bold text-primary focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all" max="100" min="0" placeholder="0" type="number"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">
+                                        / 100
+                                    </div>
+</div>
+<p class="text-[11px] text-slate-500 mt-2">Pastikan nilai sesuai dengan rubrik yang berlaku.</p>
+</div>
+<!-- Feedback -->
+<div>
+<label class="block text-sm font-bold text-slate-700 mb-2">Komentar/Feedback</label>
+<textarea class="block w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-secondary focus:border-transparent outline-none transition-all resize-none" placeholder="Berikan saran atau catatan untuk mahasiswa..." rows="6"></textarea>
+</div>
+<div class="h-px bg-slate-100 my-2"></div>
+<!-- Actions -->
+<div class="flex flex-col gap-md">
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-lg font-bold hover:bg-blue-800 transition-all shadow-md active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined">save</span>
+                                    Simpan Nilai
+                                </button>
+<button class="w-full flex items-center justify-center gap-2 py-3 border-2 border-primary text-primary bg-transparent rounded-lg font-bold hover:bg-slate-50 transition-all active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined">assignment_return</span>
+                                    Kembalikan ke Mahasiswa
+                                </button>
+</div>
+<div class="mt-4 p-md bg-amber-50 border border-amber-100 rounded-lg">
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-amber-600 text-sm">info</span>
+<p class="text-[11px] text-amber-800 leading-tight">Menyimpan nilai akan langsung mengirimkan notifikasi ke email mahasiswa terkait.</p>
+</div>
+</div>
+</form>
+</div>
+<!-- Quick Stats Card -->
+<div class="bg-white rounded-xl border border-slate-200 p-lg flex flex-col gap-md">
+<h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Statistik Pengumpulan</h4>
+<div class="flex items-center justify-between">
+<span class="text-sm text-slate-600">Rata-rata Kelas</span>
+<span class="text-sm font-bold text-primary">82.4</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 82%"></div>
+</div>
+<div class="flex items-center justify-between text-[11px]">
+<span class="text-slate-500">Terendah: 65</span>
+<span class="text-slate-500">Tertinggi: 98</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Shell -->
+<footer class="w-full py-6 px-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 border-t border-slate-200 font-public-sans text-xs mt-auto">
+<div class="flex flex-col md:flex-row items-center gap-4">
+<span class="font-bold text-slate-900">SIPEP</span>
+<p class="text-slate-500">© 2024 SIPEP Universitas. All Rights Reserved.</p>
+</div>
+<div class="flex items-center gap-6">
+<a class="text-slate-500 hover:text-blue-600 transition-colors opacity-80 hover:opacity-100" href="#">Panduan Pengguna</a>
+<a class="text-slate-500 hover:text-blue-600 transition-colors opacity-80 hover:opacity-100" href="#">Kebijakan Privasi</a>
+<a class="text-slate-500 hover:text-blue-600 transition-colors opacity-80 hover:opacity-100" href="#">Kontak</a>
+</div>
+</footer>
+</main>
+</body></html>

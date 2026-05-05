@@ -36,7 +36,13 @@ class SubmissionController extends Controller
         abort_unless($profile && $registration->mahasiswa_profile_id === $profile->id, 403);
         abort_unless($registration->status === 'approved', 403);
 
-        $assignments = ClassAssignment::orderBy('deadline')->get();
+        $query = ClassAssignment::orderBy('deadline');
+        if ($registration->program) {
+            $query->where(function ($q) use ($registration) {
+                $q->whereNull('program')->orWhere('program', $registration->program);
+            });
+        }
+        $assignments = $query->get();
 
         $submissions = Submission::where('mahasiswa_profile_id', $profile->id)
             ->whereIn('assignment_id', $assignments->pluck('id'))

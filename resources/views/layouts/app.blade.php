@@ -154,6 +154,12 @@ tailwind.config = {
                 <i class="ti ti-settings text-[20px]"></i>
                 <span>Pengaturan</span>
             </a>
+            <a href="{{ route('profile.show') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-user-circle text-[20px]"></i>
+                <span>Profil Saya</span>
+            </a>
 
         {{-- ── SUPERVISOR ── --}}
         @elseif(auth()->user()?->isSupervisor())
@@ -174,6 +180,12 @@ tailwind.config = {
                     <span class="truncate">{{ $sSchool->name }}</span>
                 </a>
             @endforeach
+            <a href="{{ route('profile.show') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-user-circle text-[20px]"></i>
+                <span>Profil Saya</span>
+            </a>
 
         {{-- ── MAHASISWA ── --}}
         @else
@@ -186,7 +198,13 @@ tailwind.config = {
             <a href="{{ route('mahasiswa.profile.create') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('mahasiswa.profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <i class="ti ti-user text-[20px]"></i>
+                <i class="ti ti-id-badge text-[20px]"></i>
+                <span>Data Akademik</span>
+            </a>
+            <a href="{{ route('profile.show') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-user-circle text-[20px]"></i>
                 <span>Profil Saya</span>
             </a>
             <div class="px-4 pt-4 pb-1">

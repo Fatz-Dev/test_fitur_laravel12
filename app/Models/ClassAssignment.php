@@ -17,6 +17,7 @@ class ClassAssignment extends Model
         'deadline',
         'attachment_path',
         'created_by',
+        'program',
     ];
 
     protected function casts(): array

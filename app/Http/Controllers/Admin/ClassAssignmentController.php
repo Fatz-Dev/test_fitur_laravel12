@@ -10,14 +10,23 @@ use Illuminate\Support\Facades\Storage;
 
 class ClassAssignmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $assignments = ClassAssignment::with('creator')
+        $query = ClassAssignment::with('creator')
             ->withCount('submissions')
-            ->latest()
-            ->paginate(15);
+            ->latest();
 
-        return view('admin.class.assignments.index', compact('assignments'));
+        if ($request->filled('program')) {
+            $prog = $request->program;
+            $query->where(function ($q) use ($prog) {
+                $q->where('program', $prog)->orWhereNull('program');
+            });
+        }
+
+        $assignments = $query->paginate(15)->withQueryString();
+        $filterProgram = $request->program;
+
+        return view('admin.class.assignments.index', compact('assignments', 'filterProgram'));
     }
 
     public function create()
@@ -82,7 +91,8 @@ class ClassAssignmentController extends Controller
             'title'        => ['required', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
             'instructions' => ['nullable', 'string'],
-            'deadline'     => ['required', 'date', 'after:now'],
+            'deadline'     => ['required', 'date'],
+            'program'      => ['nullable', 'in:KPM,PPL'],
             'attachment'   => ['nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
         ]);
     }

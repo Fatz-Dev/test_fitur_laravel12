@@ -13,6 +13,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\Mahasiswa\SubmissionController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,11 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')->name('logout');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::middleware('auth')->get('/api/geocode', [GeocodeController::class, 'search'])->name('geocode');
 

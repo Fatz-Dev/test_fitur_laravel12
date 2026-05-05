@@ -8,7 +8,7 @@
         <i class="ti ti-arrow-left text-[16px]"></i> Kembali ke Daftar Tugas
     </a>
     <h2 class="font-h2 text-h2 text-primary">{{ $assignment->exists ? 'Edit Tugas' : 'Tambah Tugas Baru' }}</h2>
-    <p class="font-body-sm text-on-surface-variant">Tugas ini akan muncul di semua mahasiswa yang sudah ditempatkan</p>
+    <p class="font-body-sm text-on-surface-variant">Tugas ini akan muncul untuk mahasiswa sesuai golongan yang dipilih</p>
 </div>
 
 <form method="POST"
@@ -45,6 +45,18 @@
             <textarea name="instructions" rows="5"
                       placeholder="Tuliskan langkah-langkah pengerjaan, format file, dan hal yang perlu diperhatikan..."
                       class="w-full border border-outline-variant rounded-lg px-md py-sm text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none resize-none">{{ old('instructions', $assignment->instructions) }}</textarea>
+        </div>
+
+        {{-- Program / Golongan --}}
+        <div class="space-y-xs">
+            <label class="font-label-md text-label-md text-on-surface block">Golongan Program</label>
+            <select name="program"
+                    class="w-full border border-outline-variant rounded-lg px-md py-sm text-sm focus:ring-2 focus:ring-secondary focus:border-secondary outline-none bg-white">
+                <option value="" {{ old('program', $assignment->program) === null || old('program', $assignment->program) === '' ? 'selected' : '' }}>Semua (KPM &amp; PPL)</option>
+                <option value="KPM" {{ old('program', $assignment->program) === 'KPM' ? 'selected' : '' }}>KPM saja</option>
+                <option value="PPL" {{ old('program', $assignment->program) === 'PPL' ? 'selected' : '' }}>PPL saja</option>
+            </select>
+            <p class="text-[12px] text-on-surface-variant">Pilih golongan program yang mendapat tugas ini. Biarkan "Semua" jika berlaku untuk kedua program.</p>
         </div>
 
         {{-- Deadline --}}

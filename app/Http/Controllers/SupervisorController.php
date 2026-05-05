@@ -40,7 +40,7 @@ class SupervisorController extends Controller
             ->orderBy('program')
             ->get();
 
-        $assignments = ClassAssignment::orderBy('deadline')->get();
+        $assignments = $this->assignmentsForSchool($school)->get();
 
         return view('supervisor.class-detail', compact('school', 'registrations', 'assignments'));
     }
@@ -54,7 +54,7 @@ class SupervisorController extends Controller
             ->where('status', 'approved')
             ->firstOrFail();
 
-        $assignments = ClassAssignment::orderBy('deadline')->get();
+        $assignments = $this->assignmentsForProgram($reg->program)->get();
 
         $submissions = Submission::where('mahasiswa_profile_id', $profile->id)
             ->whereIn('assignment_id', $assignments->pluck('id'))
@@ -78,6 +78,22 @@ class SupervisorController extends Controller
         );
 
         return view('supervisor.submission', compact('school', 'profile', 'assignment', 'submission', 'reg'));
+    }
+
+    private function assignmentsForSchool(School $school): \Illuminate\Database\Eloquent\Builder
+    {
+        return $this->assignmentsForProgram($school->program);
+    }
+
+    private function assignmentsForProgram(?string $program): \Illuminate\Database\Eloquent\Builder
+    {
+        $q = ClassAssignment::orderBy('deadline');
+        if ($program) {
+            $q->where(function ($sq) use ($program) {
+                $sq->whereNull('program')->orWhere('program', $program);
+            });
+        }
+        return $q;
     }
 
     public function gradeSubmission(Request $request, School $school, MahasiswaProfile $profile, ClassAssignment $assignment)
