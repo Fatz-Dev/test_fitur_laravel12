@@ -3,106 +3,139 @@
 @section('content')
 
 {{-- Breadcrumb --}}
-<nav class="flex items-center gap-2 text-label-sm text-outline mb-lg">
+<nav class="flex items-center gap-2 text-xs text-slate-500 mb-6">
     <a href="{{ route('supervisor.dashboard') }}" class="hover:text-primary transition-colors">Dashboard</a>
-    <i class="ti ti-chevron-right text-[14px]"></i>
+    <i class="ti ti-chevron-right text-xs"></i>
+    <a href="{{ route('supervisor.classes.index') }}" class="hover:text-primary transition-colors">Daftar Kelas</a>
+    <i class="ti ti-chevron-right text-xs"></i>
     <span class="text-on-surface font-semibold">{{ $school->name }}</span>
 </nav>
 
-{{-- School Header Card --}}
-<div class="bg-white rounded-xl p-lg shadow-sm border border-slate-200 relative overflow-hidden mb-lg">
+{{-- School Info Card --}}
+<div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 relative overflow-hidden mb-6">
     <div class="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
-    <div class="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-md">
+    <div class="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
             @if($school->program === 'KPM')
-                <span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-label-sm font-bold mb-sm">KPM</span>
+                <span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold mb-3">KPM</span>
             @elseif($school->program === 'PPL')
-                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-label-sm font-bold mb-sm">PPL</span>
+                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-3">PPL</span>
             @else
-                <span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm font-bold mb-sm">KPM &amp; PPL</span>
+                <span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-xs font-bold mb-3">KPM &amp; PPL</span>
             @endif
-            <h1 class="font-h2 text-h2 text-primary">{{ $school->name }}</h1>
-            <div class="flex items-center gap-2 text-on-surface-variant font-body-sm mt-1">
-                <i class="ti ti-map-pin text-[16px] text-secondary"></i>
+
+            <h1 class="text-3xl font-bold text-primary">{{ $school->name }}</h1>
+            <div class="flex items-center gap-2 text-on-surface-variant text-sm mt-2">
+                <i class="ti ti-map-pin text-secondary text-base"></i>
                 <span>{{ $school->address }}</span>
             </div>
+            @if($school->jenjang)
+                <div class="flex items-center gap-2 text-on-surface-variant text-sm mt-1">
+                    <i class="ti ti-building text-base text-on-surface-variant"></i>
+                    <span>{{ $school->jenjang }}</span>
+                </div>
+            @endif
         </div>
-        <div class="flex gap-md shrink-0">
-            <div class="bg-surface-container-low p-md rounded-lg border border-surface-variant text-center min-w-[90px]">
-                <p class="text-label-sm text-outline mb-1">Total Tugas</p>
-                <p class="font-h2 text-h2 text-secondary">{{ $assignments->count() }}</p>
+        <div class="flex gap-4 shrink-0">
+            <div class="bg-surface-container-low p-4 rounded-lg border border-surface-variant text-center min-w-[90px]">
+                <p class="text-xs text-outline mb-1 font-medium">Total Tugas</p>
+                <p class="text-2xl font-bold text-secondary">{{ $assignments->count() }}</p>
             </div>
-            <div class="bg-surface-container-low p-md rounded-lg border border-surface-variant text-center min-w-[90px]">
-                <p class="text-label-sm text-outline mb-1">Mahasiswa</p>
-                <p class="font-h2 text-h2 text-primary">{{ $registrations->count() }}</p>
+            <div class="bg-surface-container-low p-4 rounded-lg border border-surface-variant text-center min-w-[90px]">
+                <p class="text-xs text-outline mb-1 font-medium">Mahasiswa</p>
+                <p class="text-2xl font-bold text-primary">{{ $registrations->count() }}</p>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Daftar Mahasiswa --}}
+{{-- Student List --}}
 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="px-lg py-md border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-        <h2 class="font-h3 text-h3 text-on-surface flex items-center gap-2">
-            <i class="ti ti-users text-primary text-[20px]"></i>
+    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
+            <i class="ti ti-users text-primary text-lg"></i>
             Daftar Mahasiswa
         </h2>
-        <span class="text-label-sm text-outline">{{ $registrations->count() }} mahasiswa</span>
+        <span class="text-xs text-outline font-medium">{{ $registrations->count() }} mahasiswa terdaftar</span>
     </div>
 
     @if($registrations->isEmpty())
-        <div class="p-xl text-center text-on-surface-variant">
-            <i class="ti ti-users text-[48px] opacity-30 block mb-2"></i>
-            <p class="font-body-sm">Belum ada mahasiswa yang ditempatkan di lokasi ini.</p>
+        <div class="p-12 text-center text-on-surface-variant">
+            <i class="ti ti-users text-6xl opacity-30 block mb-3"></i>
+            <p class="text-sm">Belum ada mahasiswa yang ditempatkan di lokasi ini.</p>
         </div>
     @else
         <div class="divide-y divide-slate-100">
+            @php
+                $avatarColors = [
+                    'bg-primary/10 text-primary',
+                    'bg-secondary-container text-on-secondary-container',
+                    'bg-amber-100 text-amber-700',
+                    'bg-indigo-100 text-indigo-700',
+                    'bg-rose-100 text-rose-700',
+                    'bg-teal-100 text-teal-700',
+                ];
+            @endphp
+
             @foreach($registrations as $reg)
                 @php
-                    $profile = $reg->mahasiswaProfile;
-                    $initials = strtoupper(substr($profile->user->name, 0, 2));
-                    $submittedCount = \App\Models\Submission::where('mahasiswa_profile_id', $profile->id)->whereNotNull('submitted_at')->count();
-                    $gradedCount = \App\Models\Submission::where('mahasiswa_profile_id', $profile->id)->whereNotNull('grade')->count();
-                    $bgColors = ['bg-primary/10 text-primary', 'bg-secondary-container text-on-secondary-container', 'bg-amber-100 text-amber-700', 'bg-indigo-100 text-indigo-700'];
-                    $bgColor = $bgColors[$loop->index % count($bgColors)];
+                    $mhsProfile  = $reg->mahasiswaProfile;
+                    $initials    = strtoupper(substr($mhsProfile->user->name, 0, 2));
+                    $colorClass  = $avatarColors[$loop->index % count($avatarColors)];
+                    $submitted   = \App\Models\Submission::where('mahasiswa_profile_id', $mhsProfile->id)->whereNotNull('submitted_at')->count();
+                    $graded      = \App\Models\Submission::where('mahasiswa_profile_id', $mhsProfile->id)->whereNotNull('grade')->count();
                 @endphp
-                <div class="px-lg py-md flex items-center justify-between hover:bg-slate-50 transition-colors group">
-                    <div class="flex items-center gap-md">
-                        <div class="h-12 w-12 rounded-full {{ $bgColor }} flex items-center justify-center font-bold text-lg border-2 border-white shadow-sm flex-shrink-0">
+
+                <div class="px-6 py-4 flex items-center justify-between hover:bg-slate-50 transition-colors group">
+                    {{-- Avatar + info --}}
+                    <div class="flex items-center gap-4">
+                        <div class="h-12 w-12 rounded-full {{ $colorClass }} flex items-center justify-center font-bold text-lg border-2 border-white shadow-sm shrink-0">
                             {{ $initials }}
                         </div>
                         <div>
-                            <h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">{{ $profile->user->name }}</h4>
-                            <p class="text-label-sm text-outline">NIM: {{ $profile->nim }}</p>
+                            <h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">{{ $mhsProfile->user->name }}</h4>
+                            <p class="text-xs text-outline">NIM: {{ $mhsProfile->nim }}</p>
                             <div class="flex items-center gap-2 mt-0.5">
-                                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full
+                                <span class="text-xs font-bold px-2 py-0.5 rounded-full
                                     {{ $reg->program === 'KPM' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700' }}">
                                     {{ $reg->program }}
                                 </span>
                                 @if($reg->gelombang)
-                                    <span class="text-[11px] text-outline">{{ $reg->gelombang->label() }}</span>
+                                    <span class="text-xs text-outline">{{ $reg->gelombang->label() }}</span>
                                 @endif
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-md">
+
+                    {{-- Stats + action --}}
+                    <div class="flex items-center gap-6">
                         <div class="hidden md:block text-right">
-                            <p class="text-label-sm text-outline">Pengumpulan</p>
-                            <p class="text-[13px] font-bold">
-                                <span class="text-secondary">{{ $submittedCount }}</span>
+                            <p class="text-xs text-outline font-medium mb-0.5">Pengumpulan</p>
+                            <p class="text-sm font-bold">
+                                <span class="text-secondary">{{ $submitted }}</span>
                                 <span class="text-on-surface-variant font-normal">/{{ $assignments->count() }}</span>
                             </p>
-                            @if($gradedCount > 0)
-                                <p class="text-[11px] text-emerald-600">{{ $gradedCount }} dinilai</p>
+                            @if($graded > 0)
+                                <p class="text-xs text-emerald-600 font-medium">{{ $graded }} dinilai</p>
                             @endif
                         </div>
-                        <a href="{{ route('supervisor.students.assignments', [$school, $profile]) }}"
-                           class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-label-md font-bold hover:bg-primary hover:text-white transition-all active:scale-95 whitespace-nowrap">
-                            Lihat Tugas
-                        </a>
+                        <div class="flex items-center gap-2">
+                            <button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-full transition-all" title="Kirim Pesan">
+                                <i class="ti ti-mail text-lg"></i>
+                            </button>
+                            <a href="{{ route('supervisor.students.assignments', [$school, $mhsProfile]) }}"
+                               class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-sm font-bold hover:bg-primary hover:text-white transition-all active:scale-95 whitespace-nowrap">
+                                Lihat
+                            </a>
+                        </div>
                     </div>
                 </div>
             @endforeach
+        </div>
+
+        {{-- Pagination note --}}
+        <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/30">
+            <p class="text-xs text-outline">Menampilkan {{ $registrations->count() }} mahasiswa</p>
         </div>
     @endif
 </div>

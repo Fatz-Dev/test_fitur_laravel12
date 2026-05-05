@@ -172,10 +172,16 @@ tailwind.config = {
             <div class="px-4 pt-4 pb-1">
                 <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">SIPEP Class</p>
             </div>
+            <a href="{{ route('supervisor.classes.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('supervisor.classes.index') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-chalkboard text-[20px]"></i>
+                <span>Daftar Kelas</span>
+            </a>
             @foreach(auth()->user()->supervisorSchools as $sSchool)
                 <a href="{{ route('supervisor.classes.show', $sSchool) }}"
                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
-                          {{ request()->routeIs('supervisor.classes.*') && request()->route('school')?->id == $sSchool->id ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                          {{ request()->routeIs('supervisor.classes.show') && request()->route('school')?->id == $sSchool->id ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
                     <i class="ti {{ $sSchool->program === 'KPM' ? 'ti-home' : 'ti-school' }} text-[20px]"></i>
                     <span class="truncate">{{ $sSchool->name }}</span>
                 </a>

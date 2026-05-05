@@ -30,6 +30,15 @@ class SupervisorController extends Controller
         return view('supervisor.dashboard', compact('schools', 'assignmentCount', 'totalMahasiswa', 'pendingGrades'));
     }
 
+    public function classesList()
+    {
+        $schools = Auth::user()->supervisorSchools()->withCount([
+            'registrations as mahasiswa_count' => fn($q) => $q->where('status', 'approved'),
+        ])->get();
+
+        return view('supervisor.classes', compact('schools'));
+    }
+
     public function classDetail(School $school)
     {
         $this->authorizeSchool($school);

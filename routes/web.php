@@ -107,6 +107,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 // ─── Supervisor ───────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:supervisor'])->prefix('supervisor')->name('supervisor.')->group(function () {
     Route::get('/dashboard', [SupervisorController::class, 'dashboard'])->name('dashboard');
+    Route::get('/classes', [SupervisorController::class, 'classesList'])->name('classes.index');
     Route::get('/classes/{school}', [SupervisorController::class, 'classDetail'])->name('classes.show');
     Route::get('/classes/{school}/students/{profile}/assignments', [SupervisorController::class, 'studentAssignments'])->name('students.assignments');
     Route::get('/classes/{school}/students/{profile}/assignments/{assignment}', [SupervisorController::class, 'submissionDetail'])->name('submissions.show');
