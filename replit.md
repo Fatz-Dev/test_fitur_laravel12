@@ -82,8 +82,37 @@ Semua mahasiswa sudah `approved`. Mahasiswa baru juga bisa daftar mandiri lewat 
 - Memanggil `https://nominatim.openstreetmap.org/search` dengan `User-Agent` & `countrycodes=id`
 - Tidak butuh API key, tetapi tunduk pada [Usage Policy Nominatim](https://operations.osmfoundation.org/policies/nominatim/) — max 1 req/s
 
+## Fitur SIPEP Class
+
+### Role Baru: Supervisor
+- Role ketiga di sistem (`admin` / `mahasiswa` / `supervisor`)
+- Setiap lokasi (school) dapat memiliki 1 supervisor
+- Admin membuat akun supervisor di menu **Supervisor** dan menugaskan ke lokasi
+- Akun test supervisor: `supervisor@kampus.ac.id` / `super123`
+
+### Alur Admin (SIPEP Class)
+- **Tugas** — admin tambah/edit/hapus tugas dengan judul, deskripsi, petunjuk, tenggat, dan lampiran file
+- **Nilai** — rekap nilai semua mahasiswa per program (KPM/PPL) dan per gelombang
+- **Supervisor** — kelola akun supervisor dan penugasan ke lokasi
+
+### Alur Supervisor
+- Dashboard menampilkan card setiap lokasi yang ditangani
+- "Masuk Kelas" → daftar mahasiswa yang ditempatkan di lokasi tersebut
+- "Lihat Tugas" per mahasiswa → daftar semua tugas + status pengumpulan
+- Klik tugas → lihat file/catatan pengumpulan, beri nilai (0–100) dan komentar
+
+### Alur Mahasiswa (SIPEP Class)
+- Sidebar: menu **Kelas Saya** → card kelas sesuai registrasi yang disetujui
+- "Lihat Tugas" → daftar tugas dengan status (belum/dikumpul/dinilai)
+- Klik tugas → form upload file + catatan, lihat nilai dan feedback supervisor
+
+### Tabel Baru
+- `class_assignments` — tugas dari admin (title, description, instructions, deadline, attachment_path)
+- `submissions` — pengumpulan mahasiswa (file_path, notes, submitted_at, grade, comment, graded_by, graded_at)
+- `schools.supervisor_id` — FK ke users, supervisor yang menangani lokasi
+
 ## Struktur Database (PostgreSQL)
-- `users` — id, name, email, password, **role** (`admin`/`mahasiswa`)
+- `users` — id, name, email, password, **role** (`admin`/`mahasiswa`/`supervisor`)
 - `mahasiswa_profiles` — user_id, nim, phone, address, lat/lng, microteaching_grade (A-E), `transkrip_path`, `ktm_path`, `surat_pengantar_path`, `pas_foto_path`, status (pending/approved/rejected), admin_note
 - `schools` — name, jenjang (string, no enum constraint), address, lat/lng, program (KPM/PPL/BOTH), kuota_kpm, kuota_ppl, kontak, is_active
 - `registrations` — mahasiswa_profile_id, school_id, program (KPM/PPL), distance_km, status (pending/approved/rejected/cancelled). Unique pada `(mahasiswa_profile_id, program)`

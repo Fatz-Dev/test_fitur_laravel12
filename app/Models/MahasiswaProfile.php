@@ -45,6 +45,11 @@ class MahasiswaProfile extends Model
         return $this->hasMany(Registration::class);
     }
 
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(\App\Models\Submission::class);
+    }
+
     public function isApproved(): bool
     {
         return $this->status === 'approved';
