@@ -178,14 +178,7 @@ tailwind.config = {
                 <i class="ti ti-chalkboard text-[20px]"></i>
                 <span>Daftar Kelas</span>
             </a>
-            @foreach(auth()->user()->supervisorSchools as $sSchool)
-                <a href="{{ route('supervisor.classes.show', $sSchool) }}"
-                   class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
-                          {{ request()->routeIs('supervisor.classes.show') && request()->route('school')?->id == $sSchool->id ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                    <i class="ti {{ $sSchool->program === 'KPM' ? 'ti-home' : 'ti-school' }} text-[20px]"></i>
-                    <span class="truncate">{{ $sSchool->name }}</span>
-                </a>
-            @endforeach
+            
             <a href="{{ route('profile.show') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">

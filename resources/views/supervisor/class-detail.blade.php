@@ -12,7 +12,7 @@
 </nav>
 
 {{-- School Info Card --}}
-<div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 relative overflow-hidden mb-6">
+<div class="bg-white rounded-xl p-6 shadow-sm border border-blue-800 relative overflow-hidden mb-6">
     <div class="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-bl-full -mr-16 -mt-16 pointer-events-none"></div>
     <div class="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
@@ -50,13 +50,13 @@
 </div>
 
 {{-- Student List --}}
-<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+<div class="bg-white rounded-xl shadow-sm border border-blue-800 overflow-hidden">
+    <div class="px-6 py-4 border-b border-blue-800 flex items-center justify-between bg-slate-50/50">
         <h2 class="text-xl font-bold text-on-surface flex items-center gap-2">
             <i class="ti ti-users text-primary text-lg"></i>
             Daftar Mahasiswa
         </h2>
-        <span class="text-xs text-outline font-medium">{{ $registrations->count() }} mahasiswa terdaftar</span>
+        <span class="text-xs text-blue-800 font-medium">{{ $registrations->count() }} mahasiswa terdaftar</span>
     </div>
 
     @if($registrations->isEmpty())
@@ -120,9 +120,6 @@
                             @endif
                         </div>
                         <div class="flex items-center gap-2">
-                            <button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-full transition-all" title="Kirim Pesan">
-                                <i class="ti ti-mail text-lg"></i>
-                            </button>
                             <a href="{{ route('supervisor.students.assignments', [$school, $mhsProfile]) }}"
                                class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-sm font-bold hover:bg-primary hover:text-white transition-all active:scale-95 whitespace-nowrap">
                                 Lihat

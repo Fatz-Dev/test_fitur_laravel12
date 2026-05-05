@@ -44,7 +44,7 @@
             @endphp
 
             <a href="{{ route('supervisor.classes.show', $school) }}"
-               class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative block">
+               class="bg-white rounded-xl border border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative block">
 
                 {{-- Card Header --}}
                 <div class="h-28 bg-gradient-to-r {{ $grad }} p-4 relative">

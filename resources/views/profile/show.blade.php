@@ -2,7 +2,7 @@
 @section('title', 'Profil Saya')
 @section('content')
 
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl mx-auto border border-blue-800 px-8 py-4 rounded-xl bg-white shadow-sm">
 
     <div class="flex items-center justify-between mb-lg">
         <div>
