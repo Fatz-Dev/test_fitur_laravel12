@@ -1,59 +1,143 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIPEP — Sistem Informasi Praktik & Edukasi Profesional
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web Laravel 12 untuk mengelola pendaftaran dan penempatan mahasiswa pada program **KPM** (Kuliah Pengabdian Masyarakat) dan **PPL** (Praktik Pengalaman Lapangan), dengan rekomendasi lokasi berdasarkan jarak dari tempat tinggal mahasiswa.
 
-## About Laravel
+## Stack
+- PHP 8.4 + Laravel 12
+- Database: **PostgreSQL** (Replit managed, host: helium)
+- View: Blade + Tailwind CSS (built via Vite)
+- Auth: **JWT custom** (firebase/php-jwt) — token disimpan di HTTP-only cookie `kpm_token`
+- Geocoding: **OpenStreetMap Nominatim API** (gratis, tanpa API key)
+- Icons: **Tabler Icons** (via npm + Vite build)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Design System (SIPEP Branding)
+- **Primary**: `#00236f` (blue-900) — sidebar, buttons, headings
+- **Secondary**: `#006a61` (teal) — accents, CTAs, links
+- **Error**: `#ba1a1a`
+- Layout: Fixed sidebar 256px (blue-900), sticky top AppBar (white), content area fluid 1280px max
+- Semua view extend `layouts.auth` (login/register) atau `layouts.app` (authenticated)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Views
+| View | Status |
+|------|--------|
+| `layouts/auth.blade.php` | ✅ Background foto kampus + overlay |
+| `layouts/app.blade.php` | ✅ Sidebar blue-900, AppBar, flash messages |
+| `auth/login.blade.php` | ✅ Dark overlay, SIPEP branding, Tabler icons |
+| `auth/register.blade.php` | ✅ Split layout: foto kampus kiri + form kanan |
+| `admin/dashboard.blade.php` | ✅ Stats cards, recent lists, banner section |
+| `mahasiswa/dashboard.blade.php` | ✅ Status cards, gelombang, penempatan grid, modal lokasi |
+| `admin/mahasiswa/index.blade.php` | ✅ Table dengan avatar, filter, badge status |
+| `admin/mahasiswa/show.blade.php` | ✅ Detail profil, aksi approve/reject, peta Leaflet |
+| `admin/registrations/index.blade.php` | ✅ Table penempatan dengan filter |
+| `admin/schools/index.blade.php` | ✅ Table lokasi KPM/PPL |
+| `admin/schools/form.blade.php` | ✅ Form + peta Leaflet interaktif |
+| `admin/gelombang/index.blade.php` | ✅ Table gelombang per program |
+| `admin/gelombang/form.blade.php` | ✅ Form tambah/edit gelombang |
+| `admin/settings/edit.blade.php` | ✅ Form pengaturan sistem |
+| `mahasiswa/profile-create.blade.php` | ✅ Pilih program cards, form data diri, peta, upload berkas |
+| `mahasiswa/choose-school.blade.php` | ✅ Grid rekomendasi lokasi |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Akun Seeder Default
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@kampus.ac.id` | `admin123` |
+| Mahasiswa (KPM) | `andi.kosong@kampus.ac.id` | `password123` |
+| Mahasiswa (KPM ditempatkan) | `budi.kpm@kampus.ac.id` | `password123` |
+| Mahasiswa (PPL ditempatkan) | `citra.ppl@kampus.ac.id` | `password123` |
+| Mahasiswa (PKPPM lengkap) | `dewi.keduanya@kampus.ac.id` | `password123` |
 
-## Learning Laravel
+Semua mahasiswa sudah `approved`. Mahasiswa baru juga bisa daftar mandiri lewat halaman *Daftar*.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Alur Mahasiswa
+1. Daftar akun (nama, email kampus, password)
+2. Lengkapi profil:
+   - NIM, no. HP (opsional)
+   - **Alamat** + koordinat lat/lng — tersedia tombol:
+     - "Cari Koordinat dari Alamat" → memanggil **Nominatim OpenStreetMap**, hasil pencarian dapat diklik untuk auto-fill koordinat
+     - "Gunakan lokasi saya saat ini" → pakai geolokasi browser
+   - Nilai microteaching: **A, B, C, D, E**
+   - Upload **4 berkas wajib**: Transkrip, KTM, Surat Pengantar, Pas Foto
+3. Status `pending` → menunggu review admin
+4. Setelah `approved`, mahasiswa bisa pilih program **KPM** dan/atau **PPL**
+5. Sistem menampilkan rekomendasi sekolah dalam radius (admin yang menentukan) dari tempat tinggal mahasiswa, terurut jarak terdekat — pakai **rumus Haversine**
+6. Mahasiswa pilih sekolah → status pendaftaran `pending` → menunggu konfirmasi admin
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Alur Admin
+- **Dashboard**: ringkasan jumlah mahasiswa, sekolah, dan penempatan
+- **Mahasiswa**: lihat daftar, detail (lengkap dengan link 4 berkas + tautan peta), setujui/tolak/hapus
+- **Sekolah**: CRUD (nama, jenjang SD/SMP/SMA/SMK/MI/MTs/MA, koordinat lat/lng, program KPM/PPL/keduanya, kuota KPM, kuota PPL, kontak, status aktif)
+- **Penempatan**: lihat semua pendaftaran KPM/PPL, filter program/status, setujui/tolak/hapus
+- **Pengaturan**: nama institusi, **radius maksimum (km)**, batas waktu KPM, batas waktu PPL
 
-## Laravel Sponsors
+## Arsitektur Auth (JWT Custom)
+- `App\Services\JwtService` — encode/decode JWT pakai `firebase/php-jwt` (HS256, kunci diturunkan dari `APP_KEY`)
+- `App\Auth\JwtGuard` — custom Guard yang membaca JWT dari cookie `kpm_token` atau header `Authorization: Bearer ...`
+- Diregistrasi di `App\Providers\AppServiceProvider::boot()` via `Auth::extend('jwt', ...)`
+- Cookie `kpm_token` dikecualikan dari enkripsi cookie default Laravel (`bootstrap/app.php` → `encryptCookies(except: [...])`)
+- TTL token: **7 hari**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Geocoding (Nominatim)
+- Endpoint: `GET /api/geocode?q=...` (auth required)
+- File: `app/Http/Controllers/GeocodeController.php`
+- Memanggil `https://nominatim.openstreetmap.org/search` dengan `User-Agent` & `countrycodes=id`
+- Tidak butuh API key, tetapi tunduk pada [Usage Policy Nominatim](https://operations.osmfoundation.org/policies/nominatim/) — max 1 req/s
 
-### Premium Partners
+## Fitur SIPEP Class
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Role Baru: Supervisor
+- Role ketiga di sistem (`admin` / `mahasiswa` / `supervisor`)
+- Setiap lokasi (school) dapat memiliki 1 supervisor
+- Admin membuat akun supervisor di menu **Supervisor** dan menugaskan ke lokasi
+- Akun test supervisor: `supervisor@kampus.ac.id` / `super123`
 
-## Contributing
+### Alur Admin (SIPEP Class)
+- **Tugas** — admin tambah/edit/hapus tugas dengan judul, deskripsi, petunjuk, tenggat, dan lampiran file
+- **Nilai** — rekap nilai semua mahasiswa per program (KPM/PPL) dan per gelombang
+- **Supervisor** — kelola akun supervisor dan penugasan ke lokasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Alur Supervisor
+- Dashboard menampilkan card setiap lokasi yang ditangani
+- "Masuk Kelas" → daftar mahasiswa yang ditempatkan di lokasi tersebut
+- "Lihat Tugas" per mahasiswa → daftar semua tugas + status pengumpulan
+- Klik tugas → lihat file/catatan pengumpulan, beri nilai (0–100) dan komentar
 
-## Code of Conduct
+### Alur Mahasiswa (SIPEP Class)
+- Sidebar: menu **Kelas Saya** → card kelas sesuai registrasi yang disetujui
+- "Lihat Tugas" → daftar tugas dengan status (belum/dikumpul/dinilai)
+- Klik tugas → form upload file + catatan, lihat nilai dan feedback supervisor
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Tabel Baru
+- `class_assignments` — tugas dari admin (title, description, instructions, deadline, attachment_path)
+- `submissions` — pengumpulan mahasiswa (file_path, notes, submitted_at, grade, comment, graded_by, graded_at)
+- `schools.supervisor_id` — FK ke users, supervisor yang menangani lokasi
 
-## Security Vulnerabilities
+## Struktur Database (PostgreSQL)
+- `users` — id, name, email, password, **role** (`admin`/`mahasiswa`/`supervisor`)
+- `mahasiswa_profiles` — user_id, nim, phone, address, lat/lng, microteaching_grade (A-E), `transkrip_path`, `ktm_path`, `surat_pengantar_path`, `pas_foto_path`, status (pending/approved/rejected), admin_note
+- `schools` — name, jenjang (string, no enum constraint), address, lat/lng, program (KPM/PPL/BOTH), kuota_kpm, kuota_ppl, kontak, is_active
+- `registrations` — mahasiswa_profile_id, school_id, program (KPM/PPL), distance_km, status (pending/approved/rejected/cancelled). Unique pada `(mahasiswa_profile_id, program)`
+- `gelombang` — program, nomor, tahun_akademik, tanggal_buka, tanggal_tutup, is_active
+- `settings` — key/value (radius, deadline, dll.)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Perintah Penting
+```bash
+php artisan migrate --force          # run migrations
+php artisan db:seed --force          # seed sample data
+php artisan storage:link             # symlink public/storage (sudah dijalankan)
+php artisan serve --host=0.0.0.0 --port=5000   # server (workflow)
+npm run build                        # build Tailwind/Vite assets
+```
 
-## License
+## Workflow
+- **Start application**: `php artisan config:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=5000` (port 5000, webview)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Catatan Replit Migration
+- Database dimigrasi dari SQLite ke **PostgreSQL** (Replit managed)
+- Konfigurasi DB ada di `.env` (DB_CONNECTION=pgsql, DB_HOST=helium, DB_DATABASE=heliumdb, dll.)
+- Constraint `jenjang_check` di tabel `schools` dihapus agar bisa menerima nilai non-enum (seperti "Kelurahan", "Desa")
+- Trusted proxies di-set ke `*` (`bootstrap/app.php`) agar URL Laravel mengenali HTTPS dari proxy Replit
+- Session driver: **file** (bukan database)
+- Cache store: **file** (bukan database)
+- Queue: **sync**
+- Upload file disimpan di `storage/app/public/mahasiswa/{user_id}/...` dan diakses via `/storage/...`
+- Frontend dibangun dengan Vite (`npm run build`), assets di `public/build/`
