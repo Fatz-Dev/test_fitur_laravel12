@@ -124,7 +124,8 @@ class DatabaseSeeder extends Seeder
         // ─── Mahasiswa 2: KPM → ditempatkan di desa ───────────────────────────
         $u2 = User::create([
             'name' => 'Budi Nur KPM', 'email' => 'budi.kpm@kampus.ac.id',
-            'password' => 'password123', 'role' => 'mahasiswa',
+            'password' => '
+            ', 'role' => 'mahasiswa',
         ]);
         $p2 = MahasiswaProfile::create([
             'user_id' => $u2->id, 'nim' => '2110002',
