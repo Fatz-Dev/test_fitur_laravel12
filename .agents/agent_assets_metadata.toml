@@ -6,3 +6,9 @@ id = "RjUDGLZFI-oVAiUcq62Y5"
 uri = "file://fitur-pemeilihan-lokasi-otomatis.md"
 type = "text"
 title = "Dokumentasi Fitur Pemilihan Lokasi Otomatis"
+
+[[outputs]]
+id = "JoilNp0pcSMwRUCGj66ht"
+uri = "file://docs/verifikasi_email.md"
+type = "text"
+title = "Dokumentasi Verifikasi Email & Ubah Password"
