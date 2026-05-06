@@ -22,14 +22,22 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         $user = User::where('email', $credentials['email'])->first();
+
         if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             return back()
                 ->withErrors(['email' => 'Email atau password salah.'])
+                ->onlyInput('email');
+        }
+
+        if (! $user->email_verified_at) {
+            return back()
+                ->withErrors(['email' => 'Email belum diverifikasi. Cek inbox Anda atau minta link verifikasi baru.'])
+                ->with('unverified_email', $credentials['email'])
                 ->onlyInput('email');
         }
 
@@ -46,22 +54,23 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:150'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'name'     => ['required', 'string', 'max:150'],
+            'email'    => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', Password::min(6)],
         ]);
 
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
             'password' => $data['password'],
-            'role' => 'mahasiswa',
+            'role'     => 'mahasiswa',
         ]);
 
-        $this->queueTokenCookie($user);
+        EmailVerificationController::sendVerificationEmail($user);
 
-        return redirect()->route('mahasiswa.profile.create')
-            ->with('status', 'Akun dibuat. Lengkapi pendaftaran Anda.');
+        return redirect()->route('email.notice')
+            ->with('registered_email', $user->email)
+            ->with('status', 'Akun berhasil dibuat! Cek email Anda untuk melanjutkan verifikasi.');
     }
 
     public function logout()

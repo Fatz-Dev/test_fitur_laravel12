@@ -7,8 +7,10 @@ use App\Http\Controllers\Admin\RegistrationController as AdminRegistration;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\GeocodeController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\PasswordController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// ---------- Guest routes ----------
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -28,11 +31,26 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+// ---------- Email verification (no auth required — link comes from email) ----------
+Route::get('/verify-email', [EmailVerificationController::class, 'notice'])->name('email.notice');
+Route::get('/email/verify/{id}', [EmailVerificationController::class, 'verify'])
+    ->middleware('signed')
+    ->name('email.verify');
+Route::post('/email/resend', [EmailVerificationController::class, 'resend'])->name('email.resend');
+
+// ---------- Auth routes ----------
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')->name('logout');
 
 Route::middleware('auth')->get('/api/geocode', [GeocodeController::class, 'search'])->name('geocode');
 
+// ---------- Account (authenticated, any role) ----------
+Route::middleware('auth')->prefix('account')->name('account.')->group(function () {
+    Route::get('/password', [PasswordController::class, 'edit'])->name('password.edit');
+    Route::put('/password', [PasswordController::class, 'update'])->name('password.update');
+});
+
+// ---------- Mahasiswa ----------
 Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile/create', [MahasiswaController::class, 'createProfile'])->name('profile.create');
@@ -41,6 +59,7 @@ Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->name('mahasi
     Route::delete('/registrations/{registration}', [MahasiswaController::class, 'cancelRegistration'])->name('registrations.cancel');
 });
 
+// ---------- Admin ----------
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
 

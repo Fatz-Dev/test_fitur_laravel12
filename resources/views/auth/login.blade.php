@@ -22,11 +22,33 @@
                 <p class="font-body-sm text-on-surface-variant mt-xs">Silakan masuk dengan akun institusi Anda.</p>
             </div>
 
-            {{-- Error --}}
+            {{-- Status / Error --}}
+            @if(session('status'))
+                <div class="mb-lg px-md py-sm rounded-lg bg-secondary/10 border border-secondary/20 flex items-center gap-sm">
+                    <i class="ti ti-circle-check text-secondary text-[18px]"></i>
+                    <p class="font-label-sm text-secondary">{{ session('status') }}</p>
+                </div>
+            @endif
+
             @error('email')
-                <div class="mb-lg px-md py-sm rounded-lg bg-error-container border border-error/20 flex items-center gap-sm">
-                    <i class="ti ti-alert-circle text-error text-[18px]"></i>
-                    <p class="font-label-sm text-error">{{ $message }}</p>
+                <div class="mb-lg px-md py-sm rounded-lg bg-error-container border border-error/20">
+                    <div class="flex items-start gap-sm">
+                        <i class="ti ti-alert-circle text-error text-[18px] mt-0.5"></i>
+                        <div>
+                            <p class="font-label-sm text-error">{{ $message }}</p>
+                            {{-- Show resend link if email not verified --}}
+                            @if(session('unverified_email'))
+                                <form method="POST" action="{{ route('email.resend') }}" class="mt-2">
+                                    @csrf
+                                    <input type="hidden" name="email" value="{{ session('unverified_email') }}">
+                                    <button type="submit"
+                                            class="text-[12px] text-primary underline hover:no-underline font-medium">
+                                        Kirim ulang link verifikasi →
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             @enderror
 
@@ -46,9 +68,7 @@
 
                 {{-- Password --}}
                 <div class="space-y-xs">
-                    <div class="flex justify-between items-center">
-                        <label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
-                    </div>
+                    <label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
                     <div class="relative group">
                         <i class="ti ti-lock absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-secondary transition-colors text-[20px]"></i>
                         <input class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all placeholder:text-outline font-body-sm text-on-surface"

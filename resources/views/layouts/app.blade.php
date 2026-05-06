@@ -150,6 +150,12 @@ tailwind.config = {
                 <p class="text-teal-400 text-xs capitalize">{{ auth()->user()?->role }}</p>
             </div>
         </div>
+        <a href="{{ route('account.password.edit') }}" 
+           class="flex items-center gap-3 px-4 py-2 text-slate-300 hover:text-white w-full hover:bg-blue-800/50 rounded-lg transition-all text-sm
+                  {{ request()->routeIs('account.password.*') ? 'bg-blue-800 text-teal-400' : '' }}">
+            <i class="ti ti-key text-[20px]"></i>
+            <span>Ubah Password</span>
+        </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"
