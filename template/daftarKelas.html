@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SIPEP - Daftar Kelas</title>
+<!-- Tailwind CSS V3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Awesome for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style data-purpose="custom-layout">
+    /* Custom scrollbar for a cleaner look */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sipepBlue: '#1e3a8a',
+            sipepLightBlue: '#3b82f6',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 font-sans text-gray-900 flex min-h-screen">
+<!-- BEGIN: SideNavBar -->
+<aside class="w-64 bg-sipepBlue text-white flex flex-col fixed inset-y-0 left-0 z-50" data-purpose="sidebar">
+<div class="p-6 flex items-center gap-3">
+<div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+<span class="text-sipepBlue font-bold text-xl">S</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight">SIPEP</h1>
+</div>
+<nav class="flex-1 px-4 py-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="#">
+<i class="fas fa-th-large w-5"></i>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="#">
+<i class="fas fa-edit w-5"></i>
+<span>Registrasi</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="#">
+<i class="fas fa-school w-5"></i>
+<span>Pilih Sekolah</span>
+</a>
+<!-- Active Link -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-700 text-white font-medium shadow-md" href="#">
+<i class="fas fa-chalkboard-teacher w-5"></i>
+<span>Daftar Kelas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="#">
+<i class="fas fa-folder-open w-5"></i>
+<span>Dokumen</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-blue-800 transition-colors" href="#">
+<i class="fas fa-cog w-5"></i>
+<span>Pengaturan</span>
+</a>
+</nav>
+<div class="p-4 border-t border-blue-800">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-blue-200 hover:text-white" href="#">
+<i class="fas fa-sign-out-alt w-5"></i>
+<span>Keluar</span>
+</a>
+</div>
+</aside>
+<!-- END: SideNavBar -->
+<!-- Main Wrapper -->
+<div class="flex-1 ml-64 flex flex-col">
+<!-- BEGIN: TopNavBar -->
+<header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 sticky top-0 z-40" data-purpose="top-navbar">
+<!-- Search Bar -->
+<div class="relative w-96">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+<i class="fas fa-search"></i>
+</span>
+<input class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-sipepBlue focus:border-sipepBlue sm:text-sm" placeholder="Cari kelas..." type="text"/>
+</div>
+<!-- User Profile & Notifications -->
+<div class="flex items-center gap-6">
+<button class="text-gray-400 hover:text-sipepBlue relative">
+<i class="fas fa-bell text-xl"></i>
+<span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+</button>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right">
+<p class="text-sm font-semibold text-gray-700">Ahmad Fauzan</p>
+<p class="text-xs text-gray-500 uppercase tracking-wider">Siswa</p>
+</div>
+<div class="w-10 h-10 rounded-full bg-sipepBlue flex items-center justify-center text-white font-bold">
+            AF
+          </div>
+</div>
+</div>
+</header>
+<!-- END: TopNavBar -->
+<!-- BEGIN: MainContent -->
+<main class="p-8" data-purpose="main-content">
+<!-- BEGIN: ContentHeader -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-bold text-gray-800">Daftar Kelas</h2>
+<p class="text-gray-500">Kelola dan lihat aktivitas pembelajaran Anda.</p>
+</div>
+<button class="bg-sipepBlue hover:bg-blue-800 text-white px-6 py-2.5 rounded-lg font-medium shadow-sm flex items-center gap-2 transition-all active:scale-95">
+<i class="fas fa-plus"></i>
+<span>Gabung Kelas</span>
+</button>
+</div>
+<!-- END: ContentHeader -->
+<!-- BEGIN: ClassGrid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-purpose="class-grid">
+<!-- Card 1: From Image -->
+<div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative" data-purpose="class-card">
+<!-- Card Header (Blue Gradient with Graphics) -->
+<div class="h-28 bg-gradient-to-r from-sipepLightBlue to-blue-700 p-4 relative">
+<h3 class="text-white font-bold text-lg leading-tight w-3/4 pr-2">PTI UNIT 1 Bahasa Arab</h3>
+<p class="text-blue-100 text-xs mt-1">Zakiah Zainun</p>
+<!-- Graphic Element: Initial Circle (Positioned to overlap header and body) -->
+<div class="absolute -bottom-10 right-4 w-20 h-20 rounded-full bg-[#c2410c] flex items-center justify-center text-white text-4xl font-normal border-4 border-white shadow-lg">
+              Z
+            </div>
+<!-- Decorative image overlay (as seen in provided sample) -->
+<div class="absolute top-0 right-0 w-16 h-full opacity-20 overflow-hidden">
+<i class="fas fa-book-open text-6xl rotate-12 mt-4 ml-4"></i>
+</div>
+</div>
+<!-- Card Body -->
+<div class="h-32 p-4 pt-12">
+<!-- Empty space for layout matching -->
+<p class="text-xs text-gray-400 font-medium uppercase">Tahun Ajaran 2023/2024</p>
+</div>
+<!-- Card Footer -->
+<div class="px-4 py-3 border-t border-gray-100 flex items-center justify-end gap-5 text-gray-500">
+<button class="hover:text-sipepBlue transition-colors" title="Lihat Profil"><i class="far fa-id-badge text-xl"></i></button>
+<button class="hover:text-sipepBlue transition-colors" title="Folder Dokumen"><i class="far fa-folder-open text-xl"></i></button>
+<button class="hover:text-sipepBlue transition-colors" title="Opsi Lainnya"><i class="fas fa-ellipsis-v text-xl"></i></button>
+</div>
+</div>
+<!-- Card 2: Variation (Teal) -->
+<div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative" data-purpose="class-card">
+<div class="h-28 bg-gradient-to-r from-teal-500 to-teal-700 p-4 relative">
+<h3 class="text-white font-bold text-lg leading-tight w-3/4 pr-2">Matematika Dasar</h3>
+<p class="text-teal-100 text-xs mt-1">Budi Setiawan</p>
+<div class="absolute -bottom-10 right-4 w-20 h-20 rounded-full bg-teal-800 flex items-center justify-center text-white text-4xl font-normal border-4 border-white shadow-lg">
+              B
+            </div>
+<div class="absolute top-0 right-0 w-16 h-full opacity-20 overflow-hidden text-white">
+<i class="fas fa-calculator text-6xl rotate-12 mt-4 ml-4"></i>
+</div>
+</div>
+<div class="h-32 p-4 pt-12">
+<p class="text-xs text-gray-400 font-medium uppercase">Tahun Ajaran 2023/2024</p>
+</div>
+<div class="px-4 py-3 border-t border-gray-100 flex items-center justify-end gap-5 text-gray-500">
+<button class="hover:text-teal-600 transition-colors" title="Lihat Profil"><i class="far fa-id-badge text-xl"></i></button>
+<button class="hover:text-teal-600 transition-colors" title="Folder Dokumen"><i class="far fa-folder-open text-xl"></i></button>
+<button class="hover:text-teal-600 transition-colors" title="Opsi Lainnya"><i class="fas fa-ellipsis-v text-xl"></i></button>
+</div>
+</div>
+<!-- Card 3: Variation (Purple) -->
+<div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative" data-purpose="class-card">
+<div class="h-28 bg-gradient-to-r from-purple-500 to-purple-700 p-4 relative">
+<h3 class="text-white font-bold text-lg leading-tight w-3/4 pr-2">Sejarah Indonesia</h3>
+<p class="text-purple-100 text-xs mt-1">Siti Aminah</p>
+<div class="absolute -bottom-10 right-4 w-20 h-20 rounded-full bg-purple-900 flex items-center justify-center text-white text-4xl font-normal border-4 border-white shadow-lg">
+              S
+            </div>
+<div class="absolute top-0 right-0 w-16 h-full opacity-20 overflow-hidden text-white">
+<i class="fas fa-monument text-6xl rotate-12 mt-4 ml-4"></i>
+</div>
+</div>
+<div class="h-32 p-4 pt-12">
+<p class="text-xs text-gray-400 font-medium uppercase">Tahun Ajaran 2023/2024</p>
+</div>
+<div class="px-4 py-3 border-t border-gray-100 flex items-center justify-end gap-5 text-gray-500">
+<button class="hover:text-purple-600 transition-colors" title="Lihat Profil"><i class="far fa-id-badge text-xl"></i></button>
+<button class="hover:text-purple-600 transition-colors" title="Folder Dokumen"><i class="far fa-folder-open text-xl"></i></button>
+<button class="hover:text-purple-600 transition-colors" title="Opsi Lainnya"><i class="fas fa-ellipsis-v text-xl"></i></button>
+</div>
+</div>
+<!-- Card 4: Variation (Indigo) -->
+<div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow relative" data-purpose="class-card">
+<div class="h-28 bg-gradient-to-r from-indigo-500 to-indigo-700 p-4 relative">
+<h3 class="text-white font-bold text-lg leading-tight w-3/4 pr-2">Fisika Quantum</h3>
+<p class="text-indigo-100 text-xs mt-1">Dr. Robert H.</p>
+<div class="absolute -bottom-10 right-4 w-20 h-20 rounded-full bg-indigo-800 flex items-center justify-center text-white text-4xl font-normal border-4 border-white shadow-lg">
+              R
+            </div>
+<div class="absolute top-0 right-0 w-16 h-full opacity-20 overflow-hidden text-white">
+<i class="fas fa-atom text-6xl rotate-12 mt-4 ml-4"></i>
+</div>
+</div>
+<div class="h-32 p-4 pt-12">
+<p class="text-xs text-gray-400 font-medium uppercase">Tahun Ajaran 2023/2024</p>
+</div>
+<div class="px-4 py-3 border-t border-gray-100 flex items-center justify-end gap-5 text-gray-500">
+<button class="hover:text-indigo-600 transition-colors" title="Lihat Profil"><i class="far fa-id-badge text-xl"></i></button>
+<button class="hover:text-indigo-600 transition-colors" title="Folder Dokumen"><i class="far fa-folder-open text-xl"></i></button>
+<button class="hover:text-indigo-600 transition-colors" title="Opsi Lainnya"><i class="fas fa-ellipsis-v text-xl"></i></button>
+</div>
+</div>
+</div>
+<!-- END: ClassGrid -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FooterHelp -->
+<footer class="mt-auto p-8 flex justify-end">
+<button class="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-sipepBlue transition-colors" title="Bantuan">
+<i class="far fa-question-circle text-2xl"></i>
+</button>
+</footer>
+<!-- END: FooterHelp -->
+</div>
+</body></html>

@@ -87,6 +87,8 @@ tailwind.config = {
     </div>
 
     <nav class="flex-1 px-2 space-y-1 overflow-y-auto">
+
+        {{-- ── ADMIN ── --}}
         @if(auth()->user()?->isAdmin())
             <a href="{{ route('admin.dashboard') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
@@ -118,12 +120,73 @@ tailwind.config = {
                 <i class="ti ti-clipboard-check text-[20px]"></i>
                 <span>Penempatan</span>
             </a>
+
+            {{-- SIPEP Class divider --}}
+            <div class="px-4 pt-4 pb-1">
+                <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">SIPEP Class</p>
+            </div>
+            <a href="{{ route('admin.class.assignments.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.class.assignments.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-clipboard-list text-[20px]"></i>
+                <span>Tugas</span>
+            </a>
+            <a href="{{ route('admin.class.grades') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.class.grades') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-award text-[20px]"></i>
+                <span>Nilai</span>
+            </a>
+            <a href="{{ route('admin.supervisors.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('admin.supervisors.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-users-group text-[20px]"></i>
+                <span>Supervisor</span>
+            </a>
+
+            {{-- Settings --}}
+            <div class="px-4 pt-4 pb-1">
+                <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Sistem</p>
+            </div>
             <a href="{{ route('admin.settings.edit') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('admin.settings.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
                 <i class="ti ti-settings text-[20px]"></i>
                 <span>Pengaturan</span>
             </a>
+            <a href="{{ route('profile.show') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-user-circle text-[20px]"></i>
+                <span>Profil Saya</span>
+            </a>
+
+        {{-- ── SUPERVISOR ── --}}
+        @elseif(auth()->user()?->isSupervisor())
+            <a href="{{ route('supervisor.dashboard') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('supervisor.dashboard') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-layout-dashboard text-[20px]"></i>
+                <span>Dashboard</span>
+            </a>
+            <div class="px-4 pt-4 pb-1">
+                <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">SIPEP Class</p>
+            </div>
+            <a href="{{ route('supervisor.classes.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('supervisor.classes.index') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-chalkboard text-[20px]"></i>
+                <span>Daftar Kelas</span>
+            </a>
+            
+            <a href="{{ route('profile.show') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-user-circle text-[20px]"></i>
+                <span>Profil Saya</span>
+            </a>
+
+        {{-- ── MAHASISWA ── --}}
         @else
             <a href="{{ route('mahasiswa.dashboard') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
@@ -134,8 +197,23 @@ tailwind.config = {
             <a href="{{ route('mahasiswa.profile.create') }}"
                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
                       {{ request()->routeIs('mahasiswa.profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
-                <i class="ti ti-user text-[20px]"></i>
+                <i class="ti ti-id-badge text-[20px]"></i>
+                <span>Data Akademik</span>
+            </a>
+            <a href="{{ route('profile.show') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('profile.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-user-circle text-[20px]"></i>
                 <span>Profil Saya</span>
+            </a>
+            <div class="px-4 pt-4 pb-1">
+                <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">SIPEP Class</p>
+            </div>
+            <a href="{{ route('mahasiswa.class.index') }}"
+               class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm
+                      {{ request()->routeIs('mahasiswa.class.*') ? 'bg-blue-800 text-teal-400 border-l-4 border-teal-400' : 'text-slate-300 hover:text-white hover:bg-blue-800/50' }}">
+                <i class="ti ti-school text-[20px]"></i>
+                <span>Kelas Saya</span>
             </a>
         @endif
     </nav>

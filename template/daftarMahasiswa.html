@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detail Kelas - SIPEP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c4c7c9",
+                        "tertiary-container": "#3d4143",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary": "#006a61",
+                        "surface-bright": "#f8f9ff",
+                        "secondary-container": "#86f2e4",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "surface-dim": "#ccdbf3",
+                        "primary-container": "#1e3a8a",
+                        "secondary-fixed": "#89f5e7",
+                        "on-primary-fixed": "#00164e",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-background": "#0d1c2e",
+                        "outline-variant": "#c5c5d3",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed": "#191c1e",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#e0e3e5",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed-dim": "#6bd8cb",
+                        "on-primary-fixed-variant": "#264191",
+                        "surface-tint": "#4059aa",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b6c4ff",
+                        "on-primary-container": "#90a8ff",
+                        "on-tertiary-container": "#aaadaf",
+                        "on-surface-variant": "#444651",
+                        "surface-container": "#e6eeff",
+                        "on-secondary-container": "#006f66",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#444749",
+                        "surface-variant": "#d5e3fc",
+                        "on-secondary-fixed": "#00201d",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d5e3fc",
+                        "background": "#f8f9ff",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#272b2d",
+                        "inverse-surface": "#233144",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#0d1c2e",
+                        "error-container": "#ffdad6",
+                        "primary": "#00236f",
+                        "primary-fixed": "#dce1ff",
+                        "outline": "#757682"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "2xl": "48px",
+                        "xl": "32px",
+                        "container-max": "1280px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Public Sans"],
+                        "h2": ["Public Sans"],
+                        "body-lg": ["Public Sans"],
+                        "label-md": ["Public Sans"],
+                        "h3": ["Public Sans"],
+                        "h1": ["Public Sans"],
+                        "label-sm": ["Public Sans"],
+                        "body-sm": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "fontWeight": "600"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "h1": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Public Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full fixed left-0 top-0 z-40 bg-blue-900 dark:bg-slate-950 h-screen w-64 border-r border-blue-800 dark:border-slate-800 no-shadow">
+<div class="px-6 py-8">
+<h1 class="text-2xl font-black text-white tracking-tight">SIPEP</h1>
+<p class="text-teal-400 text-xs font-medium uppercase tracking-widest mt-1">Portal Akademik</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 dark:hover:bg-slate-800/50 transition-all focus:ring-2 focus:ring-teal-500" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-public-sans text-sm">Dashboard</span>
+</a>
+<!-- Active: Pilih Sekolah / Detail Kelas context -->
+<a class="flex items-center gap-3 px-4 py-3 bg-blue-800 dark:bg-slate-800 text-teal-400 border-l-4 border-teal-400 transition-all focus:ring-2 focus:ring-teal-500" href="#">
+<span class="material-symbols-outlined">distance</span>
+<span class="font-public-sans text-sm">Pilih Sekolah</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 dark:hover:bg-slate-800/50 transition-all focus:ring-2 focus:ring-teal-500" href="#">
+<span class="material-symbols-outlined">how_to_reg</span>
+<span class="font-public-sans text-sm">Registrasi KPM/PPL</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 dark:hover:bg-slate-800/50 transition-all focus:ring-2 focus:ring-teal-500" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-public-sans text-sm">Dokumen</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 dark:hover:bg-slate-800/50 transition-all focus:ring-2 focus:ring-teal-500" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-public-sans text-sm">Pengaturan</span>
+</a>
+</nav>
+<div class="p-4 border-t border-blue-800">
+<button class="flex items-center gap-3 px-4 py-3 text-slate-300 hover:text-white hover:bg-blue-800/50 w-full transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-public-sans text-sm">Keluar</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex items-center justify-between px-6 h-16 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<div class="md:hidden">
+<span class="material-symbols-outlined text-blue-900">menu</span>
+</div>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-100 border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-blue-700 outline-none" placeholder="Cari data..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 hover:bg-slate-50 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="Profile" class="h-full w-full object-cover" data-alt="A close-up professional headshot of a smiling female academic administrator with a warm and inviting expression. She is wearing a modern navy blue blazer against a clean, soft-focus office background with books and a small plant. The lighting is bright and natural, reflecting an atmosphere of professional integrity and academic excellence." src="https://lh3.googleusercontent.com/aida/ADBb0ugtRD6fdGv0dpmPyofzlzqLoEN5UqMXqzjTCC3qD0x-1HzvGNh2kCrMNxcjuGDjy-oxcoBBKg-n4cbQhjUKD0bBCX2eCj-GT4X0CawJIp-PRPgpPYpBIE3XQFNWSuWQ0XGheH29NhFwjNoSuJoFinxQKJvIYwHKjVsj6hNPL4jyb2UAwjCZ3cXgIiCAX1nRl4O6ksE56XM_yMGRy3c67sQnKzaQ1s5KEdFFJHimXe4NGF3Ga0QiC6a8feGRhcoyBfn7namEV_54QA"/>
+</div>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 p-6 md:p-xl bg-background">
+<!-- Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex mb-lg text-label-sm font-label-sm text-outline">
+<ol class="inline-flex items-center space-x-1 md:space-x-2">
+<li class="inline-flex items-center">
+<a class="inline-flex items-center hover:text-primary" href="#">Dashboard</a>
+</li>
+<li>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<a class="ml-1 hover:text-primary" href="#">Pilih Sekolah</a>
+</div>
+</li>
+<li aria-current="page">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="ml-1 text-on-surface font-semibold">Detail Kelas</span>
+</div>
+</li>
+</ol>
+</nav>
+<!-- Header Section: Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg mb-xl">
+<!-- Primary Info Card -->
+<div class="bg-white rounded-xl p-lg shadow-sm border border-slate-200 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/10 rounded-bl-full -mr-16 -mt-16"></div>
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-md">
+<div>
+<span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm font-bold mb-sm">PTI UNIT 1</span>
+<h1 class="text-h1 font-h1 text-primary mb-xs">Bahasa Arab</h1>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md">
+<span class="material-symbols-outlined text-secondary">person</span>
+<span>Zakiah Zainun, S.Pd., M.A.</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-lg border border-surface-variant flex flex-col items-center min-w-[140px]">
+<span class="text-label-sm text-outline mb-1">Kode Kelas</span>
+<span class="text-h3 font-black text-primary tracking-widest">AR2024</span>
+<button class="mt-2 text-secondary flex items-center gap-1 hover:underline text-label-sm">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+                                Salin
+                            </button>
+</div>
+</div>
+</div>
+<!-- Stats Card -->
+</div>
+<!-- Main Content Area: Students List -->
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+<div class="px-lg py-md border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+<h2 class="text-h3 font-h3 text-on-surface flex items-center gap-2">
+                        Daftar Mahasiswa
+                    </h2>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline rounded-lg text-label-md font-label-md text-on-surface-variant hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-md">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-lg text-label-md font-label-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-md">person_add</span>
+                            Tambah
+                        </button>
+</div>
+</div>
+<!-- Student Rows -->
+<div class="divide-y divide-slate-100">
+<!-- Row 1 -->
+<div class="px-lg py-md flex items-center justify-between hover:bg-slate-50 transition-colors group">
+<div class="flex items-center gap-md">
+<div class="h-12 w-12 rounded-full bg-primary-container text-white flex items-center justify-center font-bold text-lg border-2 border-white shadow-sm">
+                                AD
+                            </div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">Ahmad Dahlan</h4>
+<p class="text-label-sm text-outline">NIM: 200102030045</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-full transition-all" title="Kirim Pesan">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-label-md font-bold hover:bg-primary hover:text-white transition-all active:scale-95">
+                                    Lihat
+                                </button>
+</div>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="px-lg py-md flex items-center justify-between hover:bg-slate-50 transition-colors group">
+<div class="flex items-center gap-md">
+<div class="h-12 w-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+<img alt="Student" class="h-full w-full object-cover" data-alt="A portrait of a male university student sitting in a modern library, looking focused and academic. He is dressed in a casual but neat olive green polo shirt. The background features blurred bookshelves and soft overhead lighting, creating a studious and professional university atmosphere. The color palette is composed of soft earth tones and cool blues." src="https://lh3.googleusercontent.com/aida/ADBb0uiSMBE6jyqA9sqyWj7wySmDYTG5gOy941FaSksToqkocrzdgXZ_o8fYId8tAkejMoPWA8JlaLsm_6Tpz9xmAxmswd9rd7BOWHekML1gZ8tGUh29vl6AdFXOKbjzHSWnmgqP1zFum52ggs0YKV3cfTPU2kQFvNui6vUV_D1MSXneUN2MhcRc4LDPx21vK8R9jUfGaAuCo-T1tvIBUJCKgSEG-gfL9bj4fXCvf1U-lAY4RkU_tRAyNE5Br9vwsyuLhyRT0slUSa65Eg"/>
+</div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">Budi Santoso</h4>
+<p class="text-label-sm text-outline">NIM: 200102030012</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-full transition-all">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-label-md font-bold hover:bg-primary hover:text-white transition-all active:scale-95">
+                                    Lihat
+                                </button>
+</div>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="px-lg py-md flex items-center justify-between hover:bg-slate-50 transition-colors group">
+<div class="flex items-center gap-md">
+<div class="h-12 w-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-lg border-2 border-white shadow-sm">
+                                CP
+                            </div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">Citra Permata</h4>
+<p class="text-label-sm text-outline">NIM: 200102030099</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-full transition-all">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-label-md font-bold hover:bg-primary hover:text-white transition-all active:scale-95">
+                                    Lihat
+                                </button>
+</div>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="px-lg py-md flex items-center justify-between hover:bg-slate-50 transition-colors group">
+<div class="flex items-center gap-md">
+<div class="h-12 w-12 rounded-full bg-surface-dim text-primary flex items-center justify-center font-bold text-lg border-2 border-white shadow-sm">
+                                DS
+                            </div>
+<div>
+<h4 class="font-bold text-on-surface group-hover:text-primary transition-colors">Dian Sastro</h4>
+<p class="text-label-sm text-outline">NIM: 200102030056</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<button class="p-2 text-outline hover:text-primary hover:bg-primary/5 rounded-full transition-all">
+<span class="material-symbols-outlined">mail</span>
+</button>
+<button class="px-5 py-2 bg-white border border-primary text-primary rounded-lg text-label-md font-bold hover:bg-primary hover:text-white transition-all active:scale-95">
+                                    Lihat
+                                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="px-lg py-md border-t border-slate-100 flex items-center justify-between">
+<p class="text-label-sm text-outline">Menampilkan 1-10 dari 45 Mahasiswa</p>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded hover:bg-slate-100 disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-white text-label-sm font-bold">1</button>
+<button class="w-8 h-8 rounded-lg hover:bg-slate-100 text-label-sm font-medium">2</button>
+<button class="w-8 h-8 rounded-lg hover:bg-slate-100 text-label-sm font-medium">3</button>
+<button class="p-1 rounded hover:bg-slate-100">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-6 px-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 no-shadow">
+<p class="font-public-sans text-xs text-slate-500">© 2024 SIPEP Universitas. All Rights Reserved.</p>
+<div class="flex gap-6">
+<a class="font-public-sans text-xs text-slate-500 hover:text-blue-600 transition-colors" href="#">Panduan Pengguna</a>
+<a class="font-public-sans text-xs text-slate-500 hover:text-blue-600 transition-colors" href="#">Kebijakan Privasi</a>
+<a class="font-public-sans text-xs text-slate-500 hover:text-blue-600 transition-colors" href="#">Kontak</a>
+</div>
+</footer>
+</div>
+</body></html>

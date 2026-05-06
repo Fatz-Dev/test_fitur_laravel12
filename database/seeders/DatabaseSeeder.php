@@ -15,14 +15,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::statement('PRAGMA foreign_keys = OFF');
         Registration::query()->delete();
         MahasiswaProfile::query()->delete();
         User::query()->delete();
         School::query()->delete();
         Gelombang::query()->delete();
         DB::table('settings')->delete();
-        DB::statement('PRAGMA foreign_keys = ON');
 
         // ─── Admin ────────────────────────────────────────────────────────────
         User::create([

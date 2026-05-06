@@ -1,0 +1,55 @@
+~/workspace$ php artisan migrate:fresh --seed
+
+  Dropping all tables .......................................... 40.88ms DONE
+
+   INFO  Preparing database.  
+
+  Creating migration table ..................................... 16.09ms DONE
+
+   INFO  Running migrations.  
+
+  0001_01_01_000000_create_users_table ........................ 127.79ms DONE
+  0001_01_01_000001_create_cache_table ......................... 22.67ms DONE
+  0001_01_01_000002_create_jobs_table .......................... 31.85ms DONE
+  2026_04_30_000001_create_mahasiswa_profiles_table ............ 17.03ms DONE
+  2026_04_30_000002_create_schools_table ....................... 10.05ms DONE
+  2026_04_30_000003_create_registrations_table ................. 17.48ms DONE
+  2026_04_30_000004_create_settings_table ...................... 15.41ms DONE
+  2026_05_04_000001_create_gelombang_table ...................... 7.53ms DONE
+  2026_05_04_000002_add_gelombang_id_to_registrations_table ..... 5.03ms DONE
+  2026_05_04_000003_update_schools_jenjang_column ............... 6.02ms DONE
+  2026_05_04_000004_add_program_choice_to_mahasiswa_profiles .... 3.75ms DONE
+  2026_05_05_000001_add_supervisor_role_to_users ................ 4.54ms DONE
+  2026_05_05_000002_add_supervisor_id_to_schools ................ 4.87ms DONE
+  2026_05_05_000003_create_class_assignments_table ............. 10.14ms DONE
+  2026_05_05_000004_create_submissions_table ................... 15.37ms DONE
+  2026_05_05_000005_add_program_to_class_assignments_table ...... 3.43ms DONE
+
+
+   INFO  Seeding database.  
+
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[23514]: Check violation: 7 ERROR:  new row for relation "schools" violates check constraint "schools_jenjang_check"
+DETAIL:  Failing row contains (1, Desa Cempaka Putih, Kelurahan, Jl. Cempaka Putih Tengah, Jakarta Pusat, -6.1722000, 106.8730000, KPM, 8, 0, null, null, t, 2026-05-05 03:40:44, 2026-05-05 03:40:44, null). (Connection: pgsql, Host: helium, Port: 5432, Database: heliumdb, SQL: insert into "schools" ("name", "jenjang", "address", "latitude", "longitude", "program", "kuota_kpm", "kuota_ppl", "is_active", "updated_at", "created_at") values (Desa Cempaka Putih, Kelurahan, Jl. Cempaka Putih Tengah, Jakarta Pusat, -6.1722, 106.873, KPM, 8, 0, 1, 2026-05-05 03:40:44, 2026-05-05 03:40:44) returning "id")
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:838
+    834▕             $exceptionType = $this->isUniqueConstraintError($e)
+    835▕                 ? UniqueConstraintViolationException::class
+    836▕                 : QueryException::class;
+    837▕ 
+  ➜ 838▕             throw new $exceptionType(
+    839▕                 $this->getNameWithReadWriteType(),
+    840▕                 $query,
+    841▕                 $this->prepareBindings($bindings),
+    842▕                 $e,
+
+      +18 vendor frames 
+
+  19  database/seeders/DatabaseSeeder.php:57
+      Illuminate\Database\Eloquent\Model::__callStatic("create")
+      +35 vendor frames 
+
+  55  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))

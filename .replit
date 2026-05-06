@@ -30,16 +30,3 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[userenv]
-
-[userenv.shared]
-SESSION_DRIVER = "file"
-CACHE_STORE = "file"
-QUEUE_CONNECTION = "sync"
-MAIL_MAILER = "smtp"
-MAIL_HOST = "sandbox.smtp.mailtrap.io"
-MAIL_PORT = "2525"
-MAIL_ENCRYPTION = "tls"
-MAIL_FROM_ADDRESS = "noreply@sipep.ac.id"
-MAIL_FROM_NAME = "SIPEP"

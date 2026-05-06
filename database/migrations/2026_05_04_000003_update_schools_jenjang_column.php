@@ -2,17 +2,17 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
-        // SQLite does not support ALTER COLUMN on enum types.
-        // We recreate the table with jenjang as a nullable string.
-        Schema::table('schools', function (Blueprint $table) {
-            $table->string('jenjang')->nullable()->change();
-        });
+        // PostgreSQL: drop the enum check constraint, then change to plain varchar
+        DB::statement('ALTER TABLE schools DROP CONSTRAINT IF EXISTS schools_jenjang_check');
+        DB::statement('ALTER TABLE schools ALTER COLUMN jenjang TYPE VARCHAR(50)');
+        DB::statement('ALTER TABLE schools ALTER COLUMN jenjang DROP NOT NULL');
     }
 
     public function down(): void

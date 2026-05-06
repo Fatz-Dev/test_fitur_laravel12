@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class School extends Model
@@ -19,6 +20,7 @@ class School extends Model
         'contact_person',
         'phone',
         'is_active',
+        'supervisor_id',
     ];
 
     protected function casts(): array
@@ -33,6 +35,11 @@ class School extends Model
     public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class);
+    }
+
+    public function supervisor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
     }
 
     public function availableSlots(string $program): int
@@ -51,18 +58,11 @@ class School extends Model
         return $this->program === $program;
     }
 
-    /**
-     * Label tipe lokasi berdasarkan program.
-     * KPM → Desa, PPL → Sekolah
-     */
     public function locationType(): string
     {
         return $this->program === 'KPM' ? 'Desa' : 'Sekolah';
     }
 
-    /**
-     * Sebutan lokasi berdasarkan konteks program tertentu.
-     */
     public static function labelFor(string $program): string
     {
         return $program === 'KPM' ? 'Desa' : 'Sekolah';

@@ -98,6 +98,8 @@ class AuthController extends Controller
 
     private function homeFor(User $user): string
     {
-        return $user->isAdmin() ? route('admin.dashboard') : route('mahasiswa.dashboard');
+        if ($user->isAdmin()) return route('admin.dashboard');
+        if ($user->isSupervisor()) return route('supervisor.dashboard');
+        return route('mahasiswa.dashboard');
     }
 }
